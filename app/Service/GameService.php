@@ -62,4 +62,9 @@ class GameService {
             }
         }
     }
+
+    public function cancelGame(): void
+    {
+        $this->getCurrentGame()->delete();
+    }
 }

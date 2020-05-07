@@ -9,7 +9,10 @@ use App\Service\{
     GameService,
     MoneyService,
 };
-use App\Player;
+use App\{
+    Money,
+    Player,
+};
 
 class HomeController extends Controller
 {
@@ -71,6 +74,20 @@ class HomeController extends Controller
     public function resetMoney()
     {
         $this->moneyService->resetMoney();
+
+        return redirect()->route('home');
+    }
+
+    public function deleteMoney(Money $money)
+    {
+        $money->delete();
+
+        return redirect()->route('home');
+    }
+
+    public function cancelGame()
+    {
+        $this->gameService->cancelGame();
 
         return redirect()->route('home');
     }

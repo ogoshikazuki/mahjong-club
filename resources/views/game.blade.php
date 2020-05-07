@@ -46,8 +46,12 @@
     @error('points')
         <div class="alert alert-danger">{{ $message }}</div>
     @enderror
-    <form method="POST" action="{{ route('game.finish') }}">
+    <form method="POST" action="{{ route('game.finish') }}" onsubmit="return confirm('本当にゲームを終了しますか？');" class="d-inline">
         {{ csrf_field() }}
-        <button class="btn btn-primary finish-game" onclick="return confirm('本当にゲームを終了しますか？');">ゲーム終了</button>
+        <button class="btn btn-primary">ゲーム終了</button>
+    </form>
+    <form method="POST" action="{{ route('game.cancel') }}" onsubmit="return confirm('本当にゲームをキャンセルしますか？');"  class="d-inline">
+        {{ csrf_field() }}
+        <button class="btn btn-secondary">キャンセル</button>
     </form>
 @endsection

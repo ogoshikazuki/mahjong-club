@@ -32,7 +32,7 @@ class CreatePlayersTable extends Migration
             $table->integer('money')->default(0);
 
             $table->unique(['money_id', 'player_id']);
-            $table->foreign('money_id')->references('id')->on('moneys');
+            $table->foreign('money_id')->references('id')->on('moneys')->onDelete('cascade');
             $table->foreign('player_id')->references('id')->on('players');
         });
     }
