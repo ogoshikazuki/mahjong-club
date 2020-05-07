@@ -33,7 +33,7 @@
                     </td>
                     @foreach($players as $player)
                         <td>
-                            <input name="points[{{ $player->id }}]" type="number" value="{{ old('points')[$player->id] }}" class="form-control form-control-sm">
+                            <input name="points[{{ $player->id }}]" type="number" value="{{ old('points')[$player->id] ?? '' }}" class="form-control form-control-sm">
                         </td>
                     @endforeach
                     <td>
