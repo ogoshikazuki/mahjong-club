@@ -17,7 +17,7 @@
             </tr>
         </tbody>
     </table>
-    <form method="POST" action="{{ route('money.reset') }}">
+    <form method="POST" action="{{ route('money.reset') }}" onsubmit="return confirm('本当に精算しますか？');">
         {{ csrf_field() }}
         <a class="btn btn-warning" href="{{ route('money.edit') }}">金額修正</a>
         <button class="btn btn-primary">精算</button>
