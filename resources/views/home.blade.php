@@ -1,6 +1,8 @@
 @extends('layout')
 
 @section('content')
+    <hr>
+    <h2>未精算</h2>
     <table class="table">
         <thead>
             <tr>
@@ -29,7 +31,7 @@
     </form>
     @if($pastMoneys->isNotEmpty())
         <hr>
-        <h1>精算済</h1>
+        <h2>精算済</h2>
         <table class="table">
             <thead>
                 <tr>
