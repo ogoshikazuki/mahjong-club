@@ -15,7 +15,7 @@
                 <tr>
                     @foreach($players as $player)
                         <td>
-                            <input class="form-control" name="money[{{ $player->id }}]" value="{{ old('money')[$player->id] ?? $currentMoney->moneyPlayer($player)->point }}">
+                            <input class="form-control" name="money[{{ $player->id }}]" value="{{ old('money')[$player->id] ?? $currentMoney->moneyPlayer($player)->money }}">
                         </td>
                     @endforeach
                 </tr>
