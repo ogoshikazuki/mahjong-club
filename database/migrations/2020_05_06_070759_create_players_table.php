@@ -19,20 +19,20 @@ class CreatePlayersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('points', function (Blueprint $table) {
+        Schema::create('moneys', function (Blueprint $table) {
             $table->id();
             $table->datetime('finished_at')->nullable();
             $table->timestamps();
         });
 
-        Schema::create('point_players', function (Blueprint $table) {
+        Schema::create('money_players', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('point_id');
+            $table->unsignedBigInteger('money_id');
             $table->unsignedBigInteger('player_id');
-            $table->integer('point');
+            $table->integer('money')->default(0);
 
-            $table->unique(['point_id', 'player_id']);
-            $table->foreign('point_id')->references('id')->on('points');
+            $table->unique(['money_id', 'player_id']);
+            $table->foreign('money_id')->references('id')->on('moneys');
             $table->foreign('player_id')->references('id')->on('players');
         });
     }
@@ -44,7 +44,8 @@ class CreatePlayersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('point_player');
+        Schema::dropIfExists('money_players');
+        Schema::dropIfExists('moneys');
         Schema::dropIfExists('players');
     }
 }

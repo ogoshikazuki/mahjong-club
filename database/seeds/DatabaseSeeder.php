@@ -3,8 +3,8 @@
 use Illuminate\Database\Seeder;
 
 use App\Player;
-use App\Point;
-use App\PointPlayer;
+use App\Money;
+use App\MoneyPlayer;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,14 +21,14 @@ class DatabaseSeeder extends Seeder
         $player4 = Player::create(['name' => 'さく']);
         $player5 = Player::create(['name' => 'かっちゃん']);
 
-        $point = Point::create([]);
+        $point = Money::create([]);
 
-        $point->pointPlayers()->saveMany([
-            new PointPlayer(['player_id' => $player1->id, 'point' => 100]),
-            new PointPlayer(['player_id' => $player2->id, 'point' => 200]),
-            new PointPlayer(['player_id' => $player3->id, 'point' => 300]),
-            new PointPlayer(['player_id' => $player4->id, 'point' => 400]),
-            new PointPlayer(['player_id' => $player5->id, 'point' => -1000]),
+        $point->moneyPlayers()->saveMany([
+            new MoneyPlayer(['player_id' => $player1->id, 'money' => 100]),
+            new MoneyPlayer(['player_id' => $player2->id, 'money' => 200]),
+            new MoneyPlayer(['player_id' => $player3->id, 'money' => 300]),
+            new MoneyPlayer(['player_id' => $player4->id, 'money' => 400]),
+            new MoneyPlayer(['player_id' => $player5->id, 'money' => -1000]),
         ]);
     }
 }

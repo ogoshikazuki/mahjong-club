@@ -12,11 +12,11 @@ use App\{
 };
 
 class GameService {
-    private $pointService;
+    private $moneyService;
 
-    public function __construct(PointService $pointService)
+    public function __construct(MoneyService $moneyService)
     {
-        $this->pointService = $pointService;
+        $this->moneyService = $moneyService;
     }
 
     public function startGame(): void
@@ -32,14 +32,14 @@ class GameService {
     public function finishGame(): void
     {
         $game = $this->getCurrentGame();
-        $point = $this->pointService->getCurrentPoint();
+        $money = $this->moneyService->getCurrentMoney();
 
-        $game->gameResults->each(function ($gameResult) use ($point) {
+        $game->gameResults->each(function ($gameResult) use ($money) {
             $rate = $gameResult->rate;
-            $gameResult->gameResultPlayers->each(function ($gameResultPlayers) use ($point, $rate) {
-                $pointPlayer = $point->pointPlayer($gameResultPlayers->player);
-                $pointPlayer->point += $gameResultPlayers->point * $rate;
-                $pointPlayer->save();
+            $gameResult->gameResultPlayers->each(function ($gameResultPlayers) use ($money, $rate) {
+                $moneyPlayer = $money->moneyPlayer($gameResultPlayers->player);
+                $moneyPlayer->money += $gameResultPlayers->point * $rate;
+                $moneyPlayer->save();
             });
         });
 

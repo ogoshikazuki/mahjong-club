@@ -12,15 +12,41 @@
         <tbody>
             <tr>
                 @foreach($players as $player)
-                    <td>{{ $currentPoint->pointPlayer($player)->point }}</td>
+                    <td>{{ $currentMoney->moneyPlayer($player)->money }}</td>
                 @endforeach
             </tr>
         </tbody>
     </table>
-    <a class="btn btn-warning" href="{{ route('money.edit') }}">金額修正</a>
+    <form method="POST" action="{{ route('money.reset') }}">
+        {{ csrf_field() }}
+        <a class="btn btn-warning" href="{{ route('money.edit') }}">金額修正</a>
+        <button class="btn btn-primary">精算</button>
+    </form>
     <hr>
     <form method="POST" action="{{ route('game.start') }}">
         {{ csrf_field() }}
         <button class="btn btn-primary">ゲームスタート</button>
     </form>
+    @if($pastMoneys->isNotEmpty())
+        <hr>
+        <h1>精算済</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    @foreach($players as $player)
+                        <th>{{ $player->name }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($pastMoneys as $pastMoney)
+                    <tr>
+                        @foreach($players as $player)
+                            <td>{{ $pastMoney->moneyPlayer($player)->money }}</td>
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 @endsection

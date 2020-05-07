@@ -7,18 +7,18 @@ use Illuminate\Http\Request;
 use App\Rules\ZeroSum;
 use App\Service\{
     GameService,
-    PointService,
+    MoneyService,
 };
 use App\Player;
 
 class HomeController extends Controller
 {
-    private $pointService;
+    private $moneyService;
     private $gameService;
 
-    public function __construct(PointService $pointService, GameService $gameService)
+    public function __construct(MoneyService $moneyService, GameService $gameService)
     {
-        $this->pointService = $pointService;
+        $this->moneyService = $moneyService;
         $this->gameService = $gameService;
     }
 
@@ -32,7 +32,8 @@ class HomeController extends Controller
 
         return view('home')
             ->with('players', Player::all())
-            ->with('currentPoint', $this->pointService->getCurrentPoint());
+            ->with('currentMoney', $this->moneyService->getCurrentMoney())
+            ->with('pastMoneys', $this->moneyService->getPastMoneys());
     }
 
     public function startGame()
@@ -53,7 +54,7 @@ class HomeController extends Controller
     {
         return view('edit_money')
             ->with('players', Player::all())
-            ->with('currentPoint', $this->pointService->getCurrentPoint());
+            ->with('currentMoney', $this->moneyService->getCurrentMoney());
     }
 
     public function updateMoney(Request $request)
@@ -62,7 +63,14 @@ class HomeController extends Controller
             'money' => ['required', 'array', new ZeroSum],
         ]);
 
-        $this->pointService->updateMoney($validatedData['money']);
+        $this->moneyService->updateMoney($validatedData['money']);
+
+        return redirect()->route('home');
+    }
+
+    public function resetMoney()
+    {
+        $this->moneyService->resetMoney();
 
         return redirect()->route('home');
     }
