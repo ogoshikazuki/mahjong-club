@@ -19,7 +19,13 @@
                         @foreach($players as $player)
                             <td>{{ $gameResult->gameResultPlayer($player)->point ?? '' }}</td>
                         @endforeach
-                        <td></td>
+                        <td>
+                            <form method="POST" action="{{ route('game.result.destroy', [$gameResult]) }}" onsubmit="return confirm('本当に削除しますか？');">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button class="btn btn-danger btn-sm">削除</button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                 @endforelse
