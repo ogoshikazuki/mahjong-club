@@ -3,22 +3,24 @@
 @section('content')
     <hr>
     <h2>未精算</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                @foreach($players as $player)
-                    <th>{{ $player->name }}</th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                @foreach($players as $player)
-                    <td>{{ $currentMoney->moneyPlayer($player)->money }}</td>
-                @endforeach
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    @foreach($players as $player)
+                        <th>{{ $player->name }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @foreach($players as $player)
+                        <td>{{ $currentMoney->moneyPlayer($player)->money }}</td>
+                    @endforeach
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <form method="POST" action="{{ route('money.reset') }}" onsubmit="return confirm('本当に精算しますか？');">
         {{ csrf_field() }}
         <a class="btn btn-warning" href="{{ route('money.edit') }}">金額修正</a>
