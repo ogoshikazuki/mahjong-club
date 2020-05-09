@@ -10,4 +10,15 @@ class Game extends Model
     {
         return $this->hasMany('App\GameResult');
     }
+
+    public function calculatePlayerMoney(Player $player): int
+    {
+        return $this->gameResults->reduce(function ($money, $gameResult) use ($player) {
+            $gameResultPlayer = $gameResult->gameResultPlayer($player);
+            if (isset($gameResultPlayer)) {
+                return $money += $gameResultPlayer->point * $gameResult->rate;
+            }
+            return $money;
+        }, 0);
+    }
 }

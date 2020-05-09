@@ -26,3 +26,4 @@ Route::group(['prefix' => 'money', 'as' => 'money.'], function () {
     Route::post('delete/{money}', 'HomeController@deleteMoney')->name('delete');
 });
 Route::get('/', 'HomeController@home')->name('home');
+Route::get('history', 'HomeController@history')->name('history');

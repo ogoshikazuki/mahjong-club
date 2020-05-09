@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use Illuminate\Support\Collection;
+
 use Carbon\Carbon;
 
 use App\{
@@ -66,5 +68,10 @@ class GameService {
     public function cancelGame(): void
     {
         $this->getCurrentGame()->delete();
+    }
+
+    public function getCurrentMoneyGames(): Collection
+    {
+        return Game::where('created_at', '>', $this->moneyService->getLastFinishedAt())->get();
     }
 }

@@ -50,4 +50,9 @@ class MoneyService {
     {
         return Money::whereNotNull('finished_at')->orderByDesc('finished_at')->get();
     }
+
+    public function getLastFinishedAt(): ?Carbon
+    {
+        return Money::orderByDesc('finished_at')->first()->finished_at ?? null;
+    }
 }

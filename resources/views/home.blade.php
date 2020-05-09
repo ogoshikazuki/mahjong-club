@@ -22,6 +22,7 @@
         </table>
     </div>
     <a class="btn btn-warning" href="{{ route('money.edit') }}">金額修正</a>
+    <a class="btn btn-secondary" href="{{ route('history') }}">履歴表示</a>
     <form method="POST" action="{{ route('money.reset') }}" onsubmit="return confirm('本当に精算しますか？');" class="d-inline">
         {{ csrf_field() }}
         <button class="btn btn-primary">精算</button>

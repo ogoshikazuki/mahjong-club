@@ -4,11 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Player;
+use Carbon\Carbon;
 
 class Money extends Model
 {
     protected $table = 'moneys';
+    protected $dates = [
+        'finished_at',
+    ];
 
     public function moneyPlayers()
     {
@@ -20,5 +23,10 @@ class Money extends Model
         return $this->moneyPlayers->first(function($moneyPlayer) use ($player) {
             return $moneyPlayer->player_id === $player->id;
         });
+    }
+
+    public function games()
+    {
+        return $this->hasMany('App\Game');
     }
 }

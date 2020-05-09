@@ -91,4 +91,11 @@ class HomeController extends Controller
 
         return redirect()->route('home');
     }
+
+    public function history()
+    {
+        return view('history')
+            ->with('players', $this->playerService->getAllPlayers())
+            ->with('currentMoneyGames', $this->gameService->getCurrentMoneyGames());
+    }
 }
