@@ -6,8 +6,11 @@
 
         <title>麻雀</title>
 
+        <link rel="icon" href="/favicon.ico">
+
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+
         <link href="/css/app.css" rel="stylesheet">
         <style>
             .table-responsive th,td {
