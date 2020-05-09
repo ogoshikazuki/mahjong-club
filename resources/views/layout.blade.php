@@ -10,7 +10,7 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <link href="/css/app.css" rel="stylesheet">
         <style>
-            .table-responsive th {
+            .table-responsive th,td {
                 white-space: nowrap;
             }
             input[type="number"].point {
