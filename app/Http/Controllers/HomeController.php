@@ -8,33 +8,33 @@ use App\Rules\ZeroSum;
 use App\Service\{
     GameService,
     MoneyService,
+    PlayerService,
 };
-use App\{
-    Money,
-    Player,
-};
+use App\Money;
 
 class HomeController extends Controller
 {
-    private $moneyService;
     private $gameService;
+    private $moneyService;
+    private $playerService;
 
-    public function __construct(MoneyService $moneyService, GameService $gameService)
+    public function __construct(GameService $gameService, MoneyService $moneyService, PlayerService $playerService)
     {
-        $this->moneyService = $moneyService;
         $this->gameService = $gameService;
+        $this->moneyService = $moneyService;
+        $this->playerService = $playerService;
     }
 
     public function home()
     {
         if ($this->gameService->isGameStarted()) {
             return view('game')
-                ->with('players', Player::all())
+                ->with('players', $this->playerService->getAllPlayers())
                 ->with('game', $this->gameService->getCurrentGame());
         }
 
         return view('home')
-            ->with('players', Player::all())
+            ->with('players', $this->playerService->getAllPlayers())
             ->with('currentMoney', $this->moneyService->getCurrentMoney())
             ->with('pastMoneys', $this->moneyService->getPastMoneys());
     }
@@ -56,7 +56,7 @@ class HomeController extends Controller
     public function editMoney()
     {
         return view('edit_money')
-            ->with('players', Player::all())
+            ->with('players', $this->playerService->getAllPlayers())
             ->with('currentMoney', $this->moneyService->getCurrentMoney());
     }
 
