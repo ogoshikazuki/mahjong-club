@@ -24,10 +24,10 @@ Route::group(['prefix' => 'game', 'as' => 'game.'], function () {
 Route::resource('game', 'GameController', ['only' => 'show']);
 
 Route::group(['prefix' => 'money', 'as' => 'money.'], function () {
-    Route::get('edit', 'HomeController@editMoney')->name('edit');
-    Route::post('update', 'HomeController@updateMoney')->name('update');
-    Route::post('reset', 'HomeController@resetMoney')->name('reset');
-    Route::post('delete/{money}', 'HomeController@deleteMoney')->name('delete');
+    Route::get('edit', 'MoneyController@editMoney')->name('edit');
+    Route::post('update', 'MoneyController@updateMoney')->name('update');
+    Route::post('reset', 'MoneyController@resetMoney')->name('reset');
+    Route::post('delete/{money}', 'MoneyController@deleteMoney')->name('delete');
 });
 
 Route::get('history', 'HomeController@history')->name('history');
