@@ -54,6 +54,9 @@
     @error('points')
         <div class="alert alert-danger">{{ $message }}</div>
     @enderror
+    @if($game->gameResults()->count() >= 6)
+        <div class="alert alert-info">スマホの画面サイズ的にそろそろ一度締めた方が良いよ！</div>
+    @endif
     <form method="POST" action="{{ route('game.finish') }}" onsubmit="return confirm('本当にゲームを終了しますか？');" class="d-inline">
         {{ csrf_field() }}
         <button class="btn btn-primary">ゲーム終了</button>
