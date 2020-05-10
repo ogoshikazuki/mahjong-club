@@ -11,6 +11,7 @@
                     @foreach($players as $player)
                         <th>{{ $player->name }}</th>
                     @endforeach
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,9 @@
                             @foreach($players as $player)
                                 <td>{{ $game->calculatePlayerMoney($player) }}</td>
                             @endforeach
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="{{ route('game.show', [$game]) }}">詳細</a>
+                            </td>
                         </tr>
                     @endforeach
                 @endif
