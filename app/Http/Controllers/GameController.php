@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\{
-    Service\PlayerService,
-    Game,
+use App\Service\{
+    GameService,
+    PlayerService,
 };
+use App\Game;
 
 class GameController extends Controller
 {
+    private $gameService;
     private $playerService;
 
-    public function __construct(PlayerService $playerService)
+    public function __construct(GameService $gameService, PlayerService $playerService)
     {
+        $this->gameService = $gameService;
         $this->playerService = $playerService;
     }
 
@@ -94,5 +97,26 @@ class GameController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function startGame()
+    {
+        $this->gameService->startGame();
+
+        return redirect()->route('home');
+    }
+
+    public function finishGame()
+    {
+        $this->gameService->finishGame();
+
+        return redirect()->route('home');
+    }
+
+    public function cancelGame()
+    {
+        $this->gameService->cancelGame();
+
+        return redirect()->route('home');
     }
 }

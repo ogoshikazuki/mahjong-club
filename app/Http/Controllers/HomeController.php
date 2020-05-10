@@ -39,20 +39,6 @@ class HomeController extends Controller
             ->with('pastMoneys', $this->moneyService->getPastMoneys());
     }
 
-    public function startGame()
-    {
-        $this->gameService->startGame();
-
-        return redirect()->route('home');
-    }
-
-    public function finishGame()
-    {
-        $this->gameService->finishGame();
-
-        return redirect()->route('home');
-    }
-
     public function editMoney()
     {
         return view('edit_money')
@@ -81,13 +67,6 @@ class HomeController extends Controller
     public function deleteMoney(Money $money)
     {
         $money->delete();
-
-        return redirect()->route('home');
-    }
-
-    public function cancelGame()
-    {
-        $this->gameService->cancelGame();
 
         return redirect()->route('home');
     }
