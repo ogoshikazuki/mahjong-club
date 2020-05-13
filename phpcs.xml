@@ -4,4 +4,5 @@
         <exclude name="PSR2.Namespaces.UseDeclaration.MultipleDeclarations"/>
     </rule>
     <arg value="s"/>
+    <arg name="colors"/>
 </ruleset>
