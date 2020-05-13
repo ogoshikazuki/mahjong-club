@@ -1,5 +1,6 @@
 <ruleset name="ogoshikazuki">
     <file>app</file>
+    <file>routes</file>
     <rule ref="PSR2">
         <exclude name="PSR2.Namespaces.UseDeclaration.MultipleDeclarations"/>
     </rule>
