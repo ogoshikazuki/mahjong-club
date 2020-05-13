@@ -1,0 +1,5 @@
+<ruleset name="ogoshikazuki">
+    <file>app</file>
+
+    <rule ref="PSR2"/>
+</ruleset>
