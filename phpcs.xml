@@ -1,5 +1,7 @@
 <ruleset name="ogoshikazuki">
     <file>app</file>
-
-    <rule ref="PSR2"/>
+    <rule ref="PSR2">
+        <exclude name="PSR2.Namespaces.UseDeclaration.MultipleDeclarations"/>
+    </rule>
+    <arg value="s"/>
 </ruleset>

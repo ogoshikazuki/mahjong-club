@@ -12,7 +12,8 @@ use App\{
     Player,
 };
 
-class MoneyService {
+class MoneyService
+{
     public function getCurrentMoney(): Money
     {
         return Money::whereNull('finished_at')->firstOrFail();
