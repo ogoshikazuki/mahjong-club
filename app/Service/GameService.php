@@ -13,7 +13,8 @@ use App\{
     Player,
 };
 
-class GameService {
+class GameService
+{
     private $moneyService;
 
     public function __construct(MoneyService $moneyService)
@@ -60,7 +61,9 @@ class GameService {
 
         foreach ($points as $playerId => $point) {
             if (isset($point)) {
-                $gameResult->gameResultPlayers()->save(new GameResultPlayer(['player_id' => $playerId, 'point' => $point]));
+                $gameResult
+                    ->gameResultPlayers()
+                    ->save(new GameResultPlayer(['player_id' => $playerId, 'point' => $point]));
             }
         }
     }
