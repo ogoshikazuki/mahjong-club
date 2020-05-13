@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cd ../laradock; docker-compose exec workspace ./vendor/bin/phpcs --standard=phpcs.xml
