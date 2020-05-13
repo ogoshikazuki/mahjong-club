@@ -20,7 +20,7 @@ class Money extends Model
 
     public function moneyPlayer(Player $player)
     {
-        return $this->moneyPlayers->first(function($moneyPlayer) use ($player) {
+        return $this->moneyPlayers->first(function ($moneyPlayer) use ($player) {
             return $moneyPlayer->player_id === $player->id;
         });
     }
