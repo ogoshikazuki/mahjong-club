@@ -21,7 +21,7 @@ jobs:
             - ./vendor
 
       - run: ./vendor/bin/phpcs --standard=phpcs.xml
-      - run: ./vendor/bin/phpmd app text phpmd.xml
+      - run: ./vendor/bin/phpmd app,routes text phpmd.xml
 
       - run: php artisan migrate
 
