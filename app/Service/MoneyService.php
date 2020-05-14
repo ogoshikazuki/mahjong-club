@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use App\{
     Money,
     MoneyPlayer,
-    Player,
+    Player
 };
 
 class MoneyService

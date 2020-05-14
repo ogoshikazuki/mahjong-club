@@ -10,7 +10,7 @@ use App\{
     Game,
     GameResult,
     GameResultPlayer,
-    Player,
+    Player
 };
 
 class GameService

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Service\{
     GameService,
     MoneyService,
-    PlayerService,
+    PlayerService
 };
 
 class HomeController extends Controller

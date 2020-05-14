@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Service\{
     GameService,
-    PlayerService,
+    PlayerService
 };
 use App\Game;
 

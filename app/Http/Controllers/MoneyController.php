@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Rules\ZeroSum;
 use App\Service\{
     MoneyService,
-    PlayerService,
+    PlayerService
 };
 use App\Money;
 
