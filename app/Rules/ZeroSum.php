@@ -22,6 +22,8 @@ class ZeroSum implements Rule
      * @param  string  $attribute
      * @param  mixed  $value
      * @return bool
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function passes($attribute, $value)
     {
