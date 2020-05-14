@@ -19,7 +19,7 @@ Route::group(['prefix' => 'game', 'as' => 'game.'], function () {
     Route::post('start', 'GameController@startGame')->name('start');
     Route::post('finish', 'GameController@finishGame')->name('finish');
     Route::post('cancel', 'GameController@cancelGame')->name('cancel');
-    Route::resource('result', 'GameResultController')->parameters(['result' => 'gameResult']);
+    Route::resource('result', 'GameResultController', ['only' => ['store', 'destroy']])->parameters(['result' => 'gameResult']);
 });
 Route::resource('game', 'GameController', ['only' => 'show']);
 
