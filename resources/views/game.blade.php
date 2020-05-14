@@ -34,8 +34,9 @@
                         {{ csrf_field() }}
                         <td>
                             <select name="rate" class="form-control form-control-sm" style="width: auto;">
-                                <option value="50">50</option>
-                                <option value="100">100</option>
+                                @foreach(Constant\Rate::getConstants() as $rate)
+                                    <option value="{{ $rate }}">{{ $rate }}</option>
+                                @endforeach
                             </select>
                         </td>
                         @foreach($players as $player)
