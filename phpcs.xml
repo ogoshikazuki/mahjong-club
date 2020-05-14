@@ -1,4 +1,6 @@
-<ruleset name="ogoshikazuki">
+<?xml version="1.0"?>
+<ruleset name="Custom Standard">
+    <description>A custom coding standard</description>
     <file>app</file>
     <file>routes</file>
     <rule ref="PSR2">
