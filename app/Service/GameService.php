@@ -50,9 +50,9 @@ class GameService
         $game->save();
     }
 
-    public function getCurrentGame(): ?Game
+    public function getCurrentGame(): Game
     {
-        return Game::whereNull('finished_at')->first();
+        return Game::whereNull('finished_at')->firstOrFail();
     }
 
     public function registerGameResult(int $rate, array $points): void

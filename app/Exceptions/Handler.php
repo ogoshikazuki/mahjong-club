@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+
+use App\Game;
 
 class Handler extends ExceptionHandler
 {
@@ -50,6 +53,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ModelNotFoundException && $exception->getModel() === Game::class) {
+            return response()->view('errors.400', ['message' => 'ゲームが存在しません。']);
+        }
+
         return parent::render($request, $exception);
     }
 }
