@@ -14,10 +14,9 @@ class GameStartedException extends Exception
     /**
      * Render the exception as an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function render($request)
+    public function render()
     {
         return response()->view('errors.400', ['message' => $this->getMessage()], $this->getCode());
     }
