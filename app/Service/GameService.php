@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 
 use Carbon\Carbon;
 
+use App\Exceptions\GameStartedException;
 use App\{
     Game,
     GameResult,
@@ -24,6 +25,7 @@ class GameService
 
     public function startGame(): void
     {
+        throw_if($this->isGameStarted(), GameStartedException::class);
         Game::create();
     }
 
