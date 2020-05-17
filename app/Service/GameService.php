@@ -79,4 +79,16 @@ class GameService
     {
         return Game::where('created_at', '>', $this->moneyService->getLastFinishedAt())->get();
     }
+
+    public function rememberLastGameResult(): void
+    {
+        $lastGameResult = GameResult::latest()->first();
+        session(['lastGameResult' => $lastGameResult]);
+    }
+
+    public function isRegisteredGameSameTime(): bool
+    {
+        $lastGameResult = GameResult::latest()->first();
+        return $lastGameResult->id !== session('lastGameResult')->id;
+    }
 }

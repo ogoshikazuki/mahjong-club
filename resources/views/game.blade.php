@@ -1,6 +1,9 @@
 @extends('layout')
 
 @section('content')
+    @if(session()->has('temporaryGameErrorMessage'))
+        <div class="alert alert-danger">{{ session('temporaryGameErrorMessage') }}</div>
+    @endif
     <div class="table-responsive">
         <table class="table">
             <thead>

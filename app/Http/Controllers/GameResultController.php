@@ -31,6 +31,11 @@ class GameResultController extends Controller
             'points' => ['required', 'array', new ZeroSum],
         ]);
 
+        if ($this->gameService->isRegisteredGameSameTime()) {
+            session()->flash('temporaryGameErrorMessage', '他の方と同時に登録されたため、キャンセルしました。');
+            return redirect()->route('home');
+        }
+
         $this->gameService->registerGameResult($validatedData['rate'], $validatedData['points']);
 
         return redirect()->route('home');
