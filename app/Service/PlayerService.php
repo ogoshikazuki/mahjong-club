@@ -8,8 +8,15 @@ use App\Player;
 
 class PlayerService
 {
+    private $player;
+
+    public function __construct(Player $player)
+    {
+        $this->player = $player;
+    }
+
     public function getAllPlayers(): Collection
     {
-        return Player::all();
+        return $this->player->all();
     }
 }
