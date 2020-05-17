@@ -9,7 +9,6 @@ use Tests\TestCase;
 use Illuminate\Support\Collection;
 
 use DB;
-use Mockery;
 
 use App\Service\PlayerService;
 use App\Player;
