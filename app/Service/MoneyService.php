@@ -14,16 +14,9 @@ use App\{
 
 class MoneyService
 {
-    private $money;
-
-    public function __construct(Money $money)
-    {
-        $this->money = $money;
-    }
-
     public function getCurrentMoney(): Money
     {
-        return $this->money->whereNull('finished_at')->firstOrFail();
+        return Money::whereNull('finished_at')->firstOrFail();
     }
 
     public function getCurrentMoneyPlayers(): Collection
