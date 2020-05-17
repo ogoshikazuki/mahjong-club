@@ -14,6 +14,13 @@ use App\{
 
 class MoneyService
 {
+    private $playerService;
+
+    public function __construct(PlayerService $playerService)
+    {
+        $this->playerService = $playerService;
+    }
+
     public function getCurrentMoney(): Money
     {
         return Money::whereNull('finished_at')->firstOrFail();
@@ -42,7 +49,7 @@ class MoneyService
         $currentMoney->save();
 
         $newMoney = Money::create();
-        Player::all()->each(function ($player) use ($newMoney) {
+        $this->playerService->getAllPlayers()->each(function ($player) use ($newMoney) {
             $newMoney->moneyPlayers()->save(new MoneyPlayer(['player_id' => $player->id]));
         });
     }
