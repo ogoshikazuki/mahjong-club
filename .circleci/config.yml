@@ -18,16 +18,27 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "composer.lock" }}
             - v1-dependencies-
-      - run: composer install -n --prefer-dist
+
+      - run:
+          name: composer install
+          command: |
+            composer install -n --prefer-dist
+
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.lock" }}
           paths:
             - ./vendor
 
-      - run: ./vendor/bin/phpcs --standard=phpcs.xml
-      - run: ./vendor/bin/phpmd app,routes text phpmd.xml
+      - run:
+          name: phpcs phpmd
+          command: |
+            ./vendor/bin/phpcs --standard=phpcs.xml
+            ./vendor/bin/phpmd app,routes text phpmd.xml
 
-      - run: php artisan migrate
+      - run:
+          name: migrate
+          command: |
+            php artisan migrate
 
       - run:
           name: Setup Code Climate test-reporter
