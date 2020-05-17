@@ -15,9 +15,9 @@ class PlayerServiceTest extends TestCase
 {
     public function testGetAllPlayers()
     {
-        $playerA = new Player(['id' => 1, 'name' => 'ogoshi']);
-        $playerB = new Player(['id' => 2, 'name' => 'kazuki']);
-        $expect = collect([$playerA, $playerB]);
+        $player1 = new Player(['id' => 1, 'name' => 'ogoshi']);
+        $player2 = new Player(['id' => 2, 'name' => 'kazuki']);
+        $expect = collect([$player1, $player2]);
 
         $player = Mockery::mock(Player::class)
             ->shouldReceive('all')
