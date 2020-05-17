@@ -150,4 +150,26 @@ class MoneyServiceTest extends TestCase
         $this->assertEquals($pastMoney2->id, $pastMoneys->shift()->id);
         $this->assertEquals($pastMoney1->id, $pastMoneys->shift()->id);
     }
+
+    public function testGetLastFinishedAt()
+    {
+        DB::table('moneys')->delete();
+
+        $expect = new Carbon(app()->make(Faker::class)->datetime);
+        $notLastFinishedAt = new Carbon(app()->make(Faker::class)->datetime($expect));
+        $this->assertTrue($expect->gt($notLastFinishedAt));
+
+        $notLastFinishedMoney = new Money();
+        $notLastFinishedMoney->finished_at = $notLastFinishedAt;
+        $notLastFinishedMoney->save();
+        $lastFinishedMoney = new Money();
+        $lastFinishedMoney->finished_at = $expect;
+        $lastFinishedMoney->save();
+        Money::create();
+
+        $actual = app()->make(MoneyService::class)->getLastFinishedAt();
+
+        $this->assertTrue($actual instanceof Carbon);
+        $this->assertTrue($actual->eq($expect));
+    }
 }
