@@ -21,14 +21,14 @@ class PlayerServiceTest extends TestCase
     {
         DB::table('players')->delete();
 
-        $player1 = Player::create(['name' => 'ogoshi']);
-        $player2 = Player::create(['name' => 'kazuki']);
-        $expect = collect([$player1, $player2]);
+        $playerCount = 3;
+
+        $expect = factory(Player::class, $playerCount)->create();
 
         $actual = app()->make(PlayerService::class)->getAllPlayers();
 
         $this->assertTrue($actual instanceof Collection);
-        for ($index = 0; $index < 2; $index++) {
+        for ($index = 0; $index < $playerCount; $index++) {
             $this->assertTrue($actual->get($index) instanceof Player);
             $this->assertEquals($expect->get($index)->id, $actual->get($index)->id);
         }
