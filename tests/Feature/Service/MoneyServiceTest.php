@@ -21,7 +21,7 @@ class MoneyServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testGetCurrentMoney(): Money
+    public function testGetCurrentMoney()
     {
         DB::table('moneys')->delete();
 
@@ -39,11 +39,12 @@ class MoneyServiceTest extends TestCase
         $this->assertTrue($actual instanceof Money);
         $this->assertEquals($expect->id, $actual->id);
         $this->assertNull($actual->finished_at);
-
-        return $actual;
     }
 
-    public function testCurrentMoneyPlayers()
+    /**
+     * @depends testGetCurrentMoney
+     */
+    public function testGetCurrentMoneyPlayers()
     {
         $playerCount = 3;
 
@@ -100,5 +101,30 @@ class MoneyServiceTest extends TestCase
                 ]
             );
         }
+    }
+
+    /**
+     * @depends testGetCurrentMoneyPlayers
+     */
+    public function testResetMoney()
+    {
+        DB::table('players')->delete();
+        DB::table('moneys')->delete();
+
+        $playerCount = 3;
+
+        $players = factory(Player::class, $playerCount)->create();
+
+        $beforeResetMoney = Money::create();
+
+        $moneyService = app()->make(MoneyService::class);
+
+        $moneyService->resetMoney();
+
+        $this->assertNotNull($beforeResetMoney->refresh()->finished_at);
+
+        $moneyService->getCurrentMoneyPlayers()->each(function ($moneyPlayer) use ($players) {
+            $this->assertTrue($players->pluck('id')->contains($moneyPlayer->player_id));
+        });
     }
 }
