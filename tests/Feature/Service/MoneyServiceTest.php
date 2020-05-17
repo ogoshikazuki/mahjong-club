@@ -63,4 +63,42 @@ class MoneyServiceTest extends TestCase
             $this->assertEquals($expect->get($index)->id, $actual->get($index)->id);
         }
     }
+
+    public function testUpdateMoney()
+    {
+        DB::table('moneys')->delete();
+
+        $expect = [3000, -1000, -2000];
+        $beforeUpdate = [-3000, 1000, 2000];
+
+        $playerCount = 3;
+
+        $players = factory(Player::class, $playerCount)->create();
+
+        $moneyPlayers = [];
+        $argument = [];
+        for ($index = 0; $index < $playerCount; $index++) {
+            $moneyPlayer = MoneyPlayer::make(['player_id' => $players->get($index)->id]);
+            $moneyPlayer->money = $beforeUpdate[$index];
+            $moneyPlayers[] = $moneyPlayer;
+
+            $argument[$players->get($index)->id] = $expect[$index];
+        }
+
+        Money::create()
+            ->moneyPlayers()
+            ->saveMany($moneyPlayers);
+
+        app()->make(MoneyService::class)->updateMoney($argument);
+
+        for ($index = 0; $index < $playerCount; $index++) {
+            $this->assertDatabaseHas(
+                'money_players',
+                [
+                    'id' => $moneyPlayers[$index]->id,
+                    'money' => $expect[$index],
+                ]
+            );
+        }
+    }
 }
