@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use DB;
 
 use Carbon\Carbon;
+use Faker\Generator as Faker;
 
 use App\Money;
 use App\MoneyPlayer;
@@ -126,5 +127,27 @@ class MoneyServiceTest extends TestCase
         $moneyService->getCurrentMoneyPlayers()->each(function ($moneyPlayer) use ($players) {
             $this->assertTrue($players->pluck('id')->contains($moneyPlayer->player_id));
         });
+    }
+
+    public function testGetPastMoneys()
+    {
+        DB::table('moneys')->delete();
+
+        $finishedAt2 = new Carbon(app()->make(Faker::class)->datetime);
+        $finishedAt1 = new Carbon(app()->make(Faker::class)->datetime($finishedAt2));
+        $this->assertTrue($finishedAt1->lt($finishedAt2));
+
+        $pastMoney1 = new Money();
+        $pastMoney1->finished_at = $finishedAt1;
+        $pastMoney1->save();
+        $pastMoney2 = new Money();
+        $pastMoney2->finished_at = $finishedAt2;
+        $pastMoney2->save();
+        Money::create();
+
+        $pastMoneys = app()->make(MoneyService::class)->getPastMoneys();
+
+        $this->assertEquals($pastMoney2->id, $pastMoneys->shift()->id);
+        $this->assertEquals($pastMoney1->id, $pastMoneys->shift()->id);
     }
 }
