@@ -28,7 +28,7 @@ class PlayerServiceTest extends TestCase
         $actual = $playerService->getAllPlayers();
 
         $this->assertTrue($actual instanceof Collection);
-        for ($index = 0; $index <= 1; $index++) {
+        for ($index = 0; $index < 2; $index++) {
             $this->assertTrue($actual->get($index) instanceof Player);
             $this->assertEquals($expect->get($index)->id, $actual->get($index)->id);
             $this->assertEquals($expect->get($index)->name, $actual->get($index)->name);
