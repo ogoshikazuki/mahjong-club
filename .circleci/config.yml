@@ -9,7 +9,10 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo docker-php-ext-install pdo_mysql
+      - run: 
+          name: install pdo_mysql
+          command: |
+            sudo docker-php-ext-install pdo_mysql
 
       - restore_cache:
           keys:
