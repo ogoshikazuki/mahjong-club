@@ -8,6 +8,7 @@ use Tests\TestCase;
 
 use DB;
 
+use App\Exceptions\GameStartedException;
 use App\Service\GameService;
 use App\Game;
 
@@ -34,5 +35,23 @@ class GameServiceTest extends TestCase
         Game::create();
 
         $this->assertTrue(app()->make(GameService::class)->isGameStarted());
+    }
+
+    /**
+     * @depends testIsGameStarted
+     */
+    public function testStartGame()
+    {
+        DB::table('games')->delete();
+
+        app()->make(GameService::class)->startGame();
+
+        $this->assertDatabaseHas(
+            'games',
+            ['finished_at' => null]
+        );
+
+        $this->expectException(GameStartedException::class);
+        app()->make(GameService::class)->startGame();
     }
 }
