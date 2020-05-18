@@ -11,7 +11,6 @@ use Illuminate\Support\Collection;
 use DB;
 
 use Carbon\Carbon;
-use Faker\Generator as Faker;
 
 use App\Money;
 use App\MoneyPlayer;
@@ -21,6 +20,7 @@ use App\Service\MoneyService;
 class MoneyServiceTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     public function testGetCurrentMoney()
     {
@@ -133,8 +133,8 @@ class MoneyServiceTest extends TestCase
     {
         DB::table('moneys')->delete();
 
-        $finishedAt2 = new Carbon(app()->make(Faker::class)->datetime);
-        $finishedAt1 = new Carbon(app()->make(Faker::class)->datetime($finishedAt2));
+        $finishedAt2 = new Carbon($this->faker()->datetime);
+        $finishedAt1 = new Carbon($this->faker()->datetime($finishedAt2));
         $this->assertTrue($finishedAt1->lt($finishedAt2));
 
         $pastMoney1 = new Money();
@@ -155,8 +155,8 @@ class MoneyServiceTest extends TestCase
     {
         DB::table('moneys')->delete();
 
-        $expect = new Carbon(app()->make(Faker::class)->datetime);
-        $notLastFinishedAt = new Carbon(app()->make(Faker::class)->datetime($expect));
+        $expect = new Carbon($this->faker()->datetime);
+        $notLastFinishedAt = new Carbon($this->faker()->datetime($expect));
         $this->assertTrue($expect->gt($notLastFinishedAt));
 
         $notLastFinishedMoney = new Money();
