@@ -6,6 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 use DB;
 
 use App\Exceptions\GameStartedException;
@@ -53,5 +55,22 @@ class GameServiceTest extends TestCase
 
         $this->expectException(GameStartedException::class);
         app()->make(GameService::class)->startGame();
+    }
+
+    public function testGetCurrentGame()
+    {
+        DB::table('games')->delete();
+
+        $expect = Game::create();
+
+        $actual = app()->make(GameService::class)->getCurrentGame();
+
+        $this->assertEquals($expect->id, $actual->id);
+
+        $actual->finished_at = $this->faker()->datetime;
+        $actual->save();
+
+        $this->expectException(ModelNotFoundException::class);
+        app()->make(GameService::class)->getCurrentGame();
     }
 }
