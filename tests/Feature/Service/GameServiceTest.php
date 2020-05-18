@@ -12,7 +12,14 @@ use DB;
 
 use App\Exceptions\GameStartedException;
 use App\Service\GameService;
-use App\Game;
+use App\{
+    Game,
+    GameResult,
+    GameResultPlayer,
+    Money,
+    MoneyPlayer,
+    Player,
+};
 
 class GameServiceTest extends TestCase
 {
@@ -72,5 +79,78 @@ class GameServiceTest extends TestCase
 
         $this->expectException(ModelNotFoundException::class);
         app()->make(GameService::class)->getCurrentGame();
+    }
+
+    /**
+     * @depends testGetCurrentGame
+     */
+    public function testFinishGame()
+    {
+        DB::table('games')->delete();
+        DB::table('moneys')->delete();
+        DB::table('players')->delete();
+
+        $playerCount = 3;
+        $moneysBeforeFinishGame = [
+            3000,
+            -1000,
+            -2000,
+        ];
+        $inputs = [
+            [
+                'rate' => 50,
+                'points' => [30, -10, -20],
+            ],
+            [
+                'rate' => 100,
+                'points' => [-30, 10, 20],
+            ],
+        ];
+        $expect = [
+            1500,
+            -500,
+            -1000,
+        ];
+
+        $players = factory(Player::class, $playerCount)->create();
+        $money = Money::create();
+        $game = Game::create();
+
+        for ($index = 0; $index < $playerCount; $index++) {
+            $moneyPlayer = new MoneyPlayer();
+            $moneyPlayer->player_id = $players->get($index)->id;
+            $moneyPlayer->money = $moneysBeforeFinishGame[$index];
+            $money->moneyPlayers()->save($moneyPlayer);
+        }
+
+        foreach ($inputs as $input) {
+            $gameResult = new GameResult();
+            $gameResult->rate = $input['rate'];
+            $game->gameResults()->save($gameResult);
+
+            for ($index = 0; $index < $playerCount; $index++) {
+                $gameResultPlayer = new GameResultPlayer();
+                $gameResultPlayer->game_result_id = $gameResult->id;
+                $gameResultPlayer->player_id = $players->get($index)->id;
+                $gameResultPlayer->point = $input['points'][$index];
+                $gameResultPlayer->save();
+            }
+        }
+
+        app()->make(GameService::class)->finishGame();
+
+        $this->assertDatabaseMissing(
+            'games',
+            ['finished_at' => null],
+        );
+        for ($index = 0; $index < $playerCount; $index++) {
+            $this->assertDatabaseHas(
+                'money_players',
+                [
+                    'player_id' => $players->get($index)->id,
+                    'money' => $expect[$index],
+                ]
+            );
+        }
     }
 }
