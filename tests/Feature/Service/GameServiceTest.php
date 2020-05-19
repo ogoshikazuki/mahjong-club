@@ -244,4 +244,21 @@ class GameServiceTest extends TestCase
             $this->assertEquals($expect->get($index)->id, $actual->get($index)->id);
         }
     }
+
+    public function testRememberLastGameResult()
+    {
+        DB::table('game_results')->delete();
+
+        $datetime2 = $this->faker()->datetime;
+        $datetime1 = $this->faker()->datetime($datetime2);
+
+        $game = Game::create();
+        $notLastGameResult = factory(GameResult::class)->make(['created_at' => $datetime1]);
+        $lastGameResult = factory(GameResult::class)->make(['created_at' => $datetime2]);
+        $game->gameResults()->saveMany([$notLastGameResult, $lastGameResult]);
+
+        app()->make(GameService::class)->rememberLastGameResult();
+
+        $this->assertEquals($lastGameResult->id, session('lastGameResult')->id);
+    }
 }
