@@ -193,4 +193,21 @@ class GameServiceTest extends TestCase
             );
         }
     }
+
+    /**
+     * @depends testGetCurrentGame
+     */
+    public function testCancelGame()
+    {
+        DB::table('games')->delete();
+
+        $game = Game::create();
+
+        app()->make(GameService::class)->cancelGame();
+
+        $this->assertDatabaseMissing(
+            'games',
+            ['id' => $game->id]
+        );
+    }
 }
