@@ -261,4 +261,26 @@ class GameServiceTest extends TestCase
 
         $this->assertEquals($lastGameResult->id, session('lastGameResult')->id);
     }
+
+    public function testIsRegisteredGameSameTime()
+    {
+        DB::table('game_results')->delete();
+
+        $datetime3 = $this->faker()->datetime;
+        $datetime2 = $this->faker()->datetime($datetime3);
+        $datetime1 = $this->faker()->datetime($datetime2);
+
+        $game = Game::create();
+        $notLastGameResult = factory(GameResult::class)->make(['created_at' => $datetime1]);
+        $lastGameResult = factory(GameResult::class)->make(['created_at' => $datetime2]);
+        $game->gameResults()->saveMany([$notLastGameResult, $lastGameResult]);
+
+        session(['lastGameResult' => $lastGameResult]);
+        $this->assertFalse(app()->make(GameService::class)->isRegisteredGameSameTime());
+
+        $registeredGameSameTime = factory(GameResult::class)->make(['created_at' => $datetime3]);
+        $game->gameResults()->save($registeredGameSameTime);
+
+        $this->assertTrue(app()->make(GameService::class)->isRegisteredGameSameTime());
+    }
 }
