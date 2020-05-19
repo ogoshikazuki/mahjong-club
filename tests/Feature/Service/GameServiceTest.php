@@ -210,4 +210,38 @@ class GameServiceTest extends TestCase
             ['id' => $game->id]
         );
     }
+
+    public function testGetCurrentMoneyGames()
+    {
+        DB::table('moneys')->delete();
+        DB::table('games')->delete();
+
+        $datetime4 = $this->faker()->datetime;
+        $datetime3 = $this->faker()->datetime($datetime4);
+        $datetime2 = $this->faker()->datetime($datetime3);
+        $datetime1 = $this->faker()->datetime($datetime2);
+
+        $money1 = Money::create();
+        $game1 = new Game();
+        $game1->created_at = $datetime1;
+        $game1->save();
+        $money1->finished_at = $datetime2;
+        $money1->save();
+
+        $money2 = Money::create();
+        $game2 = new Game();
+        $game2->created_at = $datetime3;
+        $game2->save();
+        $game3 = new Game();
+        $game3->created_at = $datetime4;
+        $game3->save();
+
+        $expect = collect([$game2, $game3]);
+
+        $actual = app()->make(GameService::class)->getCurrentMoneyGames();
+
+        for ($index = 0; $index < $expect->count(); $index++) {
+            $this->assertEquals($expect->get($index)->id, $actual->get($index)->id);
+        }
+    }
 }
