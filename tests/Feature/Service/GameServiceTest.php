@@ -153,4 +153,44 @@ class GameServiceTest extends TestCase
             );
         }
     }
+
+    /**
+     * @depends testGetCurrentGame
+     */
+    public function testRegisterGameResult()
+    {
+        DB::table('games')->delete();
+
+        $playerCount = 3;
+
+        $game = Game::create();
+
+        $players = factory(Player::class, $playerCount)->create();
+
+        $rate = 50;
+        $points = [
+            $players->get(0)->id => 30,
+            $players->get(1)->id => -10,
+            $players->get(2)->id => -20,
+        ];
+
+        app()->make(GameService::class)->registerGameResult($rate, $points);
+
+        $this->assertDatabaseHas(
+            'game_results',
+            [
+                'game_id' => $game->id,
+                'rate' => $rate,
+            ]
+        );
+        for ($index = 0; $index < $playerCount; $index++) {
+            $this->assertDatabaseHas(
+                'game_result_players',
+                [
+                    'player_id' => $players->get($index)->id,
+                    'point' => $points[$players->get($index)->id],
+                ]
+            );
+        }
+    }
 }
