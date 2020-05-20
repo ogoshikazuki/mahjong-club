@@ -9,11 +9,6 @@ jobs:
     steps:
       - checkout
 
-      - run: 
-          name: install pdo_mysql
-          command: |
-            sudo docker-php-ext-install pdo_mysql
-
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "composer.lock" }}
@@ -34,6 +29,11 @@ jobs:
           command: |
             ./vendor/bin/phpcs --standard=phpcs.xml
             ./vendor/bin/phpmd app,routes text phpmd.xml
+
+      - run: 
+          name: install pdo_mysql
+          command: |
+            sudo docker-php-ext-install pdo_mysql
 
       - run:
           name: migrate
