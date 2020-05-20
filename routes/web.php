@@ -32,3 +32,5 @@ Route::group(['prefix' => 'money', 'as' => 'money.'], function () {
 });
 
 Route::get('history', 'HomeController@history')->name('history');
+
+Route::get('average-finish-order', 'GameController@averageFinishOrder')->name('average-finish-order');

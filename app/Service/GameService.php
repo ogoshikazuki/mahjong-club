@@ -17,10 +17,12 @@ use App\{
 class GameService
 {
     private $moneyService;
+    private $playerService;
 
-    public function __construct(MoneyService $moneyService)
+    public function __construct(MoneyService $moneyService, PlayerService $playerService)
     {
         $this->moneyService = $moneyService;
+        $this->playerService = $playerService;
     }
 
     public function startGame(): void
@@ -90,5 +92,29 @@ class GameService
     {
         $lastGameResult = GameResult::latest()->first();
         return $lastGameResult->id !== session('lastGameResult')->id;
+    }
+
+    public function getAverageFinishOrder($playerCount): Collection
+    {
+        $gameResults = GameResult::has('gameResultPlayers', '=', $playerCount)->get();
+
+        $totalFinishOrders = $gameResults->reduce(
+            function ($totalFinishOrders, $gameResult) {
+                $gameResultPlayers = $gameResult->gameResultPlayers()->orderByDesc('point')->get();
+                $finishOrder = 0;
+                foreach ($gameResultPlayers as $gameResultPlayer) {
+                    $finishOrder++;
+                    $totalFinishOrders[$gameResultPlayer->player_id] += $finishOrder;
+                }
+                return $totalFinishOrders;
+            },
+            $this->playerService->getAllPlayers()->mapWithKeys(function ($player) {
+                return [$player->id => 0];
+            })
+        );
+
+        return $totalFinishOrders->mapWithKeys(function ($totalFinishOrder, $playerId) use ($gameResults) {
+            return [$playerId => $totalFinishOrder / $gameResults->count()];
+        });
     }
 }

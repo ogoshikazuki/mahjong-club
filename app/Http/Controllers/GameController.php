@@ -54,4 +54,11 @@ class GameController extends Controller
 
         return redirect()->route('home');
     }
+
+    public function averageFinishOrder()
+    {
+        return view('average_finish_order')
+            ->with('players', $this->playerService->getAllPlayers())
+            ->with('averageFinishOrders3People', $this->gameService->getAverageFinishOrder(3));
+    }
 }
