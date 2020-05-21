@@ -11,7 +11,7 @@ use App\Exceptions\GameStartedException;
 use App\{
     Game,
     GameResult,
-    GameResultPlayer,
+    GameResultPlayer
 };
 
 class GameService
@@ -102,11 +102,11 @@ class GameService
                         $averageGetters->replace([
                             $playerId => $averageGetters->get($playerId)->addTotal($finishOrder)
                         ]);
-                    } else {
-                        $averageGetter = new AverageGetter();
-                        $averageGetter->addTotal($finishOrder);
-                        $averageGetters->put($playerId, $averageGetter);
+                        continue;
                     }
+                    $averageGetter = new AverageGetter();
+                    $averageGetter->addTotal($finishOrder);
+                    $averageGetters->put($playerId, $averageGetter);
                 }
                 return $averageGetters;
             }, collect())
