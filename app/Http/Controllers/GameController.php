@@ -59,6 +59,7 @@ class GameController extends Controller
     {
         return view('average_finish_order')
             ->with('players', $this->playerService->getAllPlayers())
-            ->with('averageFinishOrders3People', $this->gameService->getAverageFinishOrder(3));
+            ->with('averageFinishOrders3People', $this->gameService->getAverageFinishOrder(3))
+            ->with('averageFinishOrders4People', $this->gameService->getAverageFinishOrder(4));
     }
 }
