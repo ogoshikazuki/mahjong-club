@@ -6,23 +6,21 @@ use Illuminate\Support\Collection;
 
 use Carbon\Carbon;
 
+use App\Service\Helper\AverageGetter;
 use App\Exceptions\GameStartedException;
 use App\{
     Game,
     GameResult,
     GameResultPlayer,
-    Player
 };
 
 class GameService
 {
     private $moneyService;
-    private $playerService;
 
-    public function __construct(MoneyService $moneyService, PlayerService $playerService)
+    public function __construct(MoneyService $moneyService)
     {
         $this->moneyService = $moneyService;
-        $this->playerService = $playerService;
     }
 
     public function startGame(): void
@@ -94,27 +92,49 @@ class GameService
         return $lastGameResult->id !== session('lastGameResult')->id;
     }
 
-    public function getAverageFinishOrder($playerCount): Collection
+    public function getAverageFinishOrder(int $playerCount): Collection
+    {
+        return $this
+            ->getFinishOrders($playerCount)
+            ->reduce(function ($averageGetters, $finishOrders) {
+                foreach ($finishOrders as $playerId => $finishOrder) {
+                    if ($averageGetters->has($playerId)) {
+                        $averageGetters->replace([
+                            $playerId => $averageGetters->get($playerId)->addTotal($finishOrder)
+                        ]);
+                    } else {
+                        $averageGetter = new AverageGetter();
+                        $averageGetter->addTotal($finishOrder);
+                        $averageGetters->put($playerId, $averageGetter);
+                    }
+                }
+                return $averageGetters;
+            }, collect())
+            ->mapWithKeys(function ($averageGetter, $playerId) {
+                return [$playerId => $averageGetter->getAverage()];
+            });
+    }
+
+    /**
+     * [
+     *     [playerId => 着順, playerId => 着順, ...],
+     *     [playerId => 着順, playerId => 着順, ...],
+     *     ...
+     * ]
+     */
+    private function getFinishOrders(int $playerCount): Collection
     {
         $gameResults = GameResult::has('gameResultPlayers', '=', $playerCount)->get();
 
-        $totalFinishOrders = $gameResults->reduce(
-            function ($totalFinishOrders, $gameResult) {
-                $gameResultPlayers = $gameResult->gameResultPlayers()->orderByDesc('point')->get();
-                $finishOrder = 0;
-                foreach ($gameResultPlayers as $gameResultPlayer) {
-                    $finishOrder++;
-                    $totalFinishOrders[$gameResultPlayer->player_id] += $finishOrder;
-                }
-                return $totalFinishOrders;
-            },
-            $this->playerService->getAllPlayers()->mapWithKeys(function ($player) {
-                return [$player->id => 0];
-            })
-        );
-
-        return $totalFinishOrders->mapWithKeys(function ($totalFinishOrder, $playerId) use ($gameResults) {
-            return [$playerId => $totalFinishOrder / $gameResults->count()];
+        return $gameResults->map(function ($gameResult) {
+            return $gameResult
+                ->gameResultPlayers()
+                ->orderByDesc('point')
+                ->get()
+                ->mapWithKeys(function ($gameResultPlayer, $index) {
+                    // 着順を`$index + 1`とした。
+                    return [$gameResultPlayer->player_id => $index + 1];
+                });
         });
     }
 }
