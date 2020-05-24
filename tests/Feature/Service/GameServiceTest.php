@@ -283,4 +283,72 @@ class GameServiceTest extends TestCase
 
         $this->assertTrue(app()->make(GameService::class)->isRegisteredGameSameTime());
     }
+
+    public function testGetAverageFinishOrder()
+    {
+        DB::table('games')->delete();
+
+        $players = factory(Player::class, 4)->create();
+        $game = Game::create();
+
+        $inputs = [
+            [
+                $players->get(0)->id => 1,
+                $players->get(1)->id => 2,
+                $players->get(2)->id => -3
+            ],
+            [
+                $players->get(0)->id => 1,
+                $players->get(1)->id => 2,
+                $players->get(2)->id => 3,
+                $players->get(3)->id => -6
+            ],
+            [
+                $players->get(0)->id => 2,
+                $players->get(1)->id => -3,
+                $players->get(2)->id => 1
+            ],
+            [
+                $players->get(0)->id => 3,
+                $players->get(1)->id => -6,
+                $players->get(2)->id => 1,
+                $players->get(3)->id => 2
+            ],
+        ];
+
+        $expect = [
+            '3people' => [
+                $players->get(0)->id => 1.5,
+                $players->get(1)->id => 2,
+                $players->get(2)->id => 2.5
+            ],
+            '4people' => [
+                $players->get(0)->id => 2,
+                $players->get(1)->id => 3,
+                $players->get(2)->id => 2,
+                $players->get(3)->id => 3
+            ],
+        ];
+
+        foreach ($inputs as $input) {
+            $game
+                ->gameResults()
+                ->save(factory(GameResult::class)->make())
+                ->gameResultPlayers()
+                ->saveMany(collect($input)->map(function ($point, $playerId) {
+                    return GameResultPlayer::make(['player_id' => $playerId, 'point' => $point]);
+                }));
+        }
+
+        resolve(GameService::class)
+            ->getAverageFinishOrder(3)
+            ->each(function ($averageFinishOrder, $playerId) use ($expect) {
+                $this->assertEquals($expect['3people'][$playerId], $averageFinishOrder);
+            });
+        resolve(GameService::class)
+            ->getAverageFinishOrder(4)
+            ->each(function ($averageFinishOrder, $playerId) use ($expect) {
+                $this->assertEquals($expect['4people'][$playerId], $averageFinishOrder);
+            });
+    }
 }
