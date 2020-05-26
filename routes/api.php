@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
+    Route::get('player', 'PlayerController@index')->name('player.index');
+    Route::apiResource('player', 'PlayerController', ['only' => ['index']]);
+    Route::group(['prefix' => 'game', 'as' => 'game.'], function () {
+        Route::get('get-current-game', 'GameController@getCurrentGame')->name('get-current-game');
+        Route::apiResource('result', 'GameResultController', ['only' => ['destroy']])
+            ->parameters(['result' => 'gameResult']);
+    });
 });

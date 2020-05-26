@@ -28,8 +28,7 @@ class HomeController extends Controller
         if ($this->gameService->isGameStarted()) {
             $this->gameService->rememberLastGameResult();
             return view('game')
-                ->with('players', $this->playerService->getAllPlayers())
-                ->with('game', $this->gameService->getCurrentGame());
+                ->with('players', $this->playerService->getAllPlayers());
         }
 
         return view('home')

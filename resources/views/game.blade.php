@@ -31,44 +31,11 @@
                 </tr>
             @endforeach
         </table>
-        <button class="btn btn-primary btn-sm">登録</button>
+        <button class="btn btn-primary">登録</button>
     </form>
     <hr>
     <h2>履歴</h2>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>レート</th>
-                    @foreach($players as $player)
-                        <th>{{ $player->name }}</th>
-                    @endforeach
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($game->gameResults as $gameResult)
-                    <tr>
-                        <td>{{ $gameResult->rate }}</td>
-                        @foreach($players as $player)
-                            <td>{{ $gameResult->gameResultPlayer($player)->point ?? '' }}</td>
-                        @endforeach
-                        <td>
-                            <form method="POST" action="{{ route('game.result.destroy', [$gameResult]) }}" onsubmit="return confirm('本当に削除しますか？');">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <button class="btn btn-danger btn-sm">削除</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-    @if($game->gameResults()->count() >= 6)
-        <div class="alert alert-info">スマホの画面サイズ的にそろそろ一度締めた方が良いよ！</div>
-    @endif
+    <game-result-history></game-result-history>
     <form method="POST" action="{{ route('game.finish') }}" onsubmit="return confirm('本当にゲームを終了しますか？');" class="d-inline">
         {{ csrf_field() }}
         <button class="btn btn-primary">ゲーム終了</button>
