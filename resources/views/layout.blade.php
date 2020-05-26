@@ -22,8 +22,9 @@
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="container" id="app">
             @yield('content')
         </div>
     </body>
+    <script type="text/javascript" src="{{ mix('/js/app.js') }}"></script>
 </html>
