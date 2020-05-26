@@ -13,3 +13,4 @@ yarn-error.log
 clover.xml
 public/js/app.js
 public/mix-manifest.json
+public/fonts/vendor
