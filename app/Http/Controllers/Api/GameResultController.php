@@ -30,6 +30,8 @@ class GameResultController extends Controller
 
     public function update(GameResult $gameResult, GameResultRequest $request)
     {
-        $this->gameService->updateGameResult($gameResult, $request->validated()['rate'], $request->validated()['points']);
+        $this
+            ->gameService
+            ->updateGameResult($gameResult, $request->validated()['rate'], $request->validated()['points']);
     }
 }
