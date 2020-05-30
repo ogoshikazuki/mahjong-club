@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Rules\ZeroSum;
+use App\Http\Requests\GameResultRequest;
 use App\Service\GameService;
 use App\GameResult;
 use App\GameResultPlayer;
@@ -24,19 +24,14 @@ class GameResultController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(GameResultRequest $request)
     {
-        $validatedData = $request->validate([
-            'rate' => ['required', 'numeric'],
-            'points' => ['required', 'array', new ZeroSum],
-        ]);
-
         if ($this->gameService->isRegisteredGameSameTime()) {
             session()->flash('temporaryGameErrorMessage', '他の方と同時に登録されたため、キャンセルしました。');
             return redirect()->route('home');
         }
 
-        $this->gameService->registerGameResult($validatedData['rate'], $validatedData['points']);
+        $this->gameService->registerGameResult($request->validated()['rate'], $request->validated()['points']);
 
         return redirect()->route('home');
     }
