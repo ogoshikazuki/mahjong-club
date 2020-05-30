@@ -11,10 +11,10 @@
         "heroku-prebuild": "npm run production"
     },
     "dependencies": {
-        "element-ui": "^2.13.2",
         "axios": "^0.19",
         "bootstrap": "^4.0.0",
         "cross-env": "^7.0",
+        "element-ui": "^2.13.2",
         "jquery": "^3.2",
         "laravel-mix": "^5.0.1",
         "lodash": "^4.17.13",
@@ -22,6 +22,7 @@
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.20.1",
         "sass-loader": "^8.0.0",
+        "url-template": "^2.0.8",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
     },
