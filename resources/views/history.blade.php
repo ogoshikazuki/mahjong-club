@@ -30,5 +30,4 @@
             </tbody>
         </table>
     </div>
-    <a class="btn btn-secondary" href="{{ route('home') }}">戻る</a>
 @endsection
