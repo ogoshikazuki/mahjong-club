@@ -12,4 +12,9 @@ class MoneyPlayer extends Model
     protected $casts = [
         'player_id' => 'int',
     ];
+
+    public function player()
+    {
+        return $this->belongsTo('App\Player');
+    }
 }
