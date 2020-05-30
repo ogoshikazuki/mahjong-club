@@ -17,4 +17,9 @@ class AverageGetter
     {
         return $this->total / $this->count;
     }
+
+    public function getCount(): int
+    {
+        return $this->count;
+    }
 }

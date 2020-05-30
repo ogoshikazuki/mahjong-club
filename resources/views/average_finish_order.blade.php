@@ -17,6 +17,7 @@
                 <thead>
                     <tr>
                         <th>名前</th>
+                        <th>ゲーム数</th>
                         <th>平均着順</th>
                     </tr>
                 </thead>
@@ -24,7 +25,8 @@
                     @foreach($averageFinishOrders4People as $playerId => $averageFinishOrder)
                         <tr>
                             <td>{{ App\Player::findOrFail($playerId)->name }}</td>
-                            <td>{{ $averageFinishOrder }}</td>
+                            <td>{{ $averageFinishOrder->getCount() }}</td>
+                            <td>{{ $averageFinishOrder->getAverage() }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -36,6 +38,7 @@
                 <thead>
                     <tr>
                         <th>名前</th>
+                        <th>ゲーム数</th>
                         <th>平均着順</th>
                     </tr>
                 </thead>
@@ -43,7 +46,8 @@
                     @foreach($averageFinishOrders3People as $playerId => $averageFinishOrder)
                         <tr>
                             <td>{{ App\Player::findOrFail($playerId)->name }}</td>
-                            <td>{{ $averageFinishOrder }}</td>
+                            <td>{{ $averageFinishOrder->getCount() }}</td>
+                            <td>{{ $averageFinishOrder->getAverage() }}</td>
                         </tr>
                     @endforeach
                 </tbody>

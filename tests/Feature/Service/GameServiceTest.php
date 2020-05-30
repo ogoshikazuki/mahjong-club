@@ -343,12 +343,12 @@ class GameServiceTest extends TestCase
         resolve(GameService::class)
             ->getAverageFinishOrder(3)
             ->each(function ($averageFinishOrder, $playerId) use ($expect) {
-                $this->assertEquals($expect['3people'][$playerId], $averageFinishOrder);
+                $this->assertEquals($expect['3people'][$playerId], $averageFinishOrder->getAverage());
             });
         resolve(GameService::class)
             ->getAverageFinishOrder(4)
             ->each(function ($averageFinishOrder, $playerId) use ($expect) {
-                $this->assertEquals($expect['4people'][$playerId], $averageFinishOrder);
+                $this->assertEquals($expect['4people'][$playerId], $averageFinishOrder->getAverage());
             });
     }
 }
