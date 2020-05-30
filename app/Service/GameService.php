@@ -11,7 +11,8 @@ use App\Exceptions\GameStartedException;
 use App\{
     Game,
     GameResult,
-    GameResultPlayer
+    GameResultPlayer,
+    Player
 };
 
 class GameService
@@ -137,5 +138,33 @@ class GameService
                     return [$gameResultPlayer->player_id => $index + 1];
                 });
         });
+    }
+
+    public function updateGameResult(GameResult $gameResult, int $rate, array $points): void
+    {
+        $gameResult->rate = $rate;
+        $gameResult->save();
+
+        foreach ($points as $playerId => $point) {
+            $player = Player::findOrFail($playerId);
+            $gameResultPlayer = $gameResult->gameResultPlayer($player);
+
+            if (!isset($point) || $point === '0') {
+                if (isset($gameResultPlayer)) {
+                    $gameResultPlayer->delete();
+                }
+                continue;
+            }
+
+            if (isset($gameResultPlayer)) {
+                $gameResultPlayer->point = $point;
+                $gameResultPlayer->save();
+                continue;
+            }
+
+            $gameResult
+                ->gameResultPlayers()
+                ->save(new GameResultPlayer(['player_id' => $playerId, 'point' => $point]));
+        }
     }
 }
