@@ -16,7 +16,6 @@ class GameResultController extends Controller
      */
     public function destroy(GameResult $gameResult)
     {
-        \Log::debug($gameResult->id);
         $gameResult->delete();
     }
 }
