@@ -34,6 +34,15 @@
         <div class="container mt-3" id="app">
             @yield('content')
         </div>
+        <nav class="navbar navbar-dark bg-dark fixed-bottom justify-content-end">
+            <ul class="navbar-nav">
+                @if(!Route::is('average-finish-order'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('average-finish-order') }}">平均着順</a>
+                    </li>
+                @endif
+            </ul>
+        </nav>
     </body>
     <script type="text/javascript" src="{{ mix('/js/app.js') }}"></script>
 </html>
