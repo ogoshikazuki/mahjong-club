@@ -1,7 +1,6 @@
 @extends('layout')
 
 @section('content')
-    <hr>
     <h1>履歴</h1>
     <div class="table-responsive">
         <table class="table">

@@ -11,7 +11,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
-        <link href="/css/app.css" rel="stylesheet">
+        <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
         <style>
             .table-responsive th,td {
                 white-space: nowrap;
@@ -22,7 +22,16 @@
         </style>
     </head>
     <body>
-        <div class="container" id="app">
+        <nav class="navbar navbar-dark bg-dark sticky-top">
+            <a href="{{ route('home') }}" class="navbar-brand">Mahjong</a>
+            @if(!resolve(App\Service\GameService::class)->isGameStarted())
+                <form method="POST" action="{{ route('game.start') }}">
+                    {{ csrf_field() }}
+                    <button class="btn btn-outline-primary">ゲームスタート</button>
+                </form>
+            @endif
+        </nav>
+        <div class="container mt-3" id="app">
             @yield('content')
         </div>
     </body>

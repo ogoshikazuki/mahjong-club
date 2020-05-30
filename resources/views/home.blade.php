@@ -1,7 +1,6 @@
 @extends('layout')
 
 @section('content')
-    <hr>
     <h2>未精算</h2>
     <div class="table-responsive">
         <table class="table">
@@ -26,11 +25,6 @@
     <form method="POST" action="{{ route('money.reset') }}" onsubmit="return confirm('本当に精算しますか？');" class="d-inline">
         {{ csrf_field() }}
         <button class="btn btn-primary">精算</button>
-    </form>
-    <hr>
-    <form method="POST" action="{{ route('game.start') }}">
-        {{ csrf_field() }}
-        <button class="btn btn-primary">ゲームスタート</button>
     </form>
     @if($pastMoneys->isNotEmpty())
         <hr>

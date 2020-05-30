@@ -4,7 +4,6 @@
     @if(session()->has('temporaryGameErrorMessage'))
         <div class="alert alert-danger">{{ session('temporaryGameErrorMessage') }}</div>
     @endif
-    <hr>
     <h2>入力</h2>
     @error('points')
         <div class="alert alert-danger">{{ $message }}</div>
