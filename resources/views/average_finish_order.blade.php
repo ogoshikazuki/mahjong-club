@@ -1,7 +1,6 @@
 @extends('layout')
 
 @section('content')
-    <hr>
     <h1>平均着順</h1>
     <h2>四麻</h2>
     <table class="table">
@@ -12,10 +11,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($players as $player)
+            @foreach($averageFinishOrders4People as $playerId => $averageFinishOrder)
                 <tr>
-                    <td>{{ $player->name }}</td>
-                    <td>{{ $averageFinishOrders4People->get($player->id) }}</td>
+                    <td>{{ App\Player::findOrFail($playerId)->name }}</td>
+                    <td>{{ $averageFinishOrder }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -29,10 +28,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($players as $player)
+            @foreach($averageFinishOrders3People as $playerId => $averageFinishOrder)
                 <tr>
-                    <td>{{ $player->name }}</td>
-                    <td>{{ $averageFinishOrders3People->get($player->id) }}</td>
+                    <td>{{ App\Player::findOrFail($playerId)->name }}</td>
+                    <td>{{ $averageFinishOrder }}</td>
                 </tr>
             @endforeach
         </tbody>

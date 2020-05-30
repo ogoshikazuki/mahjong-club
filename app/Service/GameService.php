@@ -112,7 +112,8 @@ class GameService
             }, collect())
             ->mapWithKeys(function ($averageGetter, $playerId) {
                 return [$playerId => $averageGetter->getAverage()];
-            });
+            })
+            ->sort();
     }
 
     /**
