@@ -30,7 +30,24 @@ jobs:
             ./vendor/bin/phpcs --standard=phpcs.xml
             ./vendor/bin/phpmd app,routes text phpmd.xml
 
-      - run: 
+      - run:
+          name: update npm
+          command: "sudo npm install -g npm@latest"
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: npm install
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+
+      - run:
+          name: eslint
+          command: npm run lint
+
+      - run:
           name: install pdo_mysql
           command: |
             sudo docker-php-ext-install pdo_mysql

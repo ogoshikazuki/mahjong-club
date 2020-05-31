@@ -6,7 +6,7 @@
 
 require("./bootstrap");
 
-window.Vue = require("vue");
+const Vue = require("vue");
 
 /**
  * The following block of code may be used to automatically register your
@@ -33,7 +33,7 @@ Vue.use(ElementUI, { locale });
 
 import GameResultHistory from "./components/GameResultHistory";
 
-const app = new Vue({
+new Vue({
     el: "#app",
     components: {
         GameResultHistory

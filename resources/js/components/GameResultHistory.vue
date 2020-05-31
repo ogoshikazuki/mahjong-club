@@ -83,15 +83,6 @@ export default {
         async load() {
             this.players = await apiClient.getAllPlayers();
             const currentGame = await apiClient.getCurrentGame();
-            for (let gameResult of currentGame.gameResults) {
-                let row = { rate: gameResult.rate };
-                for (let player of this.players) {
-                    for (let gameResultPlayer of gameResult.gameResultPlayers) {
-                    }
-                    row[player.id] = player.id;
-                }
-                this.tableData.push(row);
-            }
             this.tableData = currentGame.gameResults.map(gameResult => {
                 const row = { id: gameResult.id, rate: gameResult.rate };
                 for (let player of this.players) {
