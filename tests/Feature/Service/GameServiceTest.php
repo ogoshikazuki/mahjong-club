@@ -344,11 +344,13 @@ class GameServiceTest extends TestCase
             ->getAverageFinishOrder(3)
             ->each(function ($averageFinishOrder, $playerId) use ($expect) {
                 $this->assertEquals($expect['3people'][$playerId], $averageFinishOrder->getAverage());
+                $this->assertEquals(2, $averageFinishOrder->getCount());
             });
         resolve(GameService::class)
             ->getAverageFinishOrder(4)
             ->each(function ($averageFinishOrder, $playerId) use ($expect) {
                 $this->assertEquals($expect['4people'][$playerId], $averageFinishOrder->getAverage());
+                $this->assertEquals(2, $averageFinishOrder->getCount());
             });
     }
 
