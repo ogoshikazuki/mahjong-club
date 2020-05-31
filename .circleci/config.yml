@@ -2,9 +2,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/php:7.4.3-fpm
+      - image: circleci/php:7.4.3-fpm-node
       - image: circleci/mysql:latest
-      - image: circleci/node:latest
       - image: mileschou/xdebug:7.3
 
     steps:
