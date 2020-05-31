@@ -148,7 +148,7 @@ class GameService
             $player = Player::findOrFail($playerId);
             $gameResultPlayer = $gameResult->gameResultPlayer($player);
 
-            if (!isset($point) || $point === '0') {
+            if (!isset($point) || (int)$point === 0) {
                 if (isset($gameResultPlayer)) {
                     $gameResultPlayer->delete();
                 }

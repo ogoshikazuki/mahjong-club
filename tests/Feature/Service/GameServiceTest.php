@@ -351,4 +351,71 @@ class GameServiceTest extends TestCase
                 $this->assertEquals($expect['4people'][$playerId], $averageFinishOrder->getAverage());
             });
     }
+
+    /**
+     * @depends testStartGame
+     * @depends testRegisterGameResult
+     */
+    public function testUpdateGameResult()
+    {
+        DB::table('games')->delete();
+
+        $players = factory(Player::class, 7)->create();
+        resolve(GameService::class)->startGame();
+
+        $rate = 50;
+        $points = collect([50, 10, -20, -40])->mapWithKeys(function ($point, $index) use ($players) {
+            return [$players->get($index)->id => $point];
+        })->toArray();
+        resolve(GameService::class)->registerGameResult($rate, $points);
+
+        $gameResult = GameResult::firstOrFail();
+
+        $rate = 100;
+
+        // 0:登録済からnull
+        $points[$players->get(0)->id] = null;
+
+        // 1:登録済から0
+        $points[$players->get(1)->id] = 0;
+
+        // 2:登録済から変更なし
+
+        // 3:ポイント変更
+        $points[$players->get(3)->id] = -30;
+
+        // 4:未登録から変更なし
+
+        // 5:未登録から0
+        $points[$players->get(5)->id] = 0;
+
+        // 6:未登録から登録
+        $points[$players->get(6)->id] = 50;
+
+        resolve(GameService::class)->updateGameResult($gameResult, $rate, $points);
+
+        $gameResultAfterUpdate = $gameResult->fresh();
+        $this->assertEquals($rate, $gameResultAfterUpdate->rate);
+
+        // 0:登録済からunset
+        $this->assertNull($gameResultAfterUpdate->gameResultPlayer($players->get(0)));
+
+        // 1:登録済から0
+        $this->assertNull($gameResultAfterUpdate->gameResultPlayer($players->get(1)));
+
+        // 2:登録済から変更なし
+        $this->assertEquals($points[$players->get(2)->id], $gameResultAfterUpdate->gameResultPlayer($players->get(2))->point);
+
+        // 3:ポイント変更
+        $this->assertEquals($points[$players->get(3)->id], $gameResultAfterUpdate->gameResultPlayer($players->get(3))->point);
+
+        // 4:未登録から変更なし
+        $this->assertNull($gameResultAfterUpdate->gameResultPlayer($players->get(4)));
+
+        // 5:未登録から0
+        $this->assertNull($gameResultAfterUpdate->gameResultPlayer($players->get(5)));
+
+        // 6:未登録から登録
+        $this->assertEquals($points[$players->get(6)->id], $gameResultAfterUpdate->gameResultPlayer($players->get(6))->point);
+    }
 }
