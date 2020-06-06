@@ -32,10 +32,18 @@ import locale from "element-ui/lib/locale/lang/ja";
 Vue.use(ElementUI, { locale });
 
 import GameResultHistory from "./components/GameResultHistory";
+import GameResultInput from "./components/GameResultInput";
 
 new Vue({
     el: "#app",
     components: {
-        GameResultHistory
+        GameResultHistory,
+        GameResultInput
+    },
+
+    methods: {
+        reloadGameResultHistory() {
+            this.$refs.gameResultHistory.load();
+        }
     }
 });

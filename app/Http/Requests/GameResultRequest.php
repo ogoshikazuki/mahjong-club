@@ -30,4 +30,12 @@ class GameResultRequest extends FormRequest
             'points' => ['required', 'array', new ZeroSum],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'rate.required' => 'レートを選択してください。',
+            'points.required' => 'ポイントを入力してください。',
+        ];
+    }
 }

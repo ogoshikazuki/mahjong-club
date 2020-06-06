@@ -34,4 +34,9 @@ class GameResultController extends Controller
             ->gameService
             ->updateGameResult($gameResult, $request->validated()['rate'], $request->validated()['points']);
     }
+
+    public function store(GameResultRequest $request)
+    {
+        $this->gameService->registerGameResult($request->validated()['rate'], $request->validated()['points']);
+    }
 }

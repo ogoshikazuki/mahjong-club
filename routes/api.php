@@ -19,7 +19,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::apiResource('player', 'PlayerController', ['only' => ['index']]);
     Route::group(['prefix' => 'game', 'as' => 'game.'], function () {
         Route::get('get-current-game', 'GameController@getCurrentGame')->name('get-current-game');
-        Route::apiResource('result', 'GameResultController', ['only' => ['destroy', 'update']])
+        Route::apiResource('result', 'GameResultController', ['only' => ['destroy', 'update', 'store']])
             ->parameters(['result' => 'gameResult']);
     });
 });
