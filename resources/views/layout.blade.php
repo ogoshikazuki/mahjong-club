@@ -16,9 +16,6 @@
             .table-responsive th,td {
                 white-space: nowrap;
             }
-            input[type="number"].point {
-                width: 40px;
-            }
         </style>
     </head>
     <body>
