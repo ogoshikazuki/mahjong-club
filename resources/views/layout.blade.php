@@ -16,6 +16,9 @@
             .table-responsive th,td {
                 white-space: nowrap;
             }
+            input {
+                font-size: 16px;
+            }
         </style>
     </head>
     <body>
