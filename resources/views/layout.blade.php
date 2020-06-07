@@ -16,7 +16,7 @@
             .table-responsive th,td {
                 white-space: nowrap;
             }
-            input {
+            input, select {
                 font-size: 16px !important;
             }
         </style>
