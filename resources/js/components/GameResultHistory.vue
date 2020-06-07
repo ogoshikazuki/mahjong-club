@@ -42,12 +42,12 @@
 
 <script>
 import apiClient from "../ApiClient";
+import { mapState } from "vuex";
 
 export default {
   data: function() {
     return {
       tableData: [],
-      players: [],
       loading: true,
       editForm: { id: null, rate: null, points: {} },
       editFormVisible: false,
@@ -60,7 +60,6 @@ export default {
     async load() {
       this.loading = true;
 
-      this.players = await apiClient.getAllPlayers();
       const currentGame = await apiClient.getCurrentGame();
       this.tableData = currentGame.gameResults.map(gameResult => {
         const row = { id: gameResult.id, rate: gameResult.rate };
@@ -127,6 +126,10 @@ export default {
 
   created: function() {
     this.load();
+  },
+
+  computed: {
+    ...mapState(["players"])
   }
 };
 </script>

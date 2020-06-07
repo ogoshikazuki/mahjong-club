@@ -31,11 +31,15 @@ import locale from "element-ui/lib/locale/lang/ja";
 
 Vue.use(ElementUI, { locale });
 
+import store from "./store/index";
 import GameResultHistory from "./components/GameResultHistory";
 import GameResultInput from "./components/GameResultInput";
 
 new Vue({
     el: "#app",
+
+    store,
+
     components: {
         GameResultHistory,
         GameResultInput
@@ -45,5 +49,9 @@ new Vue({
         reloadGameResultHistory() {
             this.$refs.gameResultHistory.load();
         }
+    },
+
+    created() {
+        this.$store.dispatch("loadPlayers");
     }
 });

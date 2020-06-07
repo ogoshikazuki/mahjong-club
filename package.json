@@ -25,7 +25,8 @@
         "sass-loader": "^8.0.0",
         "url-template": "^2.0.8",
         "vue": "^2.5.17",
-        "vue-template-compiler": "^2.6.10"
+        "vue-template-compiler": "^2.6.10",
+        "vuex": "^3.4.0"
     },
     "engines": {
         "node": "12.16.x"

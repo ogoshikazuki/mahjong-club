@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit" v-loading="loading">
+  <form @submit.prevent="onSubmit" v-loading="loading && players">
     <div class="form-group row">
       <label class="col-5 col-form-label">レート</label>
       <div class="col-7">
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import apiClient from "../ApiClient";
 
 export default {
@@ -34,8 +35,7 @@ export default {
     return {
       rate: null,
       points: {},
-      players: [],
-      loading: true,
+      loading: false,
       errors: {},
       conflictOccurred: false
     };
@@ -70,10 +70,8 @@ export default {
     }
   },
 
-  created: async function() {
-    this.players = await apiClient.getAllPlayers();
-
-    this.loading = false;
+  computed: {
+    ...mapState(["players"])
   }
 };
 </script>
