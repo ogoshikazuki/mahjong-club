@@ -17,7 +17,7 @@
                 white-space: nowrap;
             }
             input {
-                font-size: 16px;
+                font-size: 16px !important;
             }
         </style>
     </head>
