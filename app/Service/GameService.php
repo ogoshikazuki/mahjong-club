@@ -69,7 +69,11 @@ class GameService
             if (isset($point)) {
                 $gameResult
                     ->gameResultPlayers()
-                    ->save(new GameResultPlayer(['player_id' => $playerId, 'point' => $point, 'tip' => $tips[$playerId] ?? 0]));
+                    ->save(new GameResultPlayer([
+                        'player_id' => $playerId,
+                        'point' => $point,
+                        'tip' => $tips[$playerId] ?? 0,
+                    ]));
             }
         }
     }
@@ -167,7 +171,11 @@ class GameService
 
             $gameResult
                 ->gameResultPlayers()
-                ->save(new GameResultPlayer(['player_id' => $playerId, 'point' => $point, 'tip' => $tips[$playerId] ?? 0]));
+                ->save(new GameResultPlayer([
+                    'player_id' => $playerId,
+                    'point' => $point,
+                    'tip' => $tips[$playerId] ?? 0,
+                ]));
         }
     }
 }
