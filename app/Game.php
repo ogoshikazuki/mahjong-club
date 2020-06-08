@@ -16,7 +16,7 @@ class Game extends Model
         return $this->gameResults->reduce(function ($money, $gameResult) use ($player) {
             $gameResultPlayer = $gameResult->gameResultPlayer($player);
             if (isset($gameResultPlayer)) {
-                return $money += $gameResultPlayer->point * $gameResult->rate;
+                return $money += ($gameResultPlayer->point + $gameResultPlayer->tip * 2) * $gameResult->rate;
             }
             return $money;
         }, 0);

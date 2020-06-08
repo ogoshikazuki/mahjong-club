@@ -17,6 +17,8 @@ use App\{
 
 class GameService
 {
+    public const POINT_PER_TIP = 2;
+
     private $moneyService;
 
     public function __construct(MoneyService $moneyService)
@@ -44,7 +46,8 @@ class GameService
             $rate = $gameResult->rate;
             $gameResult->gameResultPlayers->each(function ($gameResultPlayers) use ($money, $rate) {
                 $moneyPlayer = $money->moneyPlayer($gameResultPlayers->player);
-                $moneyPlayer->money += $gameResultPlayers->point * $rate;
+                $money = ($gameResultPlayers->point + $gameResultPlayers->tip * self::POINT_PER_TIP) * $rate;
+                $moneyPlayer->money += $money;
                 $moneyPlayer->save();
             });
         });
@@ -58,7 +61,7 @@ class GameService
         return Game::whereNull('finished_at')->firstOrFail();
     }
 
-    public function registerGameResult(int $rate, array $points): void
+    public function registerGameResult(int $rate, array $points, array $tips): void
     {
         $gameResult = $this->getCurrentGame()->gameResults()->save(new GameResult(['rate' => $rate]));
 
@@ -66,7 +69,7 @@ class GameService
             if (isset($point)) {
                 $gameResult
                     ->gameResultPlayers()
-                    ->save(new GameResultPlayer(['player_id' => $playerId, 'point' => $point]));
+                    ->save(new GameResultPlayer(['player_id' => $playerId, 'point' => $point, 'tip' => $tips[$playerId] ?? 0]));
             }
         }
     }
@@ -139,7 +142,7 @@ class GameService
         });
     }
 
-    public function updateGameResult(GameResult $gameResult, int $rate, array $points): void
+    public function updateGameResult(GameResult $gameResult, int $rate, array $points, array $tips): void
     {
         $gameResult->rate = $rate;
         $gameResult->save();
@@ -148,7 +151,7 @@ class GameService
             $player = Player::findOrFail($playerId);
             $gameResultPlayer = $gameResult->gameResultPlayer($player);
 
-            if (!isset($point) || (int)$point === 0) {
+            if (!isset($point) || (int)$point === 0 && (int)$tips[$playerId] === 0) {
                 if (isset($gameResultPlayer)) {
                     $gameResultPlayer->delete();
                 }
@@ -157,13 +160,14 @@ class GameService
 
             if (isset($gameResultPlayer)) {
                 $gameResultPlayer->point = $point;
+                $gameResultPlayer->tip = $tips[$playerId];
                 $gameResultPlayer->save();
                 continue;
             }
 
             $gameResult
                 ->gameResultPlayers()
-                ->save(new GameResultPlayer(['player_id' => $playerId, 'point' => $point]));
+                ->save(new GameResultPlayer(['player_id' => $playerId, 'point' => $point, 'tip' => $tips[$playerId] ?? 0]));
         }
     }
 }

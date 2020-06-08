@@ -40,6 +40,6 @@ class ZeroSum implements Rule
      */
     public function message()
     {
-        return '合計が0ではありません。';
+        return ':attributeの合計が0ではありません。';
     }
 }

@@ -173,8 +173,13 @@ class GameServiceTest extends TestCase
             $players->get(1)->id => -10,
             $players->get(2)->id => -20,
         ];
+        $tips = [
+            $players->get(0)->id => 3,
+            $players->get(1)->id => -1,
+            $players->get(2)->id => -2,
+        ];
 
-        app()->make(GameService::class)->registerGameResult($rate, $points);
+        app()->make(GameService::class)->registerGameResult($rate, $points, $tips);
 
         $this->assertDatabaseHas(
             'game_results',
@@ -189,6 +194,7 @@ class GameServiceTest extends TestCase
                 [
                     'player_id' => $players->get($index)->id,
                     'point' => $points[$players->get($index)->id],
+                    'tip' => $tips[$players->get($index)->id],
                 ]
             );
         }
@@ -369,7 +375,10 @@ class GameServiceTest extends TestCase
         $points = collect([50, 10, -20, -40])->mapWithKeys(function ($point, $index) use ($players) {
             return [$players->get($index)->id => $point];
         })->toArray();
-        resolve(GameService::class)->registerGameResult($rate, $points);
+        $tips = collect([5, 1, -2, -4])->mapWithKeys(function ($tip, $index) use ($players) {
+            return [$players->get($index)->id => $tip];
+        })->toArray();
+        resolve(GameService::class)->registerGameResult($rate, $points, $tips);
 
         $gameResult = GameResult::firstOrFail();
 
@@ -377,24 +386,29 @@ class GameServiceTest extends TestCase
 
         // 0:登録済からnull
         $points[$players->get(0)->id] = null;
+        $tips[$players->get(0)->id] = null;
 
         // 1:登録済から0
         $points[$players->get(1)->id] = 0;
+        $tips[$players->get(1)->id] = 0;
 
         // 2:登録済から変更なし
 
         // 3:ポイント変更
         $points[$players->get(3)->id] = -30;
+        $tips[$players->get(3)->id] = -3;
 
         // 4:未登録から変更なし
 
         // 5:未登録から0
         $points[$players->get(5)->id] = 0;
+        $tips[$players->get(5)->id] = 0;
 
         // 6:未登録から登録
         $points[$players->get(6)->id] = 50;
+        $tips[$players->get(6)->id] = 5;
 
-        resolve(GameService::class)->updateGameResult($gameResult, $rate, $points);
+        resolve(GameService::class)->updateGameResult($gameResult, $rate, $points, $tips);
 
         $gameResultAfterUpdate = $gameResult->fresh();
         $this->assertEquals($rate, $gameResultAfterUpdate->rate);
@@ -407,9 +421,11 @@ class GameServiceTest extends TestCase
 
         // 2:登録済から変更なし
         $this->assertEquals($points[$players->get(2)->id], $gameResultAfterUpdate->gameResultPlayer($players->get(2))->point);
+        $this->assertEquals($tips[$players->get(2)->id], $gameResultAfterUpdate->gameResultPlayer($players->get(2))->tip);
 
         // 3:ポイント変更
         $this->assertEquals($points[$players->get(3)->id], $gameResultAfterUpdate->gameResultPlayer($players->get(3))->point);
+        $this->assertEquals($tips[$players->get(3)->id], $gameResultAfterUpdate->gameResultPlayer($players->get(3))->tip);
 
         // 4:未登録から変更なし
         $this->assertNull($gameResultAfterUpdate->gameResultPlayer($players->get(4)));
@@ -419,5 +435,6 @@ class GameServiceTest extends TestCase
 
         // 6:未登録から登録
         $this->assertEquals($points[$players->get(6)->id], $gameResultAfterUpdate->gameResultPlayer($players->get(6))->point);
+        $this->assertEquals($tips[$players->get(6)->id], $gameResultAfterUpdate->gameResultPlayer($players->get(6))->tip);
     }
 }

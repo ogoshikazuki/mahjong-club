@@ -28,6 +28,7 @@ class GameResultRequest extends FormRequest
         return [
             'rate' => ['required', 'numeric'],
             'points' => ['required', 'array', new ZeroSum],
+            'tips' => ['array', new ZeroSum],
         ];
     }
 
@@ -36,6 +37,14 @@ class GameResultRequest extends FormRequest
         return [
             'rate.required' => 'レートを選択してください。',
             'points.required' => 'ポイントを入力してください。',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'points' => 'ポイント',
+            'tips' => '祝儀',
         ];
     }
 }

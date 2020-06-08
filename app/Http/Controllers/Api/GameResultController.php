@@ -32,11 +32,22 @@ class GameResultController extends Controller
     {
         $this
             ->gameService
-            ->updateGameResult($gameResult, $request->validated()['rate'], $request->validated()['points']);
+            ->updateGameResult(
+                $gameResult,
+                $request->validated()['rate'],
+                $request->validated()['points'],
+                $request->validated()['tips']
+            );
     }
 
     public function store(GameResultRequest $request)
     {
-        $this->gameService->registerGameResult($request->validated()['rate'], $request->validated()['points']);
+        $this
+            ->gameService
+            ->registerGameResult(
+                $request->validated()['rate'],
+                $request->validated()['points'],
+                $request->validated()['tips']
+            );
     }
 }

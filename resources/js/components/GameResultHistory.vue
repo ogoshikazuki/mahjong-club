@@ -1,66 +1,68 @@
 <template>
-    <el-table :data="tableData" v-loading="loading" max-height="500">
-        <el-table-column prop="rate" label="レート"></el-table-column>
-        <el-table-column
-            v-for="player in players"
-            :key="player.id"
-            :prop="String(player.id)"
-            :label="player.name"
-        ></el-table-column>
-        <el-table-column width="146">
-            <template slot-scope="scope">
-                <el-button size="mini" @click="editGameResult(scope.row)"
-                    >編集</el-button
-                >
-                <el-dialog
-                    title="編集"
-                    :visible.sync="editFormVisible"
-                    v-loading="isEditFormLoading"
-                >
-                    <el-form :model="editForm">
-                        <el-form-item label="レート">
-                            <el-select v-model="editForm.rate">
-                                <el-option label="50" :value="50"></el-option>
-                                <el-option label="100" :value="100"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item
-                            v-for="player in players"
-                            :key="player.id"
-                            :label="player.name"
-                        >
-                            <el-input
-                                v-model="editForm.points[player.id]"
-                                type="number"
-                            ></el-input>
-                        </el-form-item>
-                    </el-form>
-                    <template v-if="editFormErrorMessages">
-                        <el-alert
-                            type="error"
-                            v-for="(message, index) in editFormErrorMessages"
-                            :key="index"
-                            :title="message"
-                        ></el-alert>
-                    </template>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button
-                            size="mini"
-                            type="primary"
-                            @click="updateGameResult"
-                            >更新</el-button
-                        >
-                    </span>
-                </el-dialog>
-                <el-button
-                    size="mini"
-                    type="danger"
-                    @click="deleteGameResult(scope.row.id)"
-                    >削除</el-button
-                >
+  <div class="table-responsive" v-loading="loading">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>レート</th>
+          <th v-for="player in players" :key="player.id">{{ player.name }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="gameResult in gameResults" :key="gameResult.id">
+          <td>
+            <select
+              class="form-control form-control-sm"
+              v-if="editForm.id === gameResult.id"
+              v-model="editForm.rate"
+            >
+              <option :value="50">50</option>
+              <option :value="100">100</option>
+            </select>
+            <template v-else>{{ gameResult.rate }}</template>
+          </td>
+          <td v-for="player in players" :key="player.id">
+            <template v-if="editForm.id === gameResult.id">
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                :class="{ 'is-invalid': editErrors.points }"
+                v-model="editForm.points[player.id]"
+              />
+              <div
+                class="invalid-feedback"
+                v-for="error of editErrors.points"
+                :key="error"
+              >{{ error }}</div>
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                :class="{ 'is-invalid': editErrors.tips }"
+                v-model="editForm.tips[player.id]"
+                placeholder="祝儀"
+              />
+              <div
+                class="invalid-feedback"
+                v-for="error of editErrors.tips"
+                :key="error"
+              >{{ error }}</div>
             </template>
-        </el-table-column>
-    </el-table>
+            <template v-else>{{ getPointAndTip(gameResult, player) }}</template>
+          </td>
+          <td>
+            <template v-if="editForm.id === gameResult.id">
+              <button class="btn btn-primary btn-sm" @click="updateGameResult">更新</button>
+              <button class="btn btn-secondary btn-sm" @click="resetForm">キャンセル</button>
+            </template>
+            <template v-else>
+              <button class="btn btn-secondary btn-sm" @click="editGameResult(gameResult)">編集</button>
+              <button class="btn btn-danger btn-sm" @click="deleteGameResult(gameResult.id)">削除</button>
+            </template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -68,95 +70,104 @@ import apiClient from "../ApiClient";
 import { mapState } from "vuex";
 
 export default {
-    data: function() {
-        return {
-            tableData: [],
-            loading: true,
-            editForm: { id: null, rate: null, points: {} },
-            editFormVisible: false,
-            isEditFormLoading: false,
-            editFormErrorMessages: []
-        };
+  data: function() {
+    return {
+      gameResults: [],
+      loading: true,
+      editForm: { id: null, rate: null, points: {}, tips: {} },
+      editing: null,
+      editErrors: {}
+    };
+  },
+
+  methods: {
+    async load() {
+      this.loading = true;
+
+      this.gameResults = [];
+
+      this.gameResults = (await apiClient.getCurrentGame()).gameResults;
+
+      this.loading = false;
     },
 
-    methods: {
-        async load() {
-            this.loading = true;
+    async deleteGameResult(id) {
+      if (!confirm("本当に削除しますか？")) {
+        return;
+      }
+      this.loading = true;
 
-            const currentGame = await apiClient.getCurrentGame();
-            this.tableData = currentGame.gameResults.map(gameResult => {
-                const row = { id: gameResult.id, rate: gameResult.rate };
-                for (let player of this.players) {
-                    for (let gameResultPlayer of gameResult.gameResultPlayers) {
-                        if (gameResultPlayer.player_id === player.id) {
-                            row[player.id] = gameResultPlayer.point;
-                        }
-                    }
-                }
-                return row;
-            });
-
-            this.loading = false;
-        },
-
-        async deleteGameResult(id) {
-            if (!confirm("本当に削除しますか？")) {
-                return;
-            }
-            this.loading = true;
-
-            await apiClient.deleteGameResult(id);
-            this.load();
-        },
-
-        editGameResult(row) {
-            this.resetForm();
-            for (let key of Object.keys(row)) {
-                if (isNaN(key)) {
-                    this.$set(this.editForm, key, row[key]);
-                } else {
-                    this.$set(this.editForm.points, key, row[key]);
-                }
-            }
-            this.editFormVisible = true;
-        },
-
-        resetForm() {
-            this.$set(this.editForm, "id", null);
-            this.$set(this.editForm, "rate", null);
-            for (let player of this.players) {
-                this.$set(this.editForm.points, player.id, null);
-            }
-            this.editFormErrorMessages = [];
-        },
-
-        async updateGameResult() {
-            this.isEditFormLoading = true;
-
-            const response = await apiClient.updateGameResult(this.editForm);
-            this.isEditFormLoading = false;
-            if (response.status === 422) {
-                this.editFormErrorMessages = (
-                    await response.json()
-                ).errors.points;
-                return;
-            }
-
-            this.editFormVisible = false;
-            this.loading = true;
-
-            this.load();
-        }
+      await apiClient.deleteGameResult(id);
+      this.load();
     },
 
-    watch: {
-        players() {
-            this.load();
-        }
+    editGameResult(gameResult) {
+      this.resetForm();
+
+      this.$set(this.editForm, "id", gameResult.id);
+      this.$set(this.editForm, "rate", gameResult.rate);
+      for (let player of this.players) {
+        let gameResultPlayer = gameResult.gameResultPlayers.find(
+          gameResultPlayer => gameResultPlayer.player_id === player.id
+        );
+        this.$set(
+          this.editForm.points,
+          player.id,
+          gameResultPlayer ? gameResultPlayer.point : null
+        );
+        this.$set(
+          this.editForm.tips,
+          player.id,
+          gameResultPlayer ? gameResultPlayer.tip : null
+        );
+      }
     },
 
-    computed: {
-        ...mapState(["players"])
+    resetForm() {
+      this.$set(this.editForm, "id", null);
+      this.$set(this.editForm, "rate", null);
+      for (let player of this.players) {
+        this.$set(this.editForm.points, player.id, null);
+        this.$set(this.editForm.tips, player.id, null);
+      }
+      this.editFormErrorMessages = [];
+      this.editErrors = {};
+    },
+
+    async updateGameResult() {
+      this.loading = true;
+
+      const response = await apiClient.updateGameResult(this.editForm);
+      this.loading = false;
+
+      if (response.status === 422) {
+        this.editErrors = (await response.json()).errors;
+        return;
+      }
+
+      this.resetForm();
+
+      this.load();
+    },
+
+    getPointAndTip(gameResult, player) {
+      const gameResultPlayer = gameResult.gameResultPlayers.find(
+        gameResultPlayer => gameResultPlayer.player_id === player.id
+      );
+      if (gameResultPlayer) {
+        return `${gameResultPlayer.point}(${gameResultPlayer.tip}枚)`;
+      }
     }
+  },
+
+  watch: {
+    players() {
+      this.load();
+    }
+  },
+
+  computed: {
+    ...mapState(["players"])
+  }
 };
 </script>

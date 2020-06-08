@@ -18,7 +18,14 @@
                     <tr>
                         <td>{{ $gameResult->rate }}</td>
                         @foreach($players as $player)
-                            <td>{{ $gameResult->gameResultPlayer($player)->point ?? 0 }}</td>
+                            <td>
+                                @php
+                                    $gameResultPlayer = $gameResult->gameResultPlayer($player)
+                                @endphp
+                                @isset($gameResultPlayer)
+                                    {{ $gameResultPlayer->point }}({{ $gameResultPlayer->tip }}枚)
+                                @endisset
+                            </td>
                         @endforeach
                     </tr>
                 @endforeach
