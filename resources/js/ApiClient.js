@@ -5,7 +5,8 @@ const URL_TEMPLATE = {
     "game.get-current-game": "api/game/get-current-game",
     "game.result.destroy": "api/game/result/{id}",
     "game.result.store": "api/game/result",
-    "game.result.update": "api/game/result/{id}"
+    "game.result.update": "api/game/result/{id}",
+    "game.result.index": "api/game/result"
 };
 
 const headers = {
@@ -68,6 +69,10 @@ class ApiClient {
 
     storeGameResult(parameters) {
         return _post(URL_TEMPLATE["game.result.store"], parameters);
+    }
+
+    getAllGameResults() {
+        return _get(URL_TEMPLATE["game.result.index"]);
     }
 }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Http\Requests\GameResultRequest;
+use App\Http\Resources\GameResult as GameResultResource;
 use App\Service\GameService;
 use App\GameResult;
 
@@ -49,5 +50,10 @@ class GameResultController extends Controller
                 $request->validated()['points'],
                 $request->validated()['tips']
             );
+    }
+
+    public function index()
+    {
+        return GameResultResource::collection(GameResult::all());
     }
 }

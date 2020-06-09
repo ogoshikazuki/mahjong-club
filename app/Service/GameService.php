@@ -100,52 +100,6 @@ class GameService
         return $lastGameResult->id !== session('lastGameResult')->id;
     }
 
-    public function getAverageFinishOrder(int $playerCount): Collection
-    {
-        return $this
-            ->getFinishOrders($playerCount)
-            ->reduce(function ($averageGetters, $finishOrders) {
-                foreach ($finishOrders as $playerId => $finishOrder) {
-                    if ($averageGetters->has($playerId)) {
-                        $averageGetters->replace([
-                            $playerId => $averageGetters->get($playerId)->addTotal($finishOrder)
-                        ]);
-                        continue;
-                    }
-                    $averageGetter = new AverageGetter();
-                    $averageGetter->addTotal($finishOrder);
-                    $averageGetters->put($playerId, $averageGetter);
-                }
-                return $averageGetters;
-            }, collect())
-            ->sort(function (AverageGetter $a, AverageGetter $b) {
-                return ($a->getAverage() < $b->getAverage()) ? -1 : 1;
-            });
-    }
-
-    /**
-     * [
-     *     [playerId => 着順, playerId => 着順, ...],
-     *     [playerId => 着順, playerId => 着順, ...],
-     *     ...
-     * ]
-     */
-    private function getFinishOrders(int $playerCount): Collection
-    {
-        $gameResults = GameResult::has('gameResultPlayers', '=', $playerCount)->get();
-
-        return $gameResults->map(function ($gameResult) {
-            return $gameResult
-                ->gameResultPlayers()
-                ->orderByDesc('point')
-                ->get()
-                ->mapWithKeys(function ($gameResultPlayer, $index) {
-                    // 着順を`$index + 1`とした。
-                    return [$gameResultPlayer->player_id => $index + 1];
-                });
-        });
-    }
-
     public function updateGameResult(GameResult $gameResult, int $rate, array $points, array $tips): void
     {
         $gameResult->rate = $rate;

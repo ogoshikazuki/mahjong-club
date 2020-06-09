@@ -34,6 +34,7 @@ Vue.use(ElementUI, { locale });
 import store from "./store/index";
 import GameResultHistory from "./components/GameResultHistory";
 import GameResultInput from "./components/GameResultInput";
+import Aggregate from "./components/Aggregate";
 
 new Vue({
     el: "#app",
@@ -41,6 +42,7 @@ new Vue({
     store,
 
     components: {
+        Aggregate,
         GameResultHistory,
         GameResultInput
     },
