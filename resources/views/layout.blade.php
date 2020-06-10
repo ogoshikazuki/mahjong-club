@@ -38,7 +38,7 @@
             <ul class="navbar-nav">
                 @if(!Route::is('average-finish-order'))
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('average-finish-order') }}">平均着順</a>
+                        <a class="nav-link" href="{{ route('average-finish-order') }}">集計</a>
                     </li>
                 @endif
             </ul>
