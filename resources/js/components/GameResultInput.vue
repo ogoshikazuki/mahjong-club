@@ -4,6 +4,7 @@
       <label class="col-4 col-form-label">レート</label>
       <div class="col-8">
         <select class="form-control" :class="{ 'is-invalid': errors.rate }" v-model="rate">
+          <option></option>
           <option :value="50">50</option>
           <option :value="100">100</option>
         </select>
