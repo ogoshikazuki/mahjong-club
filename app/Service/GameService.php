@@ -20,10 +20,12 @@ class GameService
     public const POINT_PER_TIP = 2;
 
     private $moneyService;
+    private $playerService;
 
-    public function __construct(MoneyService $moneyService)
+    public function __construct(MoneyService $moneyService, PlayerService $playerService)
     {
         $this->moneyService = $moneyService;
+        $this->playerService = $playerService;
     }
 
     public function startGame(): void
@@ -65,17 +67,17 @@ class GameService
     {
         $gameResult = $this->getCurrentGame()->gameResults()->save(new GameResult(['rate' => $rate]));
 
-        foreach ($points as $playerId => $point) {
-            if (isset($point)) {
+        $this->playerService->getAllPlayers()->each(function ($player) use ($gameResult, $points, $tips) {
+            if (isset($points[$player->id]) || isset($tips[$player->id])) {
                 $gameResult
                     ->gameResultPlayers()
                     ->save(new GameResultPlayer([
-                        'player_id' => $playerId,
-                        'point' => $point,
-                        'tip' => $tips[$playerId] ?? 0,
+                        'player_id' => $player->id,
+                        'point' => $points[$player->id] ?? 0,
+                        'tip' => $tips[$player->id] ?? 0,
                     ]));
             }
-        }
+        });
     }
 
     public function cancelGame(): void
