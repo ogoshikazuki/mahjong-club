@@ -35,6 +35,7 @@ import store from "./store/index";
 import GameResultHistory from "./components/GameResultHistory";
 import GameResultInput from "./components/GameResultInput";
 import Aggregate from "./components/Aggregate";
+import History from "./components/History";
 
 new Vue({
     el: "#app",
@@ -44,7 +45,8 @@ new Vue({
     components: {
         Aggregate,
         GameResultHistory,
-        GameResultInput
+        GameResultInput,
+        History
     },
 
     methods: {

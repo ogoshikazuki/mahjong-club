@@ -21,4 +21,9 @@ class GameController extends Controller
     {
         return new GameResource($this->gameService->getCurrentGame());
     }
+
+    public function getCurrentMoneyGames()
+    {
+        return GameResource::collection($this->gameService->getCurrentMoneyGames());
+    }
 }

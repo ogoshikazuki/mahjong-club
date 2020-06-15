@@ -22,7 +22,6 @@ Route::group(['prefix' => 'game', 'as' => 'game.'], function () {
     Route::resource('result', 'GameResultController', ['only' => ['store', 'destroy']])
         ->parameters(['result' => 'gameResult']);
 });
-Route::resource('game', 'GameController', ['only' => 'show']);
 
 Route::group(['prefix' => 'money', 'as' => 'money.'], function () {
     Route::get('edit', 'MoneyController@editMoney')->name('edit');

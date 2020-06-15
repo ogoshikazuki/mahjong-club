@@ -21,19 +21,6 @@ class GameController extends Controller
         $this->playerService = $playerService;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  Game  $game
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Game $game)
-    {
-        return view('game.show')
-            ->with('players', $this->playerService->getAllPlayers())
-            ->with('game', $game);
-    }
-
     public function startGame()
     {
         $this->gameService->startGame();

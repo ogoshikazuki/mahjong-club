@@ -3,6 +3,7 @@ const urlTemplate = require("url-template");
 const URL_TEMPLATE = {
     "player.index": "api/player",
     "game.get-current-game": "api/game/get-current-game",
+    "game.get-current-money-games": "api/game/get-current-money-games",
     "game.result.destroy": "api/game/result/{id}",
     "game.result.store": "api/game/result",
     "game.result.update": "api/game/result/{id}",
@@ -53,6 +54,10 @@ class ApiClient {
 
     getCurrentGame() {
         return _get(URL_TEMPLATE["game.get-current-game"]);
+    }
+
+    getCurrentMoneyGames() {
+        return _get(URL_TEMPLATE["game.get-current-money-games"]);
     }
 
     deleteGameResult(id) {

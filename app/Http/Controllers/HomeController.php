@@ -39,8 +39,6 @@ class HomeController extends Controller
 
     public function history()
     {
-        return view('history')
-            ->with('players', $this->playerService->getAllPlayers())
-            ->with('currentMoneyGames', $this->gameService->getCurrentMoneyGames());
+        return view('history');
     }
 }
