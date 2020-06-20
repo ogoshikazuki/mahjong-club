@@ -1,49 +1,55 @@
 <template>
   <div>
-    <h2>ゲーム詳細</h2>
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>レート</th>
-            <th v-for="player in players" :key="player.id">{{ player.name }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="gameResult in gameResults" :key="gameResult.id">
-            <td>{{ gameResult.rate }}</td>
-            <td v-for="player in players" :key="player.id">{{ showResult(gameResult, player) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <button class="btn btn-secondary" @click="$emit('back')">戻る</button>
+    <h2>入力</h2>
+    <game-result-input @store-game-result="loadHistory"></game-result-input>
+    <hr>
+    <h2>履歴</h2>
+    <game-result-history ref="gameResultHistory" :game-results="gameResults" @reload="loadHistory"></game-result-history>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import GameResultInput from "./GameResultInput";
+import gameResultHistory from "./GameResultHistory";
+import apiClient from "../ApiClient";
 
 export default {
-  props: {
-    gameResults: {
-      type: Array,
-      required: true
-    }
+  components: {
+    GameResultInput,
+    gameResultHistory
   },
 
-  methods: {
-    showResult(gameResult, player) {
-      for (let gameResultPlayer of gameResult.gameResultPlayers) {
-        if (gameResultPlayer.player_id === player.id) {
-          return `${gameResultPlayer.point}(${gameResultPlayer.tip}枚)`;
-        }
-      }
-    },
+  data() {
+    return {
+      gameResults: [],
+    }
   },
 
   computed: {
     ...mapState(["players"])
+  },
+
+  methods: {
+    async loadHistory() {
+      this.$refs.gameResultHistory.loading = true;
+
+      this.gameResults = [];
+
+      this.gameResults = (await apiClient.getCurrentGame()).gameResults;
+
+      this.$refs.gameResultHistory.loading = false;
+    },
+  },
+
+  watch: {
+    players() {
+      this.loadHistory();
+    }
+  },
+
+  mounted() {
+    this.$refs.gameResultHistory.loading = true;
   }
 }
 </script>

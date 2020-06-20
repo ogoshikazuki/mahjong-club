@@ -23,4 +23,5 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
         Route::apiResource('result', 'GameResultController', ['only' => ['destroy', 'update', 'store', 'index']])
             ->parameters(['result' => 'gameResult']);
     });
+    Route::apiResource('game', 'GameController', ['only' => ['show']]);
 });

@@ -4,6 +4,7 @@ const URL_TEMPLATE = {
     "player.index": "api/player",
     "game.get-current-game": "api/game/get-current-game",
     "game.get-current-money-games": "api/game/get-current-money-games",
+    "game.show": "api/game/{id}",
     "game.result.destroy": "api/game/result/{id}",
     "game.result.store": "api/game/result",
     "game.result.update": "api/game/result/{id}",
@@ -58,6 +59,10 @@ class ApiClient {
 
     getCurrentMoneyGames() {
         return _get(URL_TEMPLATE["game.get-current-money-games"]);
+    }
+
+    findGame(id) {
+        return _get(URL_TEMPLATE["game.show"], { id });
     }
 
     deleteGameResult(id) {

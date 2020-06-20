@@ -32,8 +32,7 @@ import locale from "element-ui/lib/locale/lang/ja";
 Vue.use(ElementUI, { locale });
 
 import store from "./store/index";
-import GameResultHistory from "./components/GameResultHistory";
-import GameResultInput from "./components/GameResultInput";
+import Game from "./components/Game";
 import Aggregate from "./components/Aggregate";
 import History from "./components/History";
 
@@ -44,15 +43,8 @@ new Vue({
 
     components: {
         Aggregate,
-        GameResultHistory,
-        GameResultInput,
+        Game,
         History
-    },
-
-    methods: {
-        reloadGameResultHistory() {
-            this.$refs.gameResultHistory.load();
-        }
     },
 
     created() {

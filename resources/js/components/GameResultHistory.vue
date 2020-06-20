@@ -70,10 +70,16 @@ import apiClient from "../ApiClient";
 import { mapState } from "vuex";
 
 export default {
+  props: {
+    gameResults: {
+      type: Array,
+      required: true
+    }
+  },
+
   data: function() {
     return {
-      gameResults: [],
-      loading: true,
+      loading: false,
       editForm: { id: null, rate: null, points: {}, tips: {} },
       editing: null,
       editErrors: {}
@@ -81,16 +87,6 @@ export default {
   },
 
   methods: {
-    async load() {
-      this.loading = true;
-
-      this.gameResults = [];
-
-      this.gameResults = (await apiClient.getCurrentGame()).gameResults;
-
-      this.loading = false;
-    },
-
     async deleteGameResult(id) {
       if (!confirm("本当に削除しますか？")) {
         return;
@@ -98,7 +94,8 @@ export default {
       this.loading = true;
 
       await apiClient.deleteGameResult(id);
-      this.load();
+      this.loading = false;
+      this.$emit("reload");
     },
 
     editGameResult(gameResult) {
@@ -147,7 +144,8 @@ export default {
 
       this.resetForm();
 
-      this.load();
+      this.loading = false;
+      this.$emit("reload");
     },
 
     getPointAndTip(gameResult, player) {
@@ -157,12 +155,6 @@ export default {
       if (gameResultPlayer) {
         return `${gameResultPlayer.point}(${gameResultPlayer.tip}枚)`;
       }
-    }
-  },
-
-  watch: {
-    players() {
-      this.load();
     }
   },
 

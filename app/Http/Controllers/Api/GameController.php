@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Resources\Game as GameResource;
 use App\Service\GameService;
+use App\Game;
 
 class GameController extends Controller
 {
@@ -25,5 +26,10 @@ class GameController extends Controller
     public function getCurrentMoneyGames()
     {
         return GameResource::collection($this->gameService->getCurrentMoneyGames());
+    }
+
+    public function show(Game $game)
+    {
+        return new GameResource($game);
     }
 }
