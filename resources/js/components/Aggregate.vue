@@ -17,6 +17,7 @@
             <th>ゲーム数</th>
             <th>平均着順</th>
             <th>祝儀</th>
+            <th>金額</th>
             <th v-for="(value, key) in finishOrderCount" :key="key">{{ key }}着</th>
           </tr>
         </thead>
@@ -26,6 +27,7 @@
             <td>{{ gameCount[player.id] }}</td>
             <td>{{ averageFinishOrder[player.id].toFixed(2) }}</td>
             <td>{{ tipCount[player.id] }}</td>
+            <td>{{ money[player.id] }}</td>
             <td
               v-for="(value, key) in finishOrderCount"
               :key="key"
@@ -151,6 +153,23 @@ export default {
             tipCount
           );
         }, tipCount);
+    },
+
+    money() {
+      let money = this.players.reduce((money, player) => {
+        money[player.id] = 0;
+        return money;
+      }, {});
+
+      return this.gameResults
+        .filter(gameResult => gameResult.gameResultPlayers.length === this.mode)
+        .reduce((money, gameResult) => {
+          return gameResult.gameResultPlayers.reduce((money, gameResultPlayer) => {
+            let point = gameResultPlayer.point + gameResultPlayer.tip * 2;
+            money[gameResultPlayer.player_id] += point * gameResult.rate;
+            return money;
+          }, money);
+        }, money)
     },
 
     ...mapState(["players"])
