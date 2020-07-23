@@ -49,7 +49,7 @@
                             @foreach($pastMoneys as $pastMoney)
                                 <tr>
                                     @foreach($players as $player)
-                                        <td>{{ $pastMoney->moneyPlayer($player)->money }}</td>
+                                        <td>{{ $pastMoney->moneyPlayer($player)->money ?? 0 }}</td>
                                     @endforeach
                                 </tr>
                             @endforeach

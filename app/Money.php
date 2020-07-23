@@ -18,7 +18,7 @@ class Money extends Model
         return $this->hasMany('App\MoneyPlayer');
     }
 
-    public function moneyPlayer(Player $player): MoneyPlayer
+    public function moneyPlayer(Player $player): ?MoneyPlayer
     {
         return $this->moneyPlayers->first(function ($moneyPlayer) use ($player) {
             return $moneyPlayer->player_id === $player->id;
