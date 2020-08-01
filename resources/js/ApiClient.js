@@ -1,4 +1,5 @@
 const urlTemplate = require("url-template");
+const queryString = require("query-string");
 
 const URL_TEMPLATE = {
     "player.index": "api/player",
@@ -8,7 +9,8 @@ const URL_TEMPLATE = {
     "game.result.destroy": "api/game/result/{id}",
     "game.result.store": "api/game/result",
     "game.result.update": "api/game/result/{id}",
-    "game.result.index": "api/game/result"
+    "game.result.index": "api/game/result",
+    "tenhou.download-log": "api/tenhou/download-log",
 };
 
 const headers = {
@@ -16,12 +18,16 @@ const headers = {
     "X-Requested-With": "XMLHttpRequest"
 };
 
-const _url = (template, parameter = {}) => {
-    return urlTemplate.parse(template).expand(parameter);
+const _url = (template, urlParameter = {}, queryParameter = {}) => {
+    const url = urlTemplate.parse(template).expand(urlParameter);
+    if (Object.keys(queryParameter).length > 0) {
+        return `${url}?${queryString.stringify(queryParameter)}`;
+    }
+    return url;
 };
 
-const _get = async (template, urlParameter) => {
-    const url = _url(template, urlParameter);
+const _get = async (template, urlParameter, queryParameter = {}) => {
+    const url = _url(template, urlParameter, queryParameter);
     return (await (await fetch(url)).json()).data;
 };
 
@@ -83,6 +89,10 @@ class ApiClient {
 
     getAllGameResults() {
         return _get(URL_TEMPLATE["game.result.index"]);
+    }
+
+    downloadTenhouLog(parameters) {
+        return _get(URL_TEMPLATE["tenhou.download-log"], {}, parameters);
     }
 }
 

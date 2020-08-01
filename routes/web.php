@@ -33,3 +33,5 @@ Route::group(['prefix' => 'money', 'as' => 'money.'], function () {
 Route::get('history', 'HomeController@history')->name('history');
 
 Route::get('average-finish-order', 'GameController@averageFinishOrder')->name('average-finish-order');
+
+Route::view('tenhou-log', 'tenhou_log')->name('tenhou-log');

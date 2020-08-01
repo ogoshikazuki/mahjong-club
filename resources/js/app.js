@@ -31,10 +31,15 @@ import locale from "element-ui/lib/locale/lang/ja";
 
 Vue.use(ElementUI, { locale });
 
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
+Vue.use(Vuetify);
+
 import store from "./store/index";
 import Game from "./components/Game";
 import Aggregate from "./components/Aggregate";
 import History from "./components/History";
+import TenhouLog from "./components/TenhouLog";
 
 new Vue({
     el: "#app",
@@ -44,10 +49,13 @@ new Vue({
     components: {
         Aggregate,
         Game,
-        History
+        History,
+        TenhouLog,
     },
 
     created() {
         this.$store.dispatch("loadPlayers");
-    }
+    },
+
+    vuetify: new Vuetify(),
 });
