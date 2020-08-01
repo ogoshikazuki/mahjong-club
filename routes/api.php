@@ -24,4 +24,5 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
             ->parameters(['result' => 'gameResult']);
     });
     Route::apiResource('game', 'GameController', ['only' => ['show']]);
+    Route::get('tenhou/download-log', 'TenhouController@downloadLog')->name('tenhou.download-log');
 });
