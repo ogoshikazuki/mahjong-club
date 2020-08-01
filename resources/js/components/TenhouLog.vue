@@ -10,7 +10,7 @@
             <v-text-field type="date" v-model="date" :rules="dateRules" :readonly="loading"></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-btn color="primary" :loading="loading">天鳳ログ取得</v-btn>
+            <v-btn color="primary" :loading="loading" type="submit">天鳳ログ取得</v-btn>
           </v-col>
         </v-row>
       </v-container>
