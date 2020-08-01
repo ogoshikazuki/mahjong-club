@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-form v-model="valid" ref="form">
+    <v-form v-model="valid" ref="form" @submit.prevent="downloadTenhouLog">
       <v-container>
         <v-row>
           <v-col cols="6">
@@ -10,7 +10,7 @@
             <v-text-field type="date" v-model="date" :rules="dateRules" :readonly="loading"></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-btn color="primary" @click="downloadTenhouLog" :loading="loading">天鳳ログ取得</v-btn>
+            <v-btn color="primary" :loading="loading">天鳳ログ取得</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -27,7 +27,7 @@
         disable-pagination
       ></v-data-table>
       <v-divider></v-divider>
-      <v-btn color="primary" disabled>チェックしたログを登録</v-btn>
+      <v-btn color="primary" disabled>チェックしたログを登録(近日実装)</v-btn>
     </template>
   </v-app>
 </template>
