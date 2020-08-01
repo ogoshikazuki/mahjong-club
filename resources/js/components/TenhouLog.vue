@@ -7,7 +7,7 @@
             <v-text-field v-model="roomNumberNoPrefix" :rules="roomNumberRules" :readonly="loading" prefix="C" placeholder="部屋番号" hint="上4桁を入力"></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field type="date" v-model="date" :rules="dateRules" :readonly="loading"></v-text-field>
+            <v-text-field type="date" v-model="date" :rules="dateRules" :readonly="loading" placeholder="日付"></v-text-field>
           </v-col>
           <v-col cols="6">
             <v-btn color="primary" @click="downloadTenhouLog" :loading="loading">天鳳ログ取得</v-btn>
