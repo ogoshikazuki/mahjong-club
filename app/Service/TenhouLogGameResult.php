@@ -21,6 +21,7 @@ class TenhouLogGameResult implements Arrayable
 
     public static function parse(string $text): self
     {
+        $matches = [];
         preg_match('/(.+)\(([^,]+)(,(.+)枚)?\)/', $text, $matches);
 
         $self = new self();
