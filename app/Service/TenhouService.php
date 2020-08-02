@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Carbon\Carbon;
 
 class TenhouService
@@ -16,8 +17,12 @@ class TenhouService
 
     public function downloadLog(Carbon $date, string $roomNumber): array
     {
-        $path = $this->downloadLogFile($date);
-        return $this->parseLogFile($path, $roomNumber);
+        try {
+            $path = $this->downloadLogFile($date);
+            return $this->parseLogFile($path, $roomNumber);
+        } catch (ClientException $e) {
+            return [];
+        }
     }
 
     private function downloadLogFile(Carbon $date): string
