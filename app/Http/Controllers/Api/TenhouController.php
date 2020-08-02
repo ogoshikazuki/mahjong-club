@@ -44,5 +44,7 @@ class TenhouController extends Controller
         }
 
         $this->gameService->finishGame();
+
+        return response()->json(['data' => count($gameResults)]);
     }
 }

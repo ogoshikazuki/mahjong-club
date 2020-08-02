@@ -4,18 +4,20 @@
       :headers="headers"
       :items="items"
       show-select
-      v-model="selected"
+      v-model="checked"
       item-key="startTime"
       :mobile-breakpoint="null"
       hide-default-footer
       disable-pagination
     ></v-data-table>
     <v-divider></v-divider>
-    <v-btn color="primary" disabled>チェックしたログを登録(近日実装)</v-btn>
+    <v-btn color="primary" @click="register" :loading="registering">チェックしたログを登録</v-btn>
   </div>
 </template>
 
 <script>
+import apiClient from "../ApiClient";
+
 export default {
   props: {
     tenhouLogs: {
@@ -30,7 +32,8 @@ export default {
         { text: "開始時刻", value: "startTime" },
         { text: "結果", value: "gameResultsText" },
       ],
-      selected: [],
+      checked: [],
+      registering: false,
     };
   },
 
@@ -46,9 +49,18 @@ export default {
         return tenhouLog;
       })
     },
+
+    checkedTenhouLogs() {
+      return this.checked.map(item => item.gameResults);
+    },
   },
 
   methods: {
+    async register() {
+      this.registering = true;
+
+      this.$emit("registered", (await (await apiClient.registerTenhouLog({ tenhou_logs: this.checkedTenhouLogs })).json()).data);
+    },
   },
 }
 </script>

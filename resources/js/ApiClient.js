@@ -11,6 +11,7 @@ const URL_TEMPLATE = {
     "game.result.update": "api/game/result/{id}",
     "game.result.index": "api/game/result",
     "tenhou.download-log": "api/tenhou/download-log",
+    "tenhou.register-log": "api/tenhou/register-log",
 };
 
 const headers = {
@@ -31,7 +32,7 @@ const _get = async (template, urlParameter, queryParameter = {}) => {
     return (await (await fetch(url)).json()).data;
 };
 
-const _post = async (template, parameters = {}) => {
+const _post = (template, parameters = {}) => {
     const url = _url(template);
     return fetch(url, {
         method: "POST",
@@ -93,6 +94,10 @@ class ApiClient {
 
     downloadTenhouLog(parameters) {
         return _get(URL_TEMPLATE["tenhou.download-log"], {}, parameters);
+    }
+
+    registerTenhouLog(parameters) {
+        return _post(URL_TEMPLATE["tenhou.register-log"], parameters);
     }
 }
 
