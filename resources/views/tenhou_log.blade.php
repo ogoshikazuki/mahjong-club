@@ -1,5 +1,7 @@
 @extends('layout')
 
 @section('content')
-  <tenhou-log></tenhou-log>
+  <v-app>
+    <tenhou-log></tenhou-log>
+  </v-app>
 @endsection
