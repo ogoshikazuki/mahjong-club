@@ -24,5 +24,9 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
             ->parameters(['result' => 'gameResult']);
     });
     Route::apiResource('game', 'GameController', ['only' => ['show']]);
-    Route::get('tenhou/download-log', 'TenhouController@downloadLog')->name('tenhou.download-log');
+
+    Route::group(['prefix' => 'tenhou', 'as' => 'tenhou.'], function () {
+        Route::get('download-log', 'TenhouController@downloadLog')->name('download-log');
+        Route::post('register-log', 'TenhouController@registerLog')->name('register-log');
+    });
 });

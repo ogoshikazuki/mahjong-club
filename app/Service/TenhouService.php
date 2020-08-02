@@ -6,6 +6,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Carbon\Carbon;
 
+use App\TenhouName;
+
 class TenhouService
 {
     private $client;
@@ -23,6 +25,22 @@ class TenhouService
         } catch (ClientException $e) {
             return [];
         }
+    }
+
+    public function convertLogsIntoGameResults(array $tenhouLogs): array
+    {
+        return collect($tenhouLogs)->map(function (array $tenhouLog) {
+            $collection = collect($tenhouLog);
+            return [
+                'rate' => $this->convertPlayersCountIntoRate($collection->count()),
+                'points' => $collection->mapWithKeys(function (array $item) {
+                    return [TenhouName::where('name', $item['playerName'])->firstOrFail()->player_id => $item['point']];
+                })->toArray(),
+                'tips' => $collection->mapWithKeys(function (array $item) {
+                    return [TenhouName::where('name', $item['playerName'])->firstOrFail()->player_id => $item['tip']];
+                })->toArray(),
+            ];
+        })->toArray();
     }
 
     private function downloadLogFile(Carbon $date): string
@@ -52,5 +70,15 @@ class TenhouService
             ->values();
 
         return $targetTenhouLogs->toArray();
+    }
+
+    private function convertPlayersCountIntoRate(int $playersCount): int
+    {
+        switch ($playersCount) {
+            case 3:
+                return 50;
+            case 4:
+                return 100;
+        }
     }
 }
