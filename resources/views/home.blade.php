@@ -24,6 +24,7 @@
             </div>
         </div>
         <div class="card-footer">
+            <a class="btn btn-primary" href="{{ route('tenhou-log') }}">ログから登録 <span class="badge badge-light">New</span></a>
             <a class="btn btn-warning" href="{{ route('money.edit') }}">金額修正</a>
             <a class="btn btn-secondary" href="{{ route('history') }}">履歴表示</a>
             <form method="POST" action="{{ route('money.reset') }}" onsubmit="return confirm('本当に精算しますか？');" class="d-inline">
