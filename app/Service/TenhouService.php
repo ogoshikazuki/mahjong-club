@@ -94,11 +94,9 @@ class TenhouService
 
     private function convertPlayersCountIntoRate(int $playersCount): int
     {
-        switch ($playersCount) {
-            case 3:
-                return 50;
-            case 4:
-                return 100;
+        if ($playersCount === 3) {
+            return 50;
         }
+        return 100;
     }
 }
