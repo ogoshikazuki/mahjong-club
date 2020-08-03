@@ -10,6 +10,9 @@ use App\TenhouName;
 
 class TenhouService
 {
+    public const LOG_FILE_NAME = 'sca%s.log.gz';
+    public const LOG_URL = 'https://tenhou.net/sc/raw/dat/%s';
+
     private $client;
 
     public function __construct(Client $client)
@@ -45,12 +48,27 @@ class TenhouService
 
     private function downloadLogFile(Carbon $date): string
     {
-        $file = "sca{$date->format('Ymd')}.log.gz";
-        $url = "https://tenhou.net/sc/raw/dat/{$file}";
-        $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file;
+        $file = $this->createLogFileName($date);
+        $url = $this->createLogUrl($file);
+        $path = $this->createPath($file);
         $this->client->get($url, ['sink' => $path]);
 
         return $path;
+    }
+
+    private function createLogFileName(Carbon $date): string
+    {
+        return sprintf(self::LOG_FILE_NAME, $date->format('Ymd'));
+    }
+
+    private function createLogUrl(string $file): string
+    {
+        return sprintf(self::LOG_URL, $file);
+    }
+
+    private function createPath(string $file): string
+    {
+        return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file;
     }
 
     private function parseLogFile(string $path, string $roomNumber): array
