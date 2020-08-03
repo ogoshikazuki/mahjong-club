@@ -14,10 +14,12 @@ class TenhouService
     public const LOG_URL = 'https://tenhou.net/sc/raw/dat/%s';
 
     private $client;
+    private $tempDir;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, string $tempDir)
     {
         $this->client = $client;
+        $this->tempDir = $tempDir;
     }
 
     public function downloadLog(Carbon $date, string $roomNumber): array
@@ -68,7 +70,7 @@ class TenhouService
 
     private function createPath(string $file): string
     {
-        return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file;
+        return $this->tempDir . DIRECTORY_SEPARATOR . $file;
     }
 
     private function parseLogFile(string $path, string $roomNumber): array
