@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 use Carbon\Carbon;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Client;
 use Mockery;
 
@@ -39,39 +40,58 @@ class TenhouServiceTest extends TestCase
                 $this->assertArrayHasKey('tip', $gameResult);
             }
         }
+
+        $clientException = Mockery::mock(ClientException::class);
+        $client = Mockery::mock(Client::class)->shouldReceive('get')->andThrow($clientException)->getMock();
+        $tenhouService = new TenhouService($client, __DIR__);
+        $logs = $tenhouService->downloadLog(new Carbon('2020-08-02'), 'C7667');
+        $this->assertEquals(0, count($logs));
     }
 
     public function testConvertLogsIntoGameResults()
     {
-        $tenhouNames = factory(Player::class, 3)
+        $tenhouNames = factory(Player::class, 4)
             ->create()
             ->map(function (Player $player) {
                 return factory(TenhouName::class)->create(['player_id' => $player->id]);
             })
             ->all();
 
-        $points = [30, -10, -20];
-        $tips = [3, -1, -2];
+        $points = [
+            [30, -10, -20],
+            [50, 10, -20, -40],
+        ];
+        $tips = [
+            [3, -1, -2],
+            [5, 1, -2, -4],
+        ];
 
-        $input = [];
-        $expected = [];
-        for ($index = 0; $index < count($tenhouNames); $index++) {
-            $input[] = ['playerName' => $tenhouNames[$index]->name, 'point' => $points[$index], 'tip' => $tips[$index]];
-            $expected[$tenhouNames[$index]->player_id] = ['point' => $points[$index], 'tip' => $tips[$index]];
+        $inputs = [];
+        $expecteds = [];
+        for ($i = 0; $i < 2; $i++) {
+            $input = [];
+            $expected = [];
+            for ($j = 0; $j < count($points[$i]); $j++) {
+                $input[] = ['playerName' => $tenhouNames[$j]->name, 'point' => $points[$i][$j], 'tip' => $tips[$i][$j]];
+                $expected[$tenhouNames[$j]->player_id] = ['point' => $points[$i][$j], 'tip' => $tips[$i][$j]];
+            }
+
+            $inputs[] = $input;
+            $expecteds[] = $expected;
         }
 
         $tenhouService = resolve(TenhouService::class);
-        $gameResults = $tenhouService->convertLogsIntoGameResults([$input]);
+        $gameResults = $tenhouService->convertLogsIntoGameResults($inputs);
 
-        foreach ($gameResults as $gameResult) {
-            $this->assertEquals(50, $gameResult['rate']);
+        for ($i = 0; $i < count($gameResults); $i++) {
+            $this->assertEquals($i === 0 ? 50 : 100, $gameResults[$i]['rate']);
 
-            foreach ($gameResult['points'] as $playerId => $point) {
-                $this->assertEquals($expected[$playerId]['point'], $point);
+            foreach ($gameResults[$i]['points'] as $playerId => $point) {
+                $this->assertEquals($expecteds[$i][$playerId]['point'], $point);
             }
 
-            foreach ($gameResult['tips'] as $playerId => $tip) {
-                $this->assertEquals($expected[$playerId]['tip'], $tip);
+            foreach ($gameResults[$i]['tips'] as $playerId => $tip) {
+                $this->assertEquals($expecteds[$i][$playerId]['tip'], $tip);
             }
         }
     }
