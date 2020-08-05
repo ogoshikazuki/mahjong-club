@@ -18,7 +18,7 @@ class RegisterGameResultFromTenhouLog extends Command
      *
      * @var string
      */
-    protected $signature = 'tenhou:register-log {roomNumber} {date}';
+    protected $signature = 'tenhou:register-log {roomNumber} {date?}';
 
     /**
      * The console command description.
@@ -45,9 +45,9 @@ class RegisterGameResultFromTenhouLog extends Command
     public function handle(TenhouService $tenhouService, GameService $gameService)
     {
         $roomNumber = $this->argument('roomNumber');
-        $date = new Carbon($this->argument('date'));
+        $date = is_null($this->argument('date')) ? new Carbon('yesterday') : new Carbon($this->argument('date'));
 
-        $this->info('downloadLogsAndConvertThemIntoGameResults start.');
+        $this->info("downloadLogsAndConvertThemIntoGameResults start. date: {$date->format('Y-m-d')}");
 
         $gameResults = $this->downloadLogsAndConvertThemIntoGameResults($tenhouService, $roomNumber, $date);
 
