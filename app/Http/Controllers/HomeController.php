@@ -34,7 +34,8 @@ class HomeController extends Controller
         return view('home')
             ->with('players', $this->playerService->getAllPlayers())
             ->with('currentMoney', $this->moneyService->getCurrentMoney())
-            ->with('pastMoneys', $this->moneyService->getPastMoneys());
+            ->with('pastMoneys', $this->moneyService->getPastMoneys())
+            ->with('pastTotalMoneys', $this->moneyService->getPastTotalMoneys());
     }
 
     public function history()

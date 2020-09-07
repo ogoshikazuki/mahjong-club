@@ -41,14 +41,22 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th></th>
                                 @foreach($players as $player)
                                     <th>{{ $player->name }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
+                            <tr style="background-color:aliceblue;">
+                                <td>合計</td>
+                                @foreach($players as $player)
+                                    <td>{{ $pastTotalMoneys[$player->id] }}</td>
+                                @endforeach
+                            </tr>
                             @foreach($pastMoneys as $pastMoney)
                                 <tr>
+                                    <td>{{ $pastMoney->finished_at->format('Y/m/d') }}</td>
                                     @foreach($players as $player)
                                         <td>{{ $pastMoney->moneyPlayer($player)->money ?? 0 }}</td>
                                     @endforeach
