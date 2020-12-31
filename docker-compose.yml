@@ -1,0 +1,61 @@
+version: '3'
+
+volumes:
+  mysql:
+    driver: local
+
+services:
+### NGINX Server #########################################
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    container_name: mahjong_nginx
+    volumes:
+      - ./:/var/www
+    ports:
+      - "50080:80"
+    depends_on:
+      - php-fpm
+    networks:
+      - mahjong
+
+### PHP-FPM ################################################
+  php-fpm:
+    build:
+      context: .
+      dockerfile: ./docker/php-fpm/Dockerfile
+    container_name: mahjong_php-fpm
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mysql
+    networks:
+      - mahjong
+
+### MySQL ################################################
+  mysql:
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+      # args:
+      #   MYSQL_VERSION: "5.7"
+    container_name: mahjong_mysql
+    environment:
+      MYSQL_DATABASE: "default"
+      MYSQL_USER: "default"
+      MYSQL_PASSWORD: "secret"
+      MYSQL_ROOT_PASSWORD: "secret"
+      TZ: "UTC"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./docker/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "53306:3306"
+    networks:
+      - mahjong
+    command: --innodb-use-native-aio=0
+
+### Networks ################################################
+networks:
+  mahjong:
