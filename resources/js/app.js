@@ -40,6 +40,7 @@ import Game from "./components/Game";
 import Aggregate from "./components/Aggregate";
 import History from "./components/History";
 import TenhouLog from "./components/TenhouLog";
+import Home from "./components/Home";
 
 new Vue({
     el: "#app",
@@ -51,6 +52,7 @@ new Vue({
         Game,
         History,
         TenhouLog,
+        Home,
     },
 
     created() {

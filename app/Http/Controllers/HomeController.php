@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Service\{
     GameService,
     MoneyService,
@@ -13,13 +11,11 @@ use App\Service\{
 class HomeController extends Controller
 {
     private $gameService;
-    private $moneyService;
     private $playerService;
 
-    public function __construct(GameService $gameService, MoneyService $moneyService, PlayerService $playerService)
+    public function __construct(GameService $gameService, PlayerService $playerService)
     {
         $this->gameService = $gameService;
-        $this->moneyService = $moneyService;
         $this->playerService = $playerService;
     }
 
@@ -31,11 +27,7 @@ class HomeController extends Controller
                 ->with('players', $this->playerService->getAllPlayers());
         }
 
-        return view('home')
-            ->with('players', $this->playerService->getAllPlayers())
-            ->with('currentMoney', $this->moneyService->getCurrentMoney())
-            ->with('pastMoneys', $this->moneyService->getPastMoneys())
-            ->with('pastTotalMoneys', $this->moneyService->getPastTotalMoneys());
+        return view('home');
     }
 
     public function history()

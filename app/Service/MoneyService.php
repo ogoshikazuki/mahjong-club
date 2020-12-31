@@ -63,20 +63,4 @@ class MoneyService
     {
         return Money::orderByDesc('finished_at')->first()->finished_at ?? null;
     }
-
-    public function getPastTotalMoneys(): Collection
-    {
-        $result = $this->playerService->getAllPlayers()->mapWithKeys(function ($player) {
-            return [$player->id => 0];
-        });
-
-        return Money::whereNotNull('finished_at')
-            ->get()
-            ->reduce(function (Collection $result, Money $money) {
-                return $money->moneyPlayers->reduce(function (Collection $result, MoneyPlayer $moneyPlayer) {
-                    $result[$moneyPlayer->player_id] += $moneyPlayer->money;
-                    return $result;
-                }, $result);
-            }, $result);
-    }
 }

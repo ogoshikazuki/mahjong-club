@@ -12,6 +12,9 @@ const URL_TEMPLATE = {
     "game.result.index": "api/game/result",
     "tenhou.download-log": "api/tenhou/download-log",
     "tenhou.register-log": "api/tenhou/register-log",
+    "money.current": "api/money/current",
+    "money.past": "api/money/past",
+    "money.reset": "api/money/reset",
 };
 
 const headers = {
@@ -98,6 +101,18 @@ class ApiClient {
 
     registerTenhouLog(parameters) {
         return _post(URL_TEMPLATE["tenhou.register-log"], parameters);
+    }
+
+    getCurrentMoney() {
+        return _get(URL_TEMPLATE["money.current"]);
+    }
+
+    getPastMoney() {
+        return _get(URL_TEMPLATE["money.past"]);
+    }
+
+    resetMoney() {
+        return _post(URL_TEMPLATE["money.reset"]);
     }
 }
 

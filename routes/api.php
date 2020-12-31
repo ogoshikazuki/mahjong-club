@@ -29,4 +29,10 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
         Route::get('download-log', 'TenhouController@downloadLog')->name('download-log');
         Route::post('register-log', 'TenhouController@registerLog')->name('register-log');
     });
+
+    Route::group(['prefix' => 'money', 'as' => 'money.'], function () {
+        Route::get('current', 'MoneyController@getCurrent')->name('current');
+        Route::get('past', 'MoneyController@getPast')->name('past');
+        Route::post('reset', 'MoneyController@reset')->name('reset');
+    });
 });
