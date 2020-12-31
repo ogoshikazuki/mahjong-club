@@ -14,7 +14,7 @@
       <tr v-for="money in moneys" :key="money.id">
         <td>{{ money.finished_at }}</td>
         <td v-for="player in players" :key="player.id">
-          {{ money.money_players.find((moneyPlayer) => moneyPlayer.player.id === player.id).money }}
+          {{ money.money_players.find((moneyPlayer) => moneyPlayer.player.id === player.id)?.money }}
         </td>
       </tr>
     </tbody>
