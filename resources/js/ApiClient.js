@@ -2,19 +2,19 @@ const urlTemplate = require("url-template");
 const queryString = require("query-string");
 
 const URL_TEMPLATE = {
-    "player.index": "api/player",
-    "game.get-current-game": "api/game/get-current-game",
-    "game.get-current-money-games": "api/game/get-current-money-games",
-    "game.show": "api/game/{id}",
-    "game.result.destroy": "api/game/result/{id}",
-    "game.result.store": "api/game/result",
-    "game.result.update": "api/game/result/{id}",
-    "game.result.index": "api/game/result",
-    "tenhou.download-log": "api/tenhou/download-log",
-    "tenhou.register-log": "api/tenhou/register-log",
-    "money.current": "api/money/current",
-    "money.past": "api/money/past",
-    "money.reset": "api/money/reset",
+    "player.index": "/api/player",
+    "game.get-current-game": "/api/game/get-current-game",
+    "game.get-current-money-games": "/api/game/get-current-money-games",
+    "game.show": "/api/game/{id}",
+    "game.result.destroy": "/api/game/result/{id}",
+    "game.result.store": "/api/game/result",
+    "game.result.update": "/api/game/result/{id}",
+    "game.result.index": "/api/game/result",
+    "tenhou.download-log": "/api/tenhou/download-log",
+    "tenhou.register-log": "/api/tenhou/register-log",
+    "money.current": "/api/money/current",
+    "money.past": "/api/money/past",
+    "money.reset": "/api/money/reset",
 };
 
 const headers = {
