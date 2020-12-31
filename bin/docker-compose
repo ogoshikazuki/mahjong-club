@@ -1,3 +1,0 @@
-#!/bin/bash
-
-cd ../laradock; docker-compose $1
