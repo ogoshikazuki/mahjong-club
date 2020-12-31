@@ -25,9 +25,6 @@ Route::group(['prefix' => 'game', 'as' => 'game.'], function () {
 
 Route::group(['prefix' => 'money', 'as' => 'money.'], function () {
     Route::get('edit', 'MoneyController@editMoney')->name('edit');
-    Route::post('update', 'MoneyController@updateMoney')->name('update');
-    Route::post('reset', 'MoneyController@resetMoney')->name('reset');
-    Route::post('delete/{money}', 'MoneyController@deleteMoney')->name('delete');
 });
 
 Route::get('history', 'HomeController@history')->name('history');

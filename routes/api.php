@@ -34,5 +34,6 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
         Route::get('current', 'MoneyController@getCurrent')->name('current');
         Route::get('past', 'MoneyController@getPast')->name('past');
         Route::post('reset', 'MoneyController@reset')->name('reset');
+        Route::post('update', 'MoneyController@update')->name('update');
     });
 });

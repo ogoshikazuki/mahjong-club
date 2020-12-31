@@ -41,6 +41,7 @@ import Aggregate from "./components/Aggregate";
 import History from "./components/History";
 import TenhouLog from "./components/TenhouLog";
 import Home from "./components/Home";
+import EditMoney from "./components/EditMoney";
 
 new Vue({
     el: "#app",
@@ -53,6 +54,7 @@ new Vue({
         History,
         TenhouLog,
         Home,
+        EditMoney,
     },
 
     created() {

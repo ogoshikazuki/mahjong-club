@@ -15,6 +15,7 @@ const URL_TEMPLATE = {
     "money.current": "/api/money/current",
     "money.past": "/api/money/past",
     "money.reset": "/api/money/reset",
+    "money.update": "/api/money/update",
 };
 
 const headers = {
@@ -113,6 +114,10 @@ class ApiClient {
 
     resetMoney() {
         return _post(URL_TEMPLATE["money.reset"]);
+    }
+
+    updateMoney(money) {
+        return _post(URL_TEMPLATE["money.update"], { money });
     }
 }
 
