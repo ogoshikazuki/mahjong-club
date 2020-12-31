@@ -14,7 +14,7 @@
       <tr v-for="money in moneys" :key="money.id">
         <td>{{ money.finished_at }}</td>
         <td v-for="player in players" :key="player.id">
-          {{ money.money_players.find((moneyPlayer) => moneyPlayer.player.id === player.id)?.money }}
+          {{ getMoney(money, player.id) }}
         </td>
       </tr>
     </tbody>
@@ -54,6 +54,18 @@ export default {
   async created() {
     this.moneys = await ApiClient.getPastMoney();
     this.loading = false;
+  },
+
+  methods: {
+    getMoney(money, playerId) {
+      const moneyPlayer = money.money_players.find(({ player }) => player.id === playerId);
+
+      if (moneyPlayer === undefined) {
+        return 0;
+      }
+
+      return moneyPlayer.money;
+    },
   },
 };
 </script>
