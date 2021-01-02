@@ -12,6 +12,7 @@
         "lint": "eslint resources/js/**/*.{js,vue}"
     },
     "dependencies": {
+        "@mdi/font": "^5.8.55",
         "axios": "^0.19",
         "bootstrap": "^4.0.0",
         "cross-env": "^7.0",
@@ -36,7 +37,6 @@
         "node": "12.16.x"
     },
     "devDependencies": {
-        "@mdi/font": "^5.8.55",
         "deepmerge": "^4.2.2",
         "eslint": "^7.1.0",
         "eslint-plugin-vue": "^6.2.2",
