@@ -2,48 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Service\{
-    GameService,
-    PlayerService
-};
+use App\Http\Resources\Game as GameResource;
+use App\Service\GameService;
 use App\Game;
 
 class GameController extends Controller
 {
     private $gameService;
-    private $playerService;
 
-    public function __construct(GameService $gameService, PlayerService $playerService)
+    public function __construct(GameService $gameService)
     {
         $this->gameService = $gameService;
-        $this->playerService = $playerService;
     }
 
-    public function startGame()
+    public function getCurrentGame()
     {
-        $this->gameService->startGame();
-
-        return redirect()->route('home');
+        return new GameResource($this->gameService->getCurrentGame());
     }
 
-    public function finishGame()
+    public function getCurrentMoneyGames()
     {
-        $this->gameService->finishGame();
-
-        return redirect()->route('home');
+        return GameResource::collection($this->gameService->getCurrentMoneyGames());
     }
 
-    public function cancelGame()
+    public function show(Game $game)
     {
-        $this->gameService->cancelGame();
-
-        return redirect()->route('home');
-    }
-
-    public function averageFinishOrder()
-    {
-        return view('average_finish_order');
+        return new GameResource($game);
     }
 }

@@ -2,10 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Service\MoneyService;
+use App\Http\Requests\UpdateMoneyRequest;
+use App\Http\Resources\Money as MoneyResource;
+use Illuminate\Contracts\Routing\ResponseFactory;
+
 class MoneyController extends Controller
 {
-    public function editMoney()
+    private $moneyService;
+
+    public function __construct(MoneyService $moneyService)
     {
-        return view('edit_money');
+        $this->moneyService = $moneyService;
+    }
+
+    public function getCurrent()
+    {
+        return new MoneyResource($this->moneyService->getCurrentMoney());
+    }
+
+    public function getPast()
+    {
+        return MoneyResource::collection($this->moneyService->getPastMoneys());
+    }
+
+    public function reset(ResponseFactory $responseFactory)
+    {
+        $this->moneyService->resetMoney();
+
+        return $responseFactory->noContent();
+    }
+
+    public function update(UpdateMoneyRequest $request, ResponseFactory $responseFactory)
+    {
+        $this->moneyService->updateMoney($request->input('money'));
+
+        return $responseFactory->noContent();
     }
 }

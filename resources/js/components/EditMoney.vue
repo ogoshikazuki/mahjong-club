@@ -13,7 +13,7 @@
       </v-row>
     </v-container>
     <v-btn color="primary" @click="updateMoney" v-loading="updating">更新</v-btn>
-    <v-btn color="secondary" href="/">戻る</v-btn>
+    <v-btn color="secondary" :to="{ name: 'home' }">戻る</v-btn>
   </v-form>
 </template>
 
@@ -53,7 +53,7 @@ export default {
       this.updating = false;
 
       if (response.ok) {
-        location.href = "/";
+        this.$router.push({ name: "home" });
         return;
       }
 

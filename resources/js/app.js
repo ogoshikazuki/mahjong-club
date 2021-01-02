@@ -33,15 +33,15 @@ Vue.use(ElementUI, { locale });
 
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
+import '@mdi/font/css/materialdesignicons.css'
 Vue.use(Vuetify);
 
+import VueRouter from "vue-router";
+Vue.use(VueRouter);
+
 import store from "./store/index";
-import Game from "./components/Game";
-import Aggregate from "./components/Aggregate";
-import History from "./components/History";
-import TenhouLog from "./components/TenhouLog";
-import Home from "./components/Home";
-import EditMoney from "./components/EditMoney";
+import App from "./components/App";
+import routes from "./routes";
 
 new Vue({
     el: "#app",
@@ -49,17 +49,23 @@ new Vue({
     store,
 
     components: {
-        Aggregate,
-        Game,
-        History,
-        TenhouLog,
-        Home,
-        EditMoney,
+        App,
     },
 
     created() {
         this.$store.dispatch("loadPlayers");
     },
 
-    vuetify: new Vuetify(),
+    vuetify: new Vuetify({
+        icons: {
+            iconfont: "mdi",
+        },
+    }),
+
+    router: new VueRouter({
+        mode: "history",
+        routes,
+    }),
+
+    template: "<App></App>"
 });

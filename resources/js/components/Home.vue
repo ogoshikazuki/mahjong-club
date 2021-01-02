@@ -4,8 +4,8 @@
       <v-card-title>未清算</v-card-title>
       <CurrentMoney></CurrentMoney>
       <v-card-actions>
-        <v-btn color="warning" href="/money/edit">金額修正</v-btn>
-        <v-btn color="secondary" href="history">履歴表示</v-btn>
+        <v-btn color="warning" :to="{ name: 'edit-money' }">金額修正</v-btn>
+        <v-btn color="secondary" :to="{ name: 'history' }">履歴表示</v-btn>
         <v-btn color="primary" @click="resetMoney">精算</v-btn>
       </v-card-actions>
     </v-card>

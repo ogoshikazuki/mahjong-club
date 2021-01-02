@@ -1,24 +1,22 @@
 <template>
-  <div class="table-responsive" v-loading="loading">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>終了日時</th>
-          <th v-for="player in players" :key="player.id">{{ player.name }}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="game in currentMoneyGames" :key="game.id">
-          <td>{{ game.finished_at }}</td>
-          <td v-for="player in players" :key="player.id">{{ culculateGamePlayerMoney(game, player) }}</td>
-          <td>
-            <button class="btn btn-primary btn-sm" @click="$emit('show-game', game)">詳細</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <v-simple-table class="text-no-wrap">
+    <thead>
+      <tr>
+        <th>終了日時</th>
+        <th v-for="player in players" :key="player.id">{{ player.name }}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="game in currentMoneyGames" :key="game.id">
+        <td>{{ game.finished_at }}</td>
+        <td v-for="player in players" :key="player.id">{{ culculateGamePlayerMoney(game, player) }}</td>
+        <td>
+          <v-btn color="primary" small @click="$emit('show-game', game)">詳細</v-btn>
+        </td>
+      </tr>
+    </tbody>
+  </v-simple-table>
 </template>
 
 <script>

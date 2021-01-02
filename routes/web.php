@@ -13,22 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@home')->name('home');
-
-Route::group(['prefix' => 'game', 'as' => 'game.'], function () {
-    Route::post('start', 'GameController@startGame')->name('start');
-    Route::post('finish', 'GameController@finishGame')->name('finish');
-    Route::post('cancel', 'GameController@cancelGame')->name('cancel');
-    Route::resource('result', 'GameResultController', ['only' => ['store', 'destroy']])
-        ->parameters(['result' => 'gameResult']);
+Route::fallback(function () {
+    return view('app');
 });
-
-Route::group(['prefix' => 'money', 'as' => 'money.'], function () {
-    Route::get('edit', 'MoneyController@editMoney')->name('edit');
-});
-
-Route::get('history', 'HomeController@history')->name('history');
-
-Route::get('average-finish-order', 'GameController@averageFinishOrder')->name('average-finish-order');
-
-Route::get('tenhou-log', 'TenhouController@log')->name('tenhou-log');

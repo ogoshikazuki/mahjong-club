@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+namespace App\Http\Controllers;
 
 use App\Http\Resources\Player as PlayerResource;
 use App\Service\PlayerService;

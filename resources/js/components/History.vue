@@ -9,7 +9,7 @@
         @reload="reloadGame"
       ></game-result-history>
     </transition>
-    <button v-if="game !== null" class="btn btn-secondary" @click="game = null">戻る</button>
+    <v-btn v-if="game !== null" color="secondary" @click="game = null">戻る</v-btn>
   </div>
 </template>
 

@@ -1,41 +1,34 @@
 <template>
   <div>
-    <h1>集計</h1>
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: mode === 4 }" @click="setMode(4)">四麻</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: mode === 3 }" @click="setMode(3)">三麻</a>
-      </li>
-    </ul>
-    <div class="table-responsive">
-      <table class="table" v-loading="loading">
-        <thead>
-          <tr>
-            <th>名前</th>
-            <th>ゲーム数</th>
-            <th>平均着順</th>
-            <th>祝儀</th>
-            <th>金額</th>
-            <th v-for="(value, key) in finishOrderCount" :key="key">{{ key }}着</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="player in players" :key="player.id">
-            <td>{{ player.name }}</td>
-            <td>{{ gameCount[player.id] }}</td>
-            <td>{{ averageFinishOrder[player.id].toFixed(2) }}</td>
-            <td>{{ tipCount[player.id] }}</td>
-            <td>{{ money[player.id] }}</td>
-            <td
-              v-for="(value, key) in finishOrderCount"
-              :key="key"
-            >{{ value[player.id] }}({{ (value[player.id] / gameCount[player.id] * 100).toFixed(2) }}%)</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <v-tabs>
+      <v-tab @change="setMode(4)">四麻</v-tab>
+      <v-tab @change="setMode(3)">三麻</v-tab>
+    </v-tabs>
+    <v-simple-table v-loading="loading" class="text-no-wrap">
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th>ゲーム数</th>
+          <th>平均着順</th>
+          <th>祝儀</th>
+          <th>金額</th>
+          <th v-for="(value, key) in finishOrderCount" :key="key">{{ key }}着</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="player in players" :key="player.id">
+          <td>{{ player.name }}</td>
+          <td>{{ gameCount[player.id] }}</td>
+          <td>{{ averageFinishOrder[player.id].toFixed(2) }}</td>
+          <td>{{ tipCount[player.id] }}</td>
+          <td>{{ money[player.id] }}</td>
+          <td
+            v-for="(value, key) in finishOrderCount"
+            :key="key"
+          >{{ value[player.id] }}({{ (value[player.id] / gameCount[player.id] * 100).toFixed(2) }}%)</td>
+        </tr>
+      </tbody>
+    </v-simple-table>
   </div>
 </template>
 

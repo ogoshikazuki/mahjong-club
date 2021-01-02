@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
+Route::group(['as' => 'api.'], function () {
     Route::get('player', 'PlayerController@index')->name('player.index');
     Route::apiResource('player', 'PlayerController', ['only' => ['index']]);
     Route::group(['prefix' => 'game', 'as' => 'game.'], function () {

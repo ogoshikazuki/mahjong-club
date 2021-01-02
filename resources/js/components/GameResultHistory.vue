@@ -1,68 +1,53 @@
 <template>
-  <div class="table-responsive" v-loading="loading">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>レート</th>
-          <th v-for="player in players" :key="player.id">{{ player.name }}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="gameResult in gameResults" :key="gameResult.id">
-          <td>
-            <select
-              class="form-control form-control-sm"
-              v-if="editForm.id === gameResult.id"
-              v-model="editForm.rate"
-            >
-              <option :value="50">50</option>
-              <option :value="100">100</option>
-            </select>
-            <template v-else>{{ gameResult.rate }}</template>
-          </td>
-          <td v-for="player in players" :key="player.id">
-            <template v-if="editForm.id === gameResult.id">
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                :class="{ 'is-invalid': editErrors.points }"
-                v-model="editForm.points[player.id]"
-              />
-              <div
-                class="invalid-feedback"
-                v-for="error of editErrors.points"
-                :key="error"
-              >{{ error }}</div>
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                :class="{ 'is-invalid': editErrors.tips }"
-                v-model="editForm.tips[player.id]"
-                placeholder="祝儀"
-              />
-              <div
-                class="invalid-feedback"
-                v-for="error of editErrors.tips"
-                :key="error"
-              >{{ error }}</div>
-            </template>
-            <template v-else>{{ getPointAndTip(gameResult, player) }}</template>
-          </td>
-          <td>
-            <template v-if="editForm.id === gameResult.id">
-              <button class="btn btn-primary btn-sm" @click="updateGameResult">更新</button>
-              <button class="btn btn-secondary btn-sm" @click="resetForm">キャンセル</button>
-            </template>
-            <template v-else>
-              <button class="btn btn-secondary btn-sm" @click="editGameResult(gameResult)">編集</button>
-              <button class="btn btn-danger btn-sm" @click="deleteGameResult(gameResult.id)">削除</button>
-            </template>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <v-simple-table class="text-no-wrap">
+    <thead>
+      <tr>
+        <th>レート</th>
+        <th v-for="player in players" :key="player.id">{{ player.name }}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="gameResult in gameResults" :key="gameResult.id">
+        <td>
+          <v-select
+            v-if="editForm.id === gameResult.id"
+            v-model="editForm.rate"
+            :items="[50, 100]"
+          ></v-select>
+          <template v-else>{{ gameResult.rate }}</template>
+        </td>
+        <td v-for="player in players" :key="player.id">
+          <template v-if="editForm.id === gameResult.id">
+            <v-text-field
+              type="number"
+              :class="{ 'is-invalid': editErrors.points }"
+              v-model="editForm.points[player.id]"
+              :error-messages="editErrors.points"
+            />
+            <v-text-field
+              type="number"
+              :class="{ 'is-invalid': editErrors.tips }"
+              v-model="editForm.tips[player.id]"
+              placeholder="祝儀"
+              :error-messages="editErrors.tips"
+            />
+          </template>
+          <template v-else>{{ getPointAndTip(gameResult, player) }}</template>
+        </td>
+        <td>
+          <template v-if="editForm.id === gameResult.id">
+            <v-btn color="primary" small @click="updateGameResult">更新</v-btn>
+            <v-btn color="secondary" small @click="resetForm">キャンセル</v-btn>
+          </template>
+          <template v-else>
+            <v-btn color="secondary" small @click="editGameResult(gameResult)">編集</v-btn>
+            <v-btn color="danger" small @click="deleteGameResult(gameResult.id)">削除</v-btn>
+          </template>
+        </td>
+      </tr>
+    </tbody>
+  </v-simple-table>
 </template>
 
 <script>
