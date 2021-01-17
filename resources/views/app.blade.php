@@ -6,6 +6,7 @@
         <title>麻雀</title>
         <link rel="icon" href="/favicon.ico">
         <link rel="manifest" href="manifest.json">
+        <link rel="apple-touch-icon" sizes="144x144" href="/images/icons/icon-144.png">
     </head>
     <body>
         <div id="app"></div>
