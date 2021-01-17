@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>麻雀</title>
         <link rel="icon" href="/favicon.ico">
+        <link rel="manifest" href="manifest.json">
     </head>
     <body>
         <div id="app"></div>

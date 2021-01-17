@@ -1,0 +1,12 @@
+{
+  "lang": "ja",
+  "name": "Mahjong Club",
+  "short_name": "Manjong",
+  "icons": [{
+    "src": "/images/icons/icon-144.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  }],
+  "start_url": "/",
+  "display": "standalone"
+}

@@ -40,6 +40,8 @@ import store from "./store/index";
 import App from "./components/App";
 import routes from "./routes";
 
+import './registerServiceWorker';
+
 new Vue({
     el: "#app",
 
