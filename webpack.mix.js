@@ -11,4 +11,4 @@ const mix = require("laravel-mix");
  |
  */
 
-mix.ts("resources/ts/app.ts", "public/js").version();
+mix.js("resources/js/app.js", "public/js").version();
