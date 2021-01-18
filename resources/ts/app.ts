@@ -4,7 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-const Vue = require("vue");
+import Vue from "vue";
 
 /**
  * The following block of code may be used to automatically register your
@@ -37,7 +37,7 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 import store from "./store/index";
-import App from "./components/App";
+import App from "./components/App.vue";
 import routes from "./routes";
 
 import './registerServiceWorker';

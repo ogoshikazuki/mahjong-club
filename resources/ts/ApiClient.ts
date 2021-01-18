@@ -23,7 +23,7 @@ const headers = {
     "X-Requested-With": "XMLHttpRequest"
 };
 
-const _url = (template, urlParameter = {}, queryParameter = {}) => {
+const _url = (template: string, urlParameter = {}, queryParameter = {}) => {
     const url = urlTemplate.parse(template).expand(urlParameter);
     if (Object.keys(queryParameter).length > 0) {
         return `${url}?${queryString.stringify(queryParameter)}`;
@@ -31,12 +31,12 @@ const _url = (template, urlParameter = {}, queryParameter = {}) => {
     return url;
 };
 
-const _get = async (template, urlParameter, queryParameter = {}) => {
+const _get = async (template: string, urlParameter = {}, queryParameter = {}) => {
     const url = _url(template, urlParameter, queryParameter);
     return (await (await fetch(url)).json()).data;
 };
 
-const _post = (template, parameters = {}) => {
+const _post = (template: string, parameters = {}) => {
     const url = _url(template);
     return fetch(url, {
         method: "POST",
@@ -45,7 +45,7 @@ const _post = (template, parameters = {}) => {
     });
 };
 
-const _put = (template, id, parameters) => {
+const _put = (template: string, id: number, parameters: object) => {
     const url = _url(template, { id });
     return fetch(url, {
         method: "PUT",
@@ -54,7 +54,7 @@ const _put = (template, id, parameters) => {
     });
 };
 
-const _delete = (template, id) => {
+const _delete = (template: string, id: number) => {
     const url = _url(template, { id });
     fetch(url, { method: "DELETE" });
 };
@@ -72,15 +72,15 @@ class ApiClient {
         return _get(URL_TEMPLATE["game.get-current-money-games"]);
     }
 
-    findGame(id) {
+    findGame(id: number) {
         return _get(URL_TEMPLATE["game.show"], { id });
     }
 
-    deleteGameResult(id) {
+    deleteGameResult(id: number) {
         _delete(URL_TEMPLATE["game.result.destroy"], id);
     }
 
-    updateGameResult(parameters) {
+    updateGameResult(parameters: { id: number }) {
         return _put(
             URL_TEMPLATE["game.result.update"],
             parameters.id,
@@ -88,7 +88,7 @@ class ApiClient {
         );
     }
 
-    storeGameResult(parameters) {
+    storeGameResult(parameters: object) {
         return _post(URL_TEMPLATE["game.result.store"], parameters);
     }
 
@@ -96,11 +96,11 @@ class ApiClient {
         return _get(URL_TEMPLATE["game.result.index"]);
     }
 
-    downloadTenhouLog(parameters) {
+    downloadTenhouLog(parameters: object) {
         return _get(URL_TEMPLATE["tenhou.download-log"], {}, parameters);
     }
 
-    registerTenhouLog(parameters) {
+    registerTenhouLog(parameters: object) {
         return _post(URL_TEMPLATE["tenhou.register-log"], parameters);
     }
 
@@ -116,7 +116,7 @@ class ApiClient {
         return _post(URL_TEMPLATE["money.reset"]);
     }
 
-    updateMoney(money) {
+    updateMoney(money: number) {
         return _post(URL_TEMPLATE["money.update"], { money });
     }
 }
