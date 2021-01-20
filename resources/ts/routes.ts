@@ -1,8 +1,8 @@
-import Home from "./components/Home";
-import EditMoney from "./components/EditMoney";
-import History from "./components/History";
-import Aggregate from "./components/Aggregate";
-import TenhouLog from "./components/TenhouLog";
+import Home from "./components/Home.vue";
+import EditMoney from "./components/EditMoney.vue";
+import History from "./components/History.vue";
+import Aggregate from "./components/Aggregate.vue";
+import TenhouLog from "./components/TenhouLog.vue";
 
 export default [
     { name: "home", path: "/", component: Home },

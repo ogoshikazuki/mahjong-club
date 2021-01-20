@@ -9,7 +9,7 @@
         "prod": "yarn run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "heroku-prebuild": "yarn && yarn run production && php artisan migrate",
-        "lint": "eslint resources/js/**/*.{js,vue}"
+        "lint": "eslint resources/ts/**/*.ts"
     },
     "dependencies": {
         "@mdi/font": "^5.8.55",
@@ -36,9 +36,14 @@
         "node": "12.16.x"
     },
     "devDependencies": {
+        "@types/url-template": "^2.0.28",
+        "@typescript-eslint/eslint-plugin": "^4.14.0",
+        "@typescript-eslint/parser": "^4.14.0",
         "deepmerge": "^4.2.2",
         "eslint": "^7.1.0",
         "eslint-plugin-vue": "^6.2.2",
-        "fibers": "^5.0.0"
+        "fibers": "^5.0.0",
+        "ts-loader": "^8.0.14",
+        "typescript": "^4.1.3"
     }
 }
