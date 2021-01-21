@@ -16,27 +16,28 @@
   </v-form>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import moment from "moment";
 import apiClient from "../ApiClient";
 
-export default {
+export default Vue.extend({
   data () {
     return {
       roomNumberNoPrefix: "",
       date: moment().format("YYYY-MM-DD"),
       roomNumberRules: [
-        v => !!v || "部屋番号を入力してください。",
-        v => v.length === 4 || "部屋番号は上4桁を入力してください。",
+        (v: string) => !!v || "部屋番号を入力してください。",
+        (v: string) => v.length === 4 || "部屋番号は上4桁を入力してください。",
       ],
-      dateRules: [v => !!v || "日付を入力してください。"],
+      dateRules: [(v: string) => !!v || "日付を入力してください。"],
       valid: true,
       loading: false,
     };
   },
 
   computed: {
-    roomNumber() {
+    roomNumber(): string {
       return `C${this.roomNumberNoPrefix}`;
     },
   },
@@ -55,10 +56,10 @@ export default {
     },
 
     validate() {
-      this.$refs.form.validate();
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
 
       return this.valid;
     },
   },
-}
+});
 </script>
