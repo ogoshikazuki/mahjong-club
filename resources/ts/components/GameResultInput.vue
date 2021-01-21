@@ -42,11 +42,12 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { mapState } from "vuex";
 import apiClient from "../ApiClient";
 
-export default {
+export default Vue.extend({
   data: function() {
     return {
       rate: null,
@@ -92,5 +93,5 @@ export default {
   computed: {
     ...mapState(["players"])
   }
-};
+});
 </script>
