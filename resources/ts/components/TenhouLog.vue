@@ -7,17 +7,21 @@
   </div>
 </template>
 
-<script>
-import TenhouLogDownloader from "./TenhouLogDownloader";
-import TenhouLogRegisterer from "./TenhouLogRegisterer";
+<script lang="ts">
+import Vue from "vue";
+import TenhouLogDownloader from "./TenhouLogDownloader.vue";
+import TenhouLogRegisterer from "./TenhouLogRegisterer.vue";
 
-export default {
+export default Vue.extend({
   components: {
     TenhouLogDownloader,
     TenhouLogRegisterer,
   },
 
-  data () {
+  data (): {
+    tenhouLogs: [],
+    registeredCount: number|null
+  } {
     return {
       tenhouLogs: [],
       registeredCount: null,
@@ -25,10 +29,10 @@ export default {
   },
 
   methods: {
-    async registered(registeredCount) {
+    async registered(registeredCount: number) {
       this.registeredCount = registeredCount;
       this.tenhouLogs = [];
     },
   },
-}
+});
 </script>
