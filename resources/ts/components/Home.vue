@@ -18,13 +18,14 @@
   </div>
 </template>
 
-<script>
-import CurrentMoney from "./CurrentMoney";
-import PastMoney from "./PastMoney";
-import SuggestResetMoneyDialog from "./SuggestResetMoneyDialog";
+<script lang="ts">
+import Vue from "vue";
+import CurrentMoney from "./CurrentMoney.vue";
+import PastMoney from "./PastMoney.vue";
+import SuggestResetMoneyDialog from "./SuggestResetMoneyDialog.vue";
 import ApiClient from "../ApiClient";
 
-export default {
+export default Vue.extend({
   components: {
     CurrentMoney,
     PastMoney,
@@ -51,7 +52,7 @@ export default {
       location.reload();
     }
   },
-};
+});
 </script>
 
 <style scoped>
