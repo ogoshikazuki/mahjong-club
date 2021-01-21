@@ -50,11 +50,38 @@
   </v-simple-table>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import apiClient from "../ApiClient";
 import { mapState } from "vuex";
 
-export default {
+type Player = {
+  id: number,
+};
+type GameResultPlayer = {
+  point: number,
+  tip: number,
+  player_id: number,
+};
+type GameResult = {
+  id: number,
+  rate: number,
+  gameResultPlayers: GameResultPlayer[],
+};
+
+type EditForm = {
+  id: number|null,
+  rate: number|null,
+  points: { [key: number]: number},
+  tips: { [key: number]: number },
+}
+
+class EditErrors {
+  points: string[] = [];
+  tips: string[] = [];
+}
+
+export default Vue.extend({
   props: {
     gameResults: {
       type: Array,
@@ -62,17 +89,20 @@ export default {
     }
   },
 
-  data: function() {
+  data(): {
+    loading: boolean,
+    editForm: EditForm,
+    editErrors: EditErrors,
+  } {
     return {
       loading: false,
       editForm: { id: null, rate: null, points: {}, tips: {} },
-      editing: null,
-      editErrors: {}
+      editErrors: new EditErrors(),
     };
   },
 
   methods: {
-    async deleteGameResult(id) {
+    async deleteGameResult(id: number) {
       if (!confirm("本当に削除しますか？")) {
         return;
       }
@@ -83,7 +113,7 @@ export default {
       this.$emit("reload");
     },
 
-    editGameResult(gameResult) {
+    editGameResult(gameResult: GameResult) {
       this.resetForm();
 
       this.$set(this.editForm, "id", gameResult.id);
@@ -112,14 +142,17 @@ export default {
         this.$set(this.editForm.points, player.id, null);
         this.$set(this.editForm.tips, player.id, null);
       }
-      this.editFormErrorMessages = [];
-      this.editErrors = {};
+      this.editErrors = new EditErrors();
     },
 
     async updateGameResult() {
+      if (this.editForm.id === null) {
+        return;
+      }
+
       this.loading = true;
 
-      const response = await apiClient.updateGameResult(this.editForm);
+      const response = await apiClient.updateGameResult(this.editForm.id, this.editForm);
       this.loading = false;
 
       if (response.status === 422) {
@@ -133,7 +166,7 @@ export default {
       this.$emit("reload");
     },
 
-    getPointAndTip(gameResult, player) {
+    getPointAndTip(gameResult: GameResult, player: Player) {
       const gameResultPlayer = gameResult.gameResultPlayers.find(
         gameResultPlayer => gameResultPlayer.player_id === player.id
       );
@@ -146,5 +179,5 @@ export default {
   computed: {
     ...mapState(["players"])
   }
-};
+});
 </script>

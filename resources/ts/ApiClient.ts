@@ -81,10 +81,10 @@ class ApiClient {
         _delete(URL_TEMPLATE["game.result.destroy"], id);
     }
 
-    updateGameResult(parameters: { id: number }) {
+    updateGameResult(id: number, parameters = {}) {
         return _put(
             URL_TEMPLATE["game.result.update"],
-            parameters.id,
+            id,
             parameters
         );
     }
