@@ -13,37 +13,52 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import apiClient from "../ApiClient";
-import CurrentMoneyGames from "./CurrentMoneyGames";
-import GameResultHistory from "./GameResultHistory";
+import CurrentMoneyGames from "./CurrentMoneyGames.vue";
+import GameResultHistory from "./GameResultHistory.vue";
 
-export default {
+interface GameResultHistoryInterface extends Vue {
+  loading: boolean,
+}
+
+type Game = {
+  id: number,
+};
+
+export default Vue.extend({
   components: {
     CurrentMoneyGames,
     GameResultHistory
   },
 
-  data() {
+  data(): {
+    game: Game|null,
+  } {
     return {
       game: null
     };
   },
 
   methods: {
-    async showGame(game) {
+    async showGame(game: Game) {
       this.game = game;
     },
 
     async reloadGame() {
-      this.$refs.gameResultHistory.loading = true;
+      (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = true;
+
+      if (this.game === null) {
+        return;
+      }
 
       this.game = await apiClient.findGame(this.game.id);
 
-      this.$refs.gameResultHistory.loading = false;
+      (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = false;
     }
   }
-};
+});
 </script>
 
 <style scoped>
