@@ -15,18 +15,47 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue, { PropType } from "vue";
 import apiClient from "../ApiClient";
 
-export default {
+type GameResult = {
+  playerName: string,
+  point: number,
+  tip: number,
+};
+type TenhouLog = {
+  gameResults: GameResult[],
+};
+type TenhouLogWithGameResultsText = TenhouLog & {
+  gameResultsText: string,
+};
+
+type Data = {
+  headers: { text: string, value: string }[],
+  checked: TenhouLogWithGameResultsText[],
+  registering: boolean,
+};
+type Methods = {
+  register: () => Promise<void>,
+};
+type Computed = {
+  items: TenhouLogWithGameResultsText[],
+  checkedTenhouLogs: GameResult[][],
+};
+type Props = {
+  tenhouLogs: TenhouLog[],
+}
+
+export default Vue.extend<Data, Methods, Computed, Props>({
   props: {
     tenhouLogs: {
-      type: Array,
+      type: Array as PropType<TenhouLog[]>,
       required: true,
     },
   },
 
-  data () {
+  data (): Data {
     return {
       headers: [
         { text: "開始時刻", value: "startTime" },
@@ -38,20 +67,21 @@ export default {
   },
 
   computed: {
-    items() {
-      return this.tenhouLogs.map(tenhouLog => {
-        tenhouLog["gameResultsText"] = tenhouLog.gameResults.reduce((gameResults, gameResult) => {
+    items(): TenhouLogWithGameResultsText[] {
+      return this.tenhouLogs.map((tenhouLog: TenhouLog): TenhouLogWithGameResultsText => {
+        const tenhouLogWithGameResultsText: TenhouLogWithGameResultsText = tenhouLog as TenhouLogWithGameResultsText;
+        tenhouLogWithGameResultsText["gameResultsText"] = tenhouLog.gameResults.reduce((gameResults, gameResult) => {
             if (gameResults) {
               gameResults += " ";
             }
             return gameResults += `${gameResult.playerName}:${gameResult.point},${gameResult.tip}枚`;
           }, "");
-        return tenhouLog;
+        return tenhouLogWithGameResultsText;
       })
     },
 
-    checkedTenhouLogs() {
-      return this.checked.map(item => item.gameResults);
+    checkedTenhouLogs(): GameResult[][] {
+      return this.checked.map((item: TenhouLogWithGameResultsText) => item.gameResults);
     },
   },
 
@@ -62,5 +92,5 @@ export default {
       this.$emit("registered", (await (await apiClient.registerTenhouLog({ tenhou_logs: this.checkedTenhouLogs })).json()).data);
     },
   },
-}
+});
 </script>
