@@ -18,10 +18,38 @@
   </v-dialog>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import ApiClient from "../ApiClient";
 
-export default {
+type Player = {
+  name: string,
+};
+type MoneyPlayer = {
+  money: number,
+  player: Player,
+};
+type Suggest = {
+  from: string,
+  to: string,
+  money: number,
+};
+
+type Data = {
+  moneyPlayers: MoneyPlayer[],
+  loading: boolean,
+};
+type Methods = Record<string, never>;
+type Computed = {
+  minusMoneyPlayers: MoneyPlayer[],
+  plusMoneyPlayers: MoneyPlayer[],
+  suggest1: Suggest[],
+};
+type Props = {
+  value: boolean,
+};
+
+export default Vue.extend<Data, Methods, Computed, Props>({
   props: {
     value: {
       type: Boolean,
@@ -94,5 +122,5 @@ export default {
     this.moneyPlayers = (await ApiClient.getCurrentMoney()).money_players;
     this.loading = false;
   },
-}
+});
 </script>
