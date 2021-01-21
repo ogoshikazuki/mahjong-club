@@ -19,11 +19,28 @@
   </v-simple-table>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { mapState } from "vuex";
 import apiClient from "../ApiClient";
 
-export default {
+type Player = {
+  id: number,
+};
+type GameResultPlayer = {
+  point: number,
+  tip: number,
+  player_id: number,
+};
+type GameResult = {
+  rate: number,
+  gameResultPlayers: GameResultPlayer[],
+};
+type Game = {
+  gameResults: GameResult[],
+};
+
+export default Vue.extend({
   data() {
     return {
       currentMoneyGames: [],
@@ -36,7 +53,7 @@ export default {
   },
 
   methods: {
-    culculateGamePlayerMoney(game, player) {
+    culculateGamePlayerMoney(game: Game, player: Player) {
       let result = 0;
       for (let gameResult of game.gameResults) {
         for (let gameResultPlayer of gameResult.gameResultPlayers) {
@@ -55,5 +72,5 @@ export default {
 
     this.loading = false;
   }
-}
+});
 </script>
