@@ -120,7 +120,7 @@ class ApiClient {
         return _post(URL_TEMPLATE["money.reset"]);
     }
 
-    updateMoney(money: number) {
+    updateMoney(money: { [key: number]: number }) {
         return _post(URL_TEMPLATE["money.update"], { money });
     }
 }

@@ -17,12 +17,26 @@
   </v-form>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { mapState } from "vuex";
 import ApiClient from "../ApiClient";
 
-export default {
-  data() {
+type Player = {
+  id: number,
+};
+type MoneyPlayer = {
+  money: number,
+  player: Player,
+};
+
+export default Vue.extend({
+  data(): {
+    money: { [key: number]: number },
+    loading: boolean,
+    updating: boolean,
+    errorMessages: string[],
+  } {
     return {
       money: {},
       loading: true,
@@ -36,7 +50,7 @@ export default {
   },
 
   async created() {
-    this.money = (await ApiClient.getCurrentMoney()).money_players.reduce((money, moneyPlayer) => {
+    this.money = (await ApiClient.getCurrentMoney()).money_players.reduce((money: number[], moneyPlayer: MoneyPlayer) => {
       money[moneyPlayer.player.id] = moneyPlayer.money;
       return money;
     }, {});
@@ -60,5 +74,5 @@ export default {
       this.errorMessages = (await response.json()).errors.money;
     }
   },
-};
+});
 </script>
