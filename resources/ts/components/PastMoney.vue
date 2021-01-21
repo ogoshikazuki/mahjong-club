@@ -21,12 +21,27 @@
   </v-simple-table>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { mapState } from "vuex";
 import ApiClient from "../ApiClient";
 
-export default {
-  data() {
+type Player = {
+  id: number,
+};
+type MoneyPlayer = {
+  player: Player,
+  money: number,
+};
+type Money = {
+  money_players: MoneyPlayer[],
+};
+
+export default Vue.extend({
+  data(): {
+    moneys: Money[],
+    loading: boolean,
+  } {
     return {
       moneys: [],
       loading: true,
@@ -34,8 +49,8 @@ export default {
   },
 
   computed: {
-    totalMoneys() {
-      let result = this.players.reduce((reduceResult, player) => {
+    totalMoneys(): number[] {
+      let result = this.players.reduce((reduceResult: number[], player: Player) => {
         reduceResult[player.id] = 0;
         return reduceResult;
       }, {});
@@ -57,7 +72,7 @@ export default {
   },
 
   methods: {
-    getMoney(money, playerId) {
+    getMoney(money: Money, playerId: number): number {
       const moneyPlayer = money.money_players.find(({ player }) => player.id === playerId);
 
       if (moneyPlayer === undefined) {
@@ -67,7 +82,7 @@ export default {
       return moneyPlayer.money;
     },
   },
-};
+});
 </script>
 
 <style scoped>
