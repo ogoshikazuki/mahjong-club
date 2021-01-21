@@ -8,13 +8,18 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { mapState } from "vuex";
-import GameResultInput from "./GameResultInput";
-import gameResultHistory from "./GameResultHistory";
+import GameResultInput from "./GameResultInput.vue";
+import gameResultHistory from "./GameResultHistory.vue";
 import apiClient from "../ApiClient";
 
-export default {
+interface GameResultHistoryInterface extends Vue {
+  loading: boolean,
+}
+
+export default Vue.extend({
   components: {
     GameResultInput,
     gameResultHistory
@@ -32,13 +37,13 @@ export default {
 
   methods: {
     async loadHistory() {
-      this.$refs.gameResultHistory.loading = true;
+      (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = true;
 
       this.gameResults = [];
 
       this.gameResults = (await apiClient.getCurrentGame()).gameResults;
 
-      this.$refs.gameResultHistory.loading = false;
+      (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = false;
     },
   },
 
@@ -49,7 +54,7 @@ export default {
   },
 
   mounted() {
-    this.$refs.gameResultHistory.loading = true;
+    (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = true;
   }
-}
+});
 </script>
