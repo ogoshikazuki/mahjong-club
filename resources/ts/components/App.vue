@@ -28,18 +28,22 @@
   </v-app>
 </template>
 
-<script>
-export default {
-  data() {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  data(): {
+    drawer: boolean,
+  } {
     return {
       drawer: false,
     };
   },
 
   methods: {
-    toggleDrawer() {
+    toggleDrawer(): void {
       this.drawer = !this.drawer;
     },
   },
-}
+});
 </script>
