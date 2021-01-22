@@ -54,10 +54,8 @@
 import Vue from "vue";
 import apiClient from "../ApiClient";
 import { mapState } from "vuex";
+import Player from "../types/Player";
 
-type Player = {
-  id: number,
-};
 type GameResultPlayer = {
   point: number,
   tip: number,

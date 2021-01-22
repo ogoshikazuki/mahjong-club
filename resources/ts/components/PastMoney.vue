@@ -25,10 +25,8 @@
 import Vue from "vue";
 import { mapState } from "vuex";
 import ApiClient from "../ApiClient";
+import Player from "../types/Player";
 
-type Player = {
-  id: number,
-};
 type MoneyPlayer = {
   player: Player,
   money: number,
