@@ -21,12 +21,7 @@
 import Vue from "vue";
 import { mapState } from "vuex";
 import ApiClient from "../ApiClient";
-import Player from "../types/Player";
-
-type MoneyPlayer = {
-  money: number,
-  player: Player,
-};
+import MoneyPlayer from "../types/MoneyPlayer";
 
 export default Vue.extend({
   data(): {

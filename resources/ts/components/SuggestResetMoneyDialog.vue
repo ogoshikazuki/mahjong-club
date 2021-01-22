@@ -21,12 +21,8 @@
 <script lang="ts">
 import Vue from "vue";
 import ApiClient from "../ApiClient";
-import Player from "../types/Player";
+import MoneyPlayer from "../types/MoneyPlayer";
 
-type MoneyPlayer = {
-  money: number,
-  player: Player,
-};
 type Suggest = {
   from: string,
   to: string,
