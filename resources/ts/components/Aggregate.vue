@@ -32,12 +32,50 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { mapState } from "vuex";
 import apiClient from "../ApiClient";
 
-export default {
-  data() {
+type Player = {
+  id: number,
+  name: string,
+};
+type GameResultPlayer = {
+  point: number,
+  tip: number,
+  player_id: number,
+};
+type GameResult = {
+  rate: number,
+  gameResultPlayers: GameResultPlayer[],
+};
+
+type ResultByPlayers = {
+  [key: number]: number,
+};
+
+interface Data {
+  mode: number,
+  loading: boolean,
+  gameResults: GameResult[],
+}
+interface Methods {
+  setMode: (mode: number) => void,
+  loadGameResults: () => Promise<void>,
+}
+interface Computed {
+  gameCount: ResultByPlayers,
+  finishOrderCount: {[key: number]: ResultByPlayers},
+  totalFinishOrder: ResultByPlayers,
+  averageFinishOrder: ResultByPlayers,
+  tipCount: ResultByPlayers,
+  money: ResultByPlayers,
+  players: Player[],
+}
+
+export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
+  data(): Data {
     return {
       mode: 4,
       loading: true,
@@ -46,7 +84,7 @@ export default {
   },
 
   methods: {
-    setMode(mode) {
+    setMode(mode: number) {
       this.mode = mode;
     },
 
@@ -61,7 +99,7 @@ export default {
 
   computed: {
     gameCount() {
-      let gameCount = this.players.reduce((gameCount, player) => {
+      let gameCount = this.players.reduce((gameCount: ResultByPlayers, player: Player) => {
         gameCount[player.id] = 0;
         return gameCount;
       }, {});
@@ -80,10 +118,10 @@ export default {
     },
 
     finishOrderCount() {
-      let finishOrderCount = {};
+      let finishOrderCount!: {[key: number]: ResultByPlayers};
       for (let finishOrder = 1; finishOrder <= this.mode; finishOrder++) {
         finishOrderCount[finishOrder] = this.players.reduce(
-          (finishOrderCount, player) => {
+          (finishOrderCount: ResultByPlayers, player) => {
             finishOrderCount[player.id] = 0;
             return finishOrderCount;
           },
@@ -104,12 +142,12 @@ export default {
     },
 
     totalFinishOrder() {
-      let totalFinishOrder = this.players.reduce((gameCount, player) => {
+      let totalFinishOrder = this.players.reduce((gameCount: ResultByPlayers, player) => {
         gameCount[player.id] = 0;
         return gameCount;
       }, {});
 
-      return Object.keys(this.finishOrderCount).reduce(
+      return Object.keys(this.finishOrderCount).map(Number).reduce(
         (totalFinishOrder, finishOrder) => {
           for (let player of this.players) {
             totalFinishOrder[player.id] +=
@@ -122,7 +160,7 @@ export default {
     },
 
     averageFinishOrder() {
-      return this.players.reduce((averageFinishOrder, player) => {
+      return this.players.reduce((averageFinishOrder: ResultByPlayers, player) => {
         averageFinishOrder[player.id] =
           this.totalFinishOrder[player.id] / this.gameCount[player.id];
         return averageFinishOrder;
@@ -130,7 +168,7 @@ export default {
     },
 
     tipCount() {
-      let tipCount = this.players.reduce((tipCount, player) => {
+      let tipCount = this.players.reduce((tipCount: ResultByPlayers, player) => {
         tipCount[player.id] = 0;
         return tipCount;
       }, {});
@@ -149,7 +187,7 @@ export default {
     },
 
     money() {
-      let money = this.players.reduce((money, player) => {
+      let money = this.players.reduce((money: ResultByPlayers, player) => {
         money[player.id] = 0;
         return money;
       }, {});
@@ -171,7 +209,7 @@ export default {
   created() {
     this.loadGameResults();
   }
-};
+});
 </script>
 
 <style scoped>
