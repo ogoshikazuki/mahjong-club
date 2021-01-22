@@ -118,7 +118,7 @@ export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
     },
 
     finishOrderCount() {
-      let finishOrderCount!: {[key: number]: ResultByPlayers};
+      let finishOrderCount: {[key: number]: ResultByPlayers} = {};
       for (let finishOrder = 1; finishOrder <= this.mode; finishOrder++) {
         finishOrderCount[finishOrder] = this.players.reduce(
           (finishOrderCount: ResultByPlayers, player) => {
