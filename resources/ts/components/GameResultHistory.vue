@@ -55,17 +55,7 @@ import Vue from "vue";
 import apiClient from "../ApiClient";
 import { mapState } from "vuex";
 import Player from "../types/Player";
-
-type GameResultPlayer = {
-  point: number,
-  tip: number,
-  player_id: number,
-};
-type GameResult = {
-  id: number,
-  rate: number,
-  gameResultPlayers: GameResultPlayer[],
-};
+import GameResult from "../types/GameResult";
 
 type EditForm = {
   id: number|null,

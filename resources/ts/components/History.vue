@@ -18,14 +18,11 @@ import Vue from "vue";
 import apiClient from "../ApiClient";
 import CurrentMoneyGames from "./CurrentMoneyGames.vue";
 import GameResultHistory from "./GameResultHistory.vue";
+import Game from "../types/Game";
 
 interface GameResultHistoryInterface extends Vue {
   loading: boolean,
 }
-
-type Game = {
-  id: number,
-};
 
 export default Vue.extend({
   components: {

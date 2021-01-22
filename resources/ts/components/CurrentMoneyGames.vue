@@ -24,19 +24,7 @@ import Vue from "vue";
 import { mapState } from "vuex";
 import apiClient from "../ApiClient";
 import Player from "../types/Player";
-
-type GameResultPlayer = {
-  point: number,
-  tip: number,
-  player_id: number,
-};
-type GameResult = {
-  rate: number,
-  gameResultPlayers: GameResultPlayer[],
-};
-type Game = {
-  gameResults: GameResult[],
-};
+import Game from "../types/Game";
 
 export default Vue.extend({
   data() {
