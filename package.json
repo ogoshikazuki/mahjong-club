@@ -9,7 +9,7 @@
         "prod": "yarn run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "heroku-prebuild": "yarn && yarn run production && php artisan migrate",
-        "lint": "eslint resources/ts/**/*.ts"
+        "lint": "eslint resources/ts/**/*"
     },
     "dependencies": {
         "@mdi/font": "^5.8.55",
