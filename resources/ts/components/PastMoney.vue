@@ -22,59 +22,58 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { mapState } from "vuex";
-import ApiClient from "../ApiClient";
-import Player from "../types/Player";
-import Money from "../types/Money";
+import Vue from 'vue'
+import { mapState } from 'vuex'
+import ApiClient from '../ApiClient'
+import Player from '../types/Player'
+import Money from '../types/Money'
 
 export default Vue.extend({
   data(): {
-    moneys: Money[],
-    loading: boolean,
+    moneys: Money[]
+    loading: boolean
   } {
     return {
       moneys: [],
       loading: true,
-    };
+    }
   },
 
   computed: {
     totalMoneys(): number[] {
       let result = this.players.reduce((reduceResult: number[], player: Player) => {
-        reduceResult[player.id] = 0;
-        return reduceResult;
-      }, {});
+        reduceResult[player.id] = 0
+        return reduceResult
+      }, {})
 
       for (const money of this.moneys) {
         for (const moneyPlayer of money.money_players) {
-          result[moneyPlayer.player.id] += moneyPlayer.money;
+          result[moneyPlayer.player.id] += moneyPlayer.money
         }
       }
 
-      return result;
+      return result
     },
-    ...mapState(["players"]),
+    ...mapState(['players']),
   },
 
   async created() {
-    this.moneys = await ApiClient.getPastMoney();
-    this.loading = false;
+    this.moneys = await ApiClient.getPastMoney()
+    this.loading = false
   },
 
   methods: {
     getMoney(money: Money, playerId: number): number {
-      const moneyPlayer = money.money_players.find(({ player }) => player.id === playerId);
+      const moneyPlayer = money.money_players.find(({ player }) => player.id === playerId)
 
       if (moneyPlayer === undefined) {
-        return 0;
+        return 0
       }
 
-      return moneyPlayer.money;
+      return moneyPlayer.money
     },
   },
-});
+})
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

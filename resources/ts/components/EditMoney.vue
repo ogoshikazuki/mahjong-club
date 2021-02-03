@@ -18,54 +18,57 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { mapState } from "vuex";
-import ApiClient from "../ApiClient";
-import MoneyPlayer from "../types/MoneyPlayer";
+import Vue from 'vue'
+import { mapState } from 'vuex'
+import ApiClient from '../ApiClient'
+import MoneyPlayer from '../types/MoneyPlayer'
 
 export default Vue.extend({
   data(): {
-    money: { [key: number]: number },
-    loading: boolean,
-    updating: boolean,
-    errorMessages: string[],
+    money: { [key: number]: number }
+    loading: boolean
+    updating: boolean
+    errorMessages: string[]
   } {
     return {
       money: {},
       loading: true,
       updating: false,
       errorMessages: [],
-    };
+    }
   },
 
   computed: {
-    ...mapState(["players"]),
+    ...mapState(['players']),
   },
 
   async created() {
-    this.money = (await ApiClient.getCurrentMoney()).money_players.reduce((money: number[], moneyPlayer: MoneyPlayer) => {
-      money[moneyPlayer.player.id] = moneyPlayer.money;
-      return money;
-    }, {});
-    this.loading = false;
+    this.money = (await ApiClient.getCurrentMoney()).money_players.reduce(
+      (money: number[], moneyPlayer: MoneyPlayer) => {
+        money[moneyPlayer.player.id] = moneyPlayer.money
+        return money
+      },
+      {}
+    )
+    this.loading = false
   },
 
   methods: {
     async updateMoney() {
-      this.updating = true;
-      this.errorMessages = [];
+      this.updating = true
+      this.errorMessages = []
 
-      const response = await ApiClient.updateMoney(this.money);
+      const response = await ApiClient.updateMoney(this.money)
 
-      this.updating = false;
+      this.updating = false
 
       if (response.ok) {
-        this.$router.push({ name: "home" });
-        return;
+        this.$router.push({ name: 'home' })
+        return
       }
 
-      this.errorMessages = (await response.json()).errors.money;
-    }
+      this.errorMessages = (await response.json()).errors.money
+    },
   },
-});
+})
 </script>

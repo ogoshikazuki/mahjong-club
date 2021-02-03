@@ -19,11 +19,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import CurrentMoney from "./CurrentMoney.vue";
-import PastMoney from "./PastMoney.vue";
-import SuggestResetMoneyDialog from "./SuggestResetMoneyDialog.vue";
-import ApiClient from "../ApiClient";
+import Vue from 'vue'
+import CurrentMoney from './CurrentMoney.vue'
+import PastMoney from './PastMoney.vue'
+import SuggestResetMoneyDialog from './SuggestResetMoneyDialog.vue'
+import ApiClient from '../ApiClient'
 
 export default Vue.extend({
   components: {
@@ -36,24 +36,23 @@ export default Vue.extend({
     return {
       resetting: false,
       suggestResetMoneyDialog: false,
-    };
+    }
   },
 
   methods: {
     async resetMoney() {
-      if (!confirm("本当に精算しますか？")) {
-        return;
+      if (!confirm('本当に精算しますか？')) {
+        return
       }
 
-      this.resetting = true;
+      this.resetting = true
 
-      await ApiClient.resetMoney();
+      await ApiClient.resetMoney()
 
-      location.reload();
-    }
+      location.reload()
+    },
   },
-});
+})
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

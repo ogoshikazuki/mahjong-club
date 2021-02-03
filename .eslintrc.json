@@ -6,7 +6,8 @@
     "extends": [
         "eslint:recommended",
         "plugin:vue/essential",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -22,6 +23,14 @@
         "vue"
     ],
     "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "printWidth": 120,
+          "semi": false,
+          "singleQuote": true
+        }
+      ]
     },
     "ignorePatterns": "/webpack.mix.js"
 }

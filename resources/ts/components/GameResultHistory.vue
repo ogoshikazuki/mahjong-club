@@ -10,11 +10,7 @@
     <tbody>
       <tr v-for="gameResult in gameResults" :key="gameResult.id">
         <td>
-          <v-select
-            v-if="editForm.id === gameResult.id"
-            v-model="editForm.rate"
-            :items="[50, 100]"
-          ></v-select>
+          <v-select v-if="editForm.id === gameResult.id" v-model="editForm.rate" :items="[50, 100]"></v-select>
           <template v-else>{{ gameResult.rate }}</template>
         </td>
         <td v-for="player in players" :key="player.id">
@@ -51,121 +47,113 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import apiClient from "../ApiClient";
-import { mapState } from "vuex";
-import Player from "../types/Player";
-import GameResult from "../types/GameResult";
+import Vue from 'vue'
+import apiClient from '../ApiClient'
+import { mapState } from 'vuex'
+import Player from '../types/Player'
+import GameResult from '../types/GameResult'
 
 type EditForm = {
-  id: number|null,
-  rate: number|null,
-  points: { [key: number]: number},
-  tips: { [key: number]: number },
+  id: number | null
+  rate: number | null
+  points: { [key: number]: number }
+  tips: { [key: number]: number }
 }
 
 class EditErrors {
-  points: string[] = [];
-  tips: string[] = [];
+  points: string[] = []
+  tips: string[] = []
 }
 
 export default Vue.extend({
   props: {
     gameResults: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data(): {
-    loading: boolean,
-    editForm: EditForm,
-    editErrors: EditErrors,
+    loading: boolean
+    editForm: EditForm
+    editErrors: EditErrors
   } {
     return {
       loading: false,
       editForm: { id: null, rate: null, points: {}, tips: {} },
       editErrors: new EditErrors(),
-    };
+    }
   },
 
   methods: {
     async deleteGameResult(id: number) {
-      if (!confirm("本当に削除しますか？")) {
-        return;
+      if (!confirm('本当に削除しますか？')) {
+        return
       }
-      this.loading = true;
+      this.loading = true
 
-      await apiClient.deleteGameResult(id);
-      this.loading = false;
-      this.$emit("reload");
+      await apiClient.deleteGameResult(id)
+      this.loading = false
+      this.$emit('reload')
     },
 
     editGameResult(gameResult: GameResult) {
-      this.resetForm();
+      this.resetForm()
 
-      this.$set(this.editForm, "id", gameResult.id);
-      this.$set(this.editForm, "rate", gameResult.rate);
+      this.$set(this.editForm, 'id', gameResult.id)
+      this.$set(this.editForm, 'rate', gameResult.rate)
       for (let player of this.players) {
         let gameResultPlayer = gameResult.gameResultPlayers.find(
-          gameResultPlayer => gameResultPlayer.player_id === player.id
-        );
-        this.$set(
-          this.editForm.points,
-          player.id,
-          gameResultPlayer ? gameResultPlayer.point : null
-        );
-        this.$set(
-          this.editForm.tips,
-          player.id,
-          gameResultPlayer ? gameResultPlayer.tip : null
-        );
+          (gameResultPlayer) => gameResultPlayer.player_id === player.id
+        )
+        this.$set(this.editForm.points, player.id, gameResultPlayer ? gameResultPlayer.point : null)
+        this.$set(this.editForm.tips, player.id, gameResultPlayer ? gameResultPlayer.tip : null)
       }
     },
 
     resetForm() {
-      this.$set(this.editForm, "id", null);
-      this.$set(this.editForm, "rate", null);
+      this.$set(this.editForm, 'id', null)
+      this.$set(this.editForm, 'rate', null)
       for (let player of this.players) {
-        this.$set(this.editForm.points, player.id, null);
-        this.$set(this.editForm.tips, player.id, null);
+        this.$set(this.editForm.points, player.id, null)
+        this.$set(this.editForm.tips, player.id, null)
       }
-      this.editErrors = new EditErrors();
+      this.editErrors = new EditErrors()
     },
 
     async updateGameResult() {
       if (this.editForm.id === null) {
-        return;
+        return
       }
 
-      this.loading = true;
+      this.loading = true
 
-      const response = await apiClient.updateGameResult(this.editForm.id, this.editForm);
-      this.loading = false;
+      const response = await apiClient.updateGameResult(this.editForm.id, this.editForm)
+      this.loading = false
 
       if (response.status === 422) {
-        this.editErrors = (await response.json()).errors;
-        return;
+        this.editErrors = (await response.json()).errors
+        return
       }
 
-      this.resetForm();
+      this.resetForm()
 
-      this.loading = false;
-      this.$emit("reload");
+      this.loading = false
+      this.$emit('reload')
     },
 
     getPointAndTip(gameResult: GameResult, player: Player) {
       const gameResultPlayer = gameResult.gameResultPlayers.find(
-        gameResultPlayer => gameResultPlayer.player_id === player.id
-      );
+        (gameResultPlayer) => gameResultPlayer.player_id === player.id
+      )
       if (gameResultPlayer) {
-        return `${gameResultPlayer.point}(${gameResultPlayer.tip}枚)`;
+        return `${gameResultPlayer.point}(${gameResultPlayer.tip}枚)`
       }
-    }
+    },
   },
 
   computed: {
-    ...mapState(["players"])
-  }
-});
+    ...mapState(['players']),
+  },
+})
 </script>

@@ -1,7 +1,7 @@
-import Player from "./Player";
+import Player from './Player'
 
 interface MoneyPlayer {
-    player: Player,
-    money: number,
+  player: Player
+  money: number
 }
-export default MoneyPlayer;
+export default MoneyPlayer

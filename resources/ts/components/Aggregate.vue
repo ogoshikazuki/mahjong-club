@@ -22,10 +22,9 @@
           <td>{{ averageFinishOrder[player.id].toFixed(2) }}</td>
           <td>{{ tipCount[player.id] }}</td>
           <td>{{ money[player.id] }}</td>
-          <td
-            v-for="(value, key) in finishOrderCount"
-            :key="key"
-          >{{ value[player.id] }}({{ (value[player.id] / gameCount[player.id] * 100).toFixed(2) }}%)</td>
+          <td v-for="(value, key) in finishOrderCount" :key="key">
+            {{ value[player.id] }}({{ ((value[player.id] / gameCount[player.id]) * 100).toFixed(2) }}%)
+          </td>
         </tr>
       </tbody>
     </v-simple-table>
@@ -33,33 +32,33 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { mapState } from "vuex";
-import apiClient from "../ApiClient";
-import Player from "../types/Player";
-import GameResult from "../types/GameResult";
+import Vue from 'vue'
+import { mapState } from 'vuex'
+import apiClient from '../ApiClient'
+import Player from '../types/Player'
+import GameResult from '../types/GameResult'
 
 type ResultByPlayers = {
-  [key: number]: number,
-};
+  [key: number]: number
+}
 
 interface Data {
-  mode: number,
-  loading: boolean,
-  gameResults: GameResult[],
+  mode: number
+  loading: boolean
+  gameResults: GameResult[]
 }
 interface Methods {
-  setMode: (mode: number) => void,
-  loadGameResults: () => Promise<void>,
+  setMode: (mode: number) => void
+  loadGameResults: () => Promise<void>
 }
 interface Computed {
-  gameCount: ResultByPlayers,
-  finishOrderCount: {[key: number]: ResultByPlayers},
-  totalFinishOrder: ResultByPlayers,
-  averageFinishOrder: ResultByPlayers,
-  tipCount: ResultByPlayers,
-  money: ResultByPlayers,
-  players: Player[],
+  gameCount: ResultByPlayers
+  finishOrderCount: { [key: number]: ResultByPlayers }
+  totalFinishOrder: ResultByPlayers
+  averageFinishOrder: ResultByPlayers
+  tipCount: ResultByPlayers
+  money: ResultByPlayers
+  players: Player[]
 }
 
 export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
@@ -67,137 +66,125 @@ export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
     return {
       mode: 4,
       loading: true,
-      gameResults: []
-    };
+      gameResults: [],
+    }
   },
 
   methods: {
     setMode(mode: number) {
-      this.mode = mode;
+      this.mode = mode
     },
 
     async loadGameResults() {
-      this.loading = true;
+      this.loading = true
 
-      this.gameResults = await apiClient.getAllGameResults();
+      this.gameResults = await apiClient.getAllGameResults()
 
-      this.loading = false;
-    }
+      this.loading = false
+    },
   },
 
   computed: {
     gameCount() {
       let gameCount = this.players.reduce((gameCount: ResultByPlayers, player: Player) => {
-        gameCount[player.id] = 0;
-        return gameCount;
-      }, {});
+        gameCount[player.id] = 0
+        return gameCount
+      }, {})
 
       return this.gameResults
-        .filter(gameResult => gameResult.gameResultPlayers.length === this.mode)
+        .filter((gameResult) => gameResult.gameResultPlayers.length === this.mode)
         .reduce((gameCount, gameResult) => {
-          return gameResult.gameResultPlayers.reduce(
-            (gameCount, gameResultPlayer) => {
-              gameCount[gameResultPlayer.player_id]++;
-              return gameCount;
-            },
-            gameCount
-          );
-        }, gameCount);
+          return gameResult.gameResultPlayers.reduce((gameCount, gameResultPlayer) => {
+            gameCount[gameResultPlayer.player_id]++
+            return gameCount
+          }, gameCount)
+        }, gameCount)
     },
 
     finishOrderCount() {
-      let finishOrderCount: {[key: number]: ResultByPlayers} = {};
+      let finishOrderCount: { [key: number]: ResultByPlayers } = {}
       for (let finishOrder = 1; finishOrder <= this.mode; finishOrder++) {
-        finishOrderCount[finishOrder] = this.players.reduce(
-          (finishOrderCount: ResultByPlayers, player) => {
-            finishOrderCount[player.id] = 0;
-            return finishOrderCount;
-          },
-          {}
-        );
+        finishOrderCount[finishOrder] = this.players.reduce((finishOrderCount: ResultByPlayers, player) => {
+          finishOrderCount[player.id] = 0
+          return finishOrderCount
+        }, {})
       }
 
       return this.gameResults
-        .filter(gameResult => gameResult.gameResultPlayers.length === this.mode)
+        .filter((gameResult) => gameResult.gameResultPlayers.length === this.mode)
         .reduce((finishOrderCount, gameResult) => {
           return gameResult.gameResultPlayers
             .sort((a, b) => b.point - a.point)
             .reduce((finishOrderCount, gameResultPlayer, index) => {
-              finishOrderCount[index + 1][gameResultPlayer.player_id]++;
-              return finishOrderCount;
-            }, finishOrderCount);
-        }, finishOrderCount);
+              finishOrderCount[index + 1][gameResultPlayer.player_id]++
+              return finishOrderCount
+            }, finishOrderCount)
+        }, finishOrderCount)
     },
 
     totalFinishOrder() {
       let totalFinishOrder = this.players.reduce((gameCount: ResultByPlayers, player) => {
-        gameCount[player.id] = 0;
-        return gameCount;
-      }, {});
+        gameCount[player.id] = 0
+        return gameCount
+      }, {})
 
-      return Object.keys(this.finishOrderCount).map(Number).reduce(
-        (totalFinishOrder, finishOrder) => {
+      return Object.keys(this.finishOrderCount)
+        .map(Number)
+        .reduce((totalFinishOrder, finishOrder) => {
           for (let player of this.players) {
-            totalFinishOrder[player.id] +=
-              this.finishOrderCount[finishOrder][player.id] * finishOrder;
+            totalFinishOrder[player.id] += this.finishOrderCount[finishOrder][player.id] * finishOrder
           }
-          return totalFinishOrder;
-        },
-        totalFinishOrder
-      );
+          return totalFinishOrder
+        }, totalFinishOrder)
     },
 
     averageFinishOrder() {
       return this.players.reduce((averageFinishOrder: ResultByPlayers, player) => {
-        averageFinishOrder[player.id] =
-          this.totalFinishOrder[player.id] / this.gameCount[player.id];
-        return averageFinishOrder;
-      }, {});
+        averageFinishOrder[player.id] = this.totalFinishOrder[player.id] / this.gameCount[player.id]
+        return averageFinishOrder
+      }, {})
     },
 
     tipCount() {
       let tipCount = this.players.reduce((tipCount: ResultByPlayers, player) => {
-        tipCount[player.id] = 0;
-        return tipCount;
-      }, {});
+        tipCount[player.id] = 0
+        return tipCount
+      }, {})
 
       return this.gameResults
-        .filter(gameResult => gameResult.gameResultPlayers.length === this.mode)
+        .filter((gameResult) => gameResult.gameResultPlayers.length === this.mode)
         .reduce((tipCount, gameResult) => {
-          return gameResult.gameResultPlayers.reduce(
-            (tipCount, gameResultPlayer) => {
-              tipCount[gameResultPlayer.player_id] += gameResultPlayer.tip;
-              return tipCount;
-            },
-            tipCount
-          );
-        }, tipCount);
+          return gameResult.gameResultPlayers.reduce((tipCount, gameResultPlayer) => {
+            tipCount[gameResultPlayer.player_id] += gameResultPlayer.tip
+            return tipCount
+          }, tipCount)
+        }, tipCount)
     },
 
     money() {
       let money = this.players.reduce((money: ResultByPlayers, player) => {
-        money[player.id] = 0;
-        return money;
-      }, {});
+        money[player.id] = 0
+        return money
+      }, {})
 
       return this.gameResults
-        .filter(gameResult => gameResult.gameResultPlayers.length === this.mode)
+        .filter((gameResult) => gameResult.gameResultPlayers.length === this.mode)
         .reduce((money, gameResult) => {
           return gameResult.gameResultPlayers.reduce((money, gameResultPlayer) => {
-            let point = gameResultPlayer.point + gameResultPlayer.tip * 2;
-            money[gameResultPlayer.player_id] += point * gameResult.rate;
-            return money;
-          }, money);
+            let point = gameResultPlayer.point + gameResultPlayer.tip * 2
+            money[gameResultPlayer.player_id] += point * gameResult.rate
+            return money
+          }, money)
         }, money)
     },
 
-    ...mapState(["players"])
+    ...mapState(['players']),
   },
 
   created() {
-    this.loadGameResults();
-  }
-});
+    this.loadGameResults()
+  },
+})
 </script>
 
 <style scoped>

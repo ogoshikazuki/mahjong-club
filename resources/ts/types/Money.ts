@@ -1,6 +1,6 @@
-import MoneyPlayer from "./MoneyPlayer";
+import MoneyPlayer from './MoneyPlayer'
 
 interface Money {
-    money_players: MoneyPlayer[],
+  money_players: MoneyPlayer[]
 }
-export default Money;
+export default Money

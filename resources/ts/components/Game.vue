@@ -2,27 +2,31 @@
   <div>
     <h2>入力</h2>
     <game-result-input @store-game-result="loadHistory"></game-result-input>
-    <hr>
+    <hr />
     <h2>履歴</h2>
-    <game-result-history ref="gameResultHistory" :game-results="gameResults" @reload="loadHistory"></game-result-history>
+    <game-result-history
+      ref="gameResultHistory"
+      :game-results="gameResults"
+      @reload="loadHistory"
+    ></game-result-history>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { mapState } from "vuex";
-import GameResultInput from "./GameResultInput.vue";
-import gameResultHistory from "./GameResultHistory.vue";
-import apiClient from "../ApiClient";
+import Vue from 'vue'
+import { mapState } from 'vuex'
+import GameResultInput from './GameResultInput.vue'
+import gameResultHistory from './GameResultHistory.vue'
+import apiClient from '../ApiClient'
 
 interface GameResultHistoryInterface extends Vue {
-  loading: boolean,
+  loading: boolean
 }
 
 export default Vue.extend({
   components: {
     GameResultInput,
-    gameResultHistory
+    gameResultHistory,
   },
 
   data() {
@@ -32,29 +36,31 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(["players"])
+    gameResultHistory(): GameResultHistoryInterface {
+      return this.$refs.gameResultHistory as GameResultHistoryInterface
+    },
+    ...mapState(['players']),
   },
 
   methods: {
     async loadHistory() {
-      (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = true;
+      this.gameResultHistory.loading = true
 
-      this.gameResults = [];
+      this.gameResults = []
 
-      this.gameResults = (await apiClient.getCurrentGame()).gameResults;
-
-      (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = false;
+      this.gameResults = (await apiClient.getCurrentGame()).gameResults
+      this.gameResultHistory.loading = false
     },
   },
 
   watch: {
     players() {
-      this.loadHistory();
-    }
+      this.loadHistory()
+    },
   },
 
   mounted() {
-    (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = true;
-  }
-});
+    this.gameResultHistory.loading = true
+  },
+})
 </script>

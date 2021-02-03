@@ -3,7 +3,14 @@
     <v-container>
       <v-row>
         <v-col cols="6">
-          <v-text-field v-model="roomNumberNoPrefix" :rules="roomNumberRules" :readonly="loading" prefix="C" placeholder="部屋番号" hint="上4桁を入力"></v-text-field>
+          <v-text-field
+            v-model="roomNumberNoPrefix"
+            :rules="roomNumberRules"
+            :readonly="loading"
+            prefix="C"
+            placeholder="部屋番号"
+            hint="上4桁を入力"
+          ></v-text-field>
         </v-col>
         <v-col cols="6">
           <v-text-field type="date" v-model="date" :rules="dateRules" :readonly="loading"></v-text-field>
@@ -17,49 +24,52 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import moment from "moment";
-import apiClient from "../ApiClient";
+import Vue from 'vue'
+import moment from 'moment'
+import apiClient from '../ApiClient'
 
 export default Vue.extend({
-  data () {
+  data() {
     return {
-      roomNumberNoPrefix: "",
-      date: moment().format("YYYY-MM-DD"),
+      roomNumberNoPrefix: '',
+      date: moment().format('YYYY-MM-DD'),
       roomNumberRules: [
-        (v: string) => !!v || "部屋番号を入力してください。",
-        (v: string) => v.length === 4 || "部屋番号は上4桁を入力してください。",
+        (v: string) => !!v || '部屋番号を入力してください。',
+        (v: string) => v.length === 4 || '部屋番号は上4桁を入力してください。',
       ],
-      dateRules: [(v: string) => !!v || "日付を入力してください。"],
+      dateRules: [(v: string) => !!v || '日付を入力してください。'],
       valid: true,
       loading: false,
-    };
+    }
   },
 
   computed: {
     roomNumber(): string {
-      return `C${this.roomNumberNoPrefix}`;
+      return `C${this.roomNumberNoPrefix}`
+    },
+    form(): Vue & { validate: () => boolean } {
+      return this.$refs.form as Vue & { validate: () => boolean }
     },
   },
 
   methods: {
     async downloadTenhouLog() {
       if (!this.validate()) {
-        return;
+        return
       }
 
-      this.loading = true;
+      this.loading = true
 
-      this.$emit("complete", await apiClient.downloadTenhouLog({ date: this.date, room_number: this.roomNumber }));
+      this.$emit('complete', await apiClient.downloadTenhouLog({ date: this.date, room_number: this.roomNumber }))
 
-      this.loading = false;
+      this.loading = false
     },
 
     validate() {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate();
+      this.form.validate()
 
-      return this.valid;
+      return this.valid
     },
   },
-});
+})
 </script>

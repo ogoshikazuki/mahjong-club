@@ -16,23 +16,22 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ApiClient from "../ApiClient";
+import Vue from 'vue'
+import ApiClient from '../ApiClient'
 
 export default Vue.extend({
   data() {
     return {
       moneyPlayers: [],
       loading: true,
-    };
+    }
   },
 
   async created() {
-    this.moneyPlayers = (await ApiClient.getCurrentMoney()).money_players;
-    this.loading = false;
+    this.moneyPlayers = (await ApiClient.getCurrentMoney()).money_players
+    this.loading = false
   },
-});
+})
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

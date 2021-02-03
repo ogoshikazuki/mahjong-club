@@ -1,6 +1,6 @@
 interface GameResultPlayer {
-    point: number,
-    tip: number,
-    player_id: number,
+  point: number
+  tip: number
+  player_id: number
 }
-export default GameResultPlayer;
+export default GameResultPlayer

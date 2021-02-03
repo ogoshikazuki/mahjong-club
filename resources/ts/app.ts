@@ -4,7 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import Vue from "vue"
+import Vue from 'vue'
 
 /**
  * The following block of code may be used to automatically register your
@@ -23,48 +23,48 @@ import Vue from "vue"
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
-Vue.use(ElementUI);
+Vue.use(ElementUI)
 
-import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 import '@mdi/font/css/materialdesignicons.css'
-Vue.use(Vuetify);
+Vue.use(Vuetify)
 
-import VueRouter from "vue-router";
-Vue.use(VueRouter);
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
 
-import store from "./store/index";
-import App from "./components/App.vue";
-import routes from "./routes";
+import store from './store/index'
+import App from './components/App.vue'
+import routes from './routes'
 
-import './registerServiceWorker';
+import './registerServiceWorker'
 
 new Vue({
-    el: "#app",
+  el: '#app',
 
-    store,
+  store,
 
-    components: {
-        App,
+  components: {
+    App,
+  },
+
+  created() {
+    this.$store.dispatch('loadPlayers')
+  },
+
+  vuetify: new Vuetify({
+    icons: {
+      iconfont: 'mdi',
     },
+  }),
 
-    created() {
-        this.$store.dispatch("loadPlayers");
-    },
+  router: new VueRouter({
+    mode: 'history',
+    routes,
+  }),
 
-    vuetify: new Vuetify({
-        icons: {
-            iconfont: "mdi",
-        },
-    }),
-
-    router: new VueRouter({
-        mode: "history",
-        routes,
-    }),
-
-    template: "<App></App>"
-});
+  template: '<App></App>',
+})

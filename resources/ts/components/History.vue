@@ -14,48 +14,53 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import apiClient from "../ApiClient";
-import CurrentMoneyGames from "./CurrentMoneyGames.vue";
-import GameResultHistory from "./GameResultHistory.vue";
-import Game from "../types/Game";
+import Vue from 'vue'
+import apiClient from '../ApiClient'
+import CurrentMoneyGames from './CurrentMoneyGames.vue'
+import GameResultHistory from './GameResultHistory.vue'
+import Game from '../types/Game'
 
 interface GameResultHistoryInterface extends Vue {
-  loading: boolean,
+  loading: boolean
 }
 
 export default Vue.extend({
   components: {
     CurrentMoneyGames,
-    GameResultHistory
+    GameResultHistory,
   },
 
   data(): {
-    game: Game|null,
+    game: Game | null
   } {
     return {
-      game: null
-    };
+      game: null,
+    }
+  },
+
+  computed: {
+    gameResultHistory(): GameResultHistoryInterface {
+      return this.$refs.gameResultHistory as GameResultHistoryInterface
+    },
   },
 
   methods: {
     async showGame(game: Game) {
-      this.game = game;
+      this.game = game
     },
 
     async reloadGame() {
-      (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = true;
+      this.gameResultHistory.loading = true
 
       if (this.game === null) {
-        return;
+        return
       }
 
-      this.game = await apiClient.findGame(this.game.id);
-
-      (this.$refs.gameResultHistory as GameResultHistoryInterface).loading = false;
-    }
-  }
-});
+      this.game = await apiClient.findGame(this.game.id)
+      this.gameResultHistory.loading = false
+    },
+  },
+})
 </script>
 
 <style scoped>

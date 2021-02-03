@@ -1,7 +1,7 @@
-import GameResult from "./GameResult";
+import GameResult from './GameResult'
 
 interface Game {
-    id: number,
-    gameResults: GameResult[],
+  id: number
+  gameResults: GameResult[]
 }
-export default Game;
+export default Game

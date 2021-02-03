@@ -43,55 +43,55 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { mapState } from "vuex";
-import apiClient from "../ApiClient";
+import Vue from 'vue'
+import { mapState } from 'vuex'
+import apiClient from '../ApiClient'
 
 export default Vue.extend({
-  data: function() {
+  data: function () {
     return {
       rate: null,
       points: {},
       tips: {},
       loading: false,
       errors: {},
-      conflictOccurred: false
-    };
+      conflictOccurred: false,
+    }
   },
 
   methods: {
-    onSubmit: async function() {
-      this.loading = true;
-      this.conflictOccurred = false;
+    onSubmit: async function () {
+      this.loading = true
+      this.conflictOccurred = false
 
       const response = await apiClient.storeGameResult({
         rate: this.rate,
         points: this.points,
-        tips: this.tips
-      });
+        tips: this.tips,
+      })
 
       if (response.status === 422) {
-        this.errors = (await response.json()).errors;
-        this.loading = false;
-        return;
+        this.errors = (await response.json()).errors
+        this.loading = false
+        return
       }
 
-      this.resetForm();
-      this.$emit("store-game-result");
+      this.resetForm()
+      this.$emit('store-game-result')
 
-      this.loading = false;
+      this.loading = false
     },
 
-    resetForm: function() {
-      this.rate = null;
-      this.points = {};
-      this.tips = {};
-      this.errors = {};
-    }
+    resetForm: function () {
+      this.rate = null
+      this.points = {}
+      this.tips = {}
+      this.errors = {}
+    },
   },
 
   computed: {
-    ...mapState(["players"])
-  }
-});
+    ...mapState(['players']),
+  },
+})
 </script>

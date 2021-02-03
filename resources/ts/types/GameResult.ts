@@ -1,8 +1,8 @@
-import GameResultPlayer from "./GameResultPlayer";
+import GameResultPlayer from './GameResultPlayer'
 
 interface GameResult {
-    id: number,
-    rate: number,
-    gameResultPlayers: GameResultPlayer[],
+  id: number
+  rate: number
+  gameResultPlayers: GameResultPlayer[]
 }
-export default GameResult;
+export default GameResult

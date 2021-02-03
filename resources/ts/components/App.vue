@@ -37,21 +37,21 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue'
 
 export default Vue.extend({
   data(): {
-    drawer: boolean,
+    drawer: boolean
   } {
     return {
       drawer: false,
-    };
+    }
   },
 
   methods: {
     toggleDrawer(): void {
-      this.drawer = !this.drawer;
+      this.drawer = !this.drawer
     },
   },
-});
+})
 </script>

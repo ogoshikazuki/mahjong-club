@@ -20,43 +20,43 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { mapState } from "vuex";
-import apiClient from "../ApiClient";
-import Player from "../types/Player";
-import Game from "../types/Game";
+import Vue from 'vue'
+import { mapState } from 'vuex'
+import apiClient from '../ApiClient'
+import Player from '../types/Player'
+import Game from '../types/Game'
 
 export default Vue.extend({
   data() {
     return {
       currentMoneyGames: [],
-      loading: true
-    };
+      loading: true,
+    }
   },
 
   computed: {
-    ...mapState(["players"])
+    ...mapState(['players']),
   },
 
   methods: {
     culculateGamePlayerMoney(game: Game, player: Player) {
-      let result = 0;
+      let result = 0
       for (let gameResult of game.gameResults) {
         for (let gameResultPlayer of gameResult.gameResultPlayers) {
           if (gameResultPlayer.player_id === player.id) {
-            result += (gameResultPlayer.point + gameResultPlayer.tip * 2) * gameResult.rate;
+            result += (gameResultPlayer.point + gameResultPlayer.tip * 2) * gameResult.rate
           }
         }
       }
 
-      return result;
-    }
+      return result
+    },
   },
 
   async created() {
-    this.currentMoneyGames = await apiClient.getCurrentMoneyGames();
+    this.currentMoneyGames = await apiClient.getCurrentMoneyGames()
 
-    this.loading = false;
-  }
-});
+    this.loading = false
+  },
+})
 </script>
