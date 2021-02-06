@@ -49,7 +49,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import apiClient from '../ApiClient'
-import { mapState } from 'vuex'
 import Player from '../types/Player'
 import GameResult from '../types/GameResult'
 
@@ -86,7 +85,7 @@ export default Vue.extend({
   },
 
   methods: {
-    async deleteGameResult(id: number) {
+    async deleteGameResult(id: number): Promise<void> {
       if (!confirm('本当に削除しますか？')) {
         return
       }
@@ -97,7 +96,7 @@ export default Vue.extend({
       this.$emit('reload')
     },
 
-    editGameResult(gameResult: GameResult) {
+    editGameResult(gameResult: GameResult): void {
       this.resetForm()
 
       this.$set(this.editForm, 'id', gameResult.id)
@@ -111,7 +110,7 @@ export default Vue.extend({
       }
     },
 
-    resetForm() {
+    resetForm(): void {
       this.$set(this.editForm, 'id', null)
       this.$set(this.editForm, 'rate', null)
       for (let player of this.players) {
@@ -121,7 +120,7 @@ export default Vue.extend({
       this.editErrors = new EditErrors()
     },
 
-    async updateGameResult() {
+    async updateGameResult(): Promise<void> {
       if (this.editForm.id === null) {
         return
       }
@@ -142,18 +141,21 @@ export default Vue.extend({
       this.$emit('reload')
     },
 
-    getPointAndTip(gameResult: GameResult, player: Player) {
+    getPointAndTip(gameResult: GameResult, player: Player): string {
       const gameResultPlayer = gameResult.gameResultPlayers.find(
         (gameResultPlayer) => gameResultPlayer.player_id === player.id
       )
       if (gameResultPlayer) {
         return `${gameResultPlayer.point}(${gameResultPlayer.tip}枚)`
       }
+      return ''
     },
   },
 
   computed: {
-    ...mapState(['players']),
+    players(): Player[] {
+      return this.$store.state.players
+    },
   },
 })
 </script>
