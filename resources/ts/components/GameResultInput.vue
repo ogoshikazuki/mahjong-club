@@ -44,11 +44,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import apiClient from '../ApiClient'
+import Player from '../types/Player'
 
 export default Vue.extend({
-  data: function () {
+  data(): {
+    rate: number | null
+    points: { [key: number]: number }
+    tips: { [key: number]: number }
+    loading: boolean
+    errors: { [key: string]: string }
+    conflictOccurred: boolean
+  } {
     return {
       rate: null,
       points: {},
@@ -60,7 +67,7 @@ export default Vue.extend({
   },
 
   methods: {
-    onSubmit: async function () {
+    async onSubmit(): Promise<void> {
       this.loading = true
       this.conflictOccurred = false
 
@@ -82,7 +89,7 @@ export default Vue.extend({
       this.loading = false
     },
 
-    resetForm: function () {
+    resetForm(): void {
       this.rate = null
       this.points = {}
       this.tips = {}
@@ -91,7 +98,9 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(['players']),
+    players(): Player[] {
+      return this.$store.state.players
+    },
   },
 })
 </script>
