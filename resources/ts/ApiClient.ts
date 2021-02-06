@@ -23,7 +23,19 @@ const headers = {
   'X-Requested-With': 'XMLHttpRequest',
 }
 
-const _url = (template: string, urlParameter = {}, queryParameter = {}) => {
+type UrlParameter = {
+  [key: string]: number | string
+}
+
+type QueryParameter = {
+  [key: string]: number | string | number[] | string[] | { [key in number | string]: unknown }
+}
+
+type RequestPayload = {
+  [key: string]: unknown
+}
+
+const _url = (template: string, urlParameter: UrlParameter = {}, queryParameter: QueryParameter = {}): string => {
   const url = urlTemplate.parse(template).expand(urlParameter)
   if (Object.keys(queryParameter).length > 0) {
     return `${url}?${queryString.stringify(queryParameter)}`
@@ -31,12 +43,12 @@ const _url = (template: string, urlParameter = {}, queryParameter = {}) => {
   return url
 }
 
-const _get = async (template: string, urlParameter = {}, queryParameter = {}) => {
+const _get = async (template: string, urlParameter: UrlParameter = {}, queryParameter: QueryParameter = {}) => {
   const url = _url(template, urlParameter, queryParameter)
   return (await (await fetch(url)).json()).data
 }
 
-const _post = (template: string, parameters = {}) => {
+const _post = (template: string, parameters: RequestPayload = {}) => {
   const url = _url(template)
   return fetch(url, {
     method: 'POST',
@@ -45,8 +57,7 @@ const _post = (template: string, parameters = {}) => {
   })
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-const _put = (template: string, id: number, parameters: object) => {
+const _put = (template: string, id: number, parameters: RequestPayload) => {
   const url = _url(template, { id })
   return fetch(url, {
     method: 'PUT',
@@ -85,8 +96,7 @@ class ApiClient {
     return _put(URL_TEMPLATE['game.result.update'], id, parameters)
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  storeGameResult(parameters: object) {
+  storeGameResult(parameters: RequestPayload) {
     return _post(URL_TEMPLATE['game.result.store'], parameters)
   }
 
@@ -94,13 +104,11 @@ class ApiClient {
     return _get(URL_TEMPLATE['game.result.index'])
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  downloadTenhouLog(parameters: object) {
+  downloadTenhouLog(parameters: QueryParameter) {
     return _get(URL_TEMPLATE['tenhou.download-log'], {}, parameters)
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  registerTenhouLog(parameters: object) {
+  registerTenhouLog(parameters: RequestPayload) {
     return _post(URL_TEMPLATE['tenhou.register-log'], parameters)
   }
 
