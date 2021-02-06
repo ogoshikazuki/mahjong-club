@@ -33,7 +33,7 @@ export default Vue.extend({
   },
 
   methods: {
-    async registered(registeredCount: number) {
+    async registered(registeredCount: number): Promise<void> {
       this.registeredCount = registeredCount
       this.tenhouLogs = []
     },
