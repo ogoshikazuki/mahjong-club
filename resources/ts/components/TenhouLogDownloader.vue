@@ -29,7 +29,14 @@ import moment from 'moment'
 import apiClient from '../ApiClient'
 
 export default Vue.extend({
-  data() {
+  data(): {
+    roomNumberNoPrefix: string
+    date: string
+    roomNumberRules: ((v: string) => boolean | string)[]
+    dateRules: ((v: string) => boolean | string)[]
+    valid: boolean
+    loading: boolean
+  } {
     return {
       roomNumberNoPrefix: '',
       date: moment().format('YYYY-MM-DD'),
@@ -53,7 +60,7 @@ export default Vue.extend({
   },
 
   methods: {
-    async downloadTenhouLog() {
+    async downloadTenhouLog(): Promise<void> {
       if (!this.validate()) {
         return
       }
@@ -65,7 +72,7 @@ export default Vue.extend({
       this.loading = false
     },
 
-    validate() {
+    validate(): boolean {
       this.form.validate()
 
       return this.valid
