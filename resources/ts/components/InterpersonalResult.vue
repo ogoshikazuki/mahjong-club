@@ -47,20 +47,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import ApiClient from '../ApiClient'
 import Player from '../types/Player'
 import GameResult from '../types/GameResult'
 type PlayerCount = 3 | 4
-interface Data {
-  first: number | null
-  second: number | null
-  playerCount: PlayerCount | null
-  loading: boolean
-  gameResults: GameResult[]
-}
 export default Vue.extend({
-  data(): Data {
+  data(): {
+    first: number | null
+    second: number | null
+    playerCount: PlayerCount | null
+    loading: boolean
+    gameResults: GameResult[]
+  } {
     return {
       first: null,
       second: null,
@@ -92,10 +90,22 @@ export default Vue.extend({
       return this.first !== null && this.second !== null && this.playerCount !== null
     },
     firstPlayerName(): string {
-      return this.players.find((player: Player) => player.id === this.first).name
+      const player: Player | undefined = this.players.find((player: Player) => player.id === this.first)
+
+      if (typeof player === 'undefined') {
+        return ''
+      }
+
+      return player.name
     },
     secondPlayerName(): string {
-      return this.players.find((player: Player) => player.id === this.second).name
+      const player: Player | undefined = this.players.find((player: Player) => player.id === this.second)
+
+      if (typeof player === 'undefined') {
+        return ''
+      }
+
+      return player.name
     },
     targetGameResults(): GameResult[] {
       return this.gameResults.filter((gameResult) => {
@@ -166,9 +176,11 @@ export default Vue.extend({
       }
       return point * 100
     },
-    ...mapState(['players']),
+    players(): Player[] {
+      return this.$store.state.players
+    },
   },
-  async created() {
+  async created(): Promise<void> {
     const gameResults: GameResult[] = await ApiClient.getAllGameResults()
     for (const gameResult of gameResults) {
       gameResult.gameResultPlayers.sort((a, b) => b.point - a.point)
