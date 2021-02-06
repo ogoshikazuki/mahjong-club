@@ -18,16 +18,20 @@
 <script lang="ts">
 import Vue from 'vue'
 import ApiClient from '../ApiClient'
+import MoneyPlayer from '../types/MoneyPlayer'
 
 export default Vue.extend({
-  data() {
+  data(): {
+    moneyPlayers: MoneyPlayer[]
+    loading: boolean
+  } {
     return {
       moneyPlayers: [],
       loading: true,
     }
   },
 
-  async created() {
+  async created(): Promise<void> {
     this.moneyPlayers = (await ApiClient.getCurrentMoney()).money_players
     this.loading = false
   },
