@@ -29,21 +29,7 @@ type Suggest = {
   money: number
 }
 
-type Data = {
-  moneyPlayers: MoneyPlayer[]
-  loading: boolean
-}
-type Methods = Record<string, never>
-type Computed = {
-  minusMoneyPlayers: MoneyPlayer[]
-  plusMoneyPlayers: MoneyPlayer[]
-  suggest1: Suggest[]
-}
-type Props = {
-  value: boolean
-}
-
-export default Vue.extend<Data, Methods, Computed, Props>({
+export default Vue.extend({
   props: {
     value: {
       type: Boolean,
@@ -51,7 +37,10 @@ export default Vue.extend<Data, Methods, Computed, Props>({
     },
   },
 
-  data() {
+  data(): {
+    moneyPlayers: MoneyPlayer[]
+    loading: boolean
+  } {
     return {
       moneyPlayers: [],
       loading: true,
@@ -59,15 +48,15 @@ export default Vue.extend<Data, Methods, Computed, Props>({
   },
 
   computed: {
-    minusMoneyPlayers() {
+    minusMoneyPlayers(): MoneyPlayer[] {
       return [...this.moneyPlayers].sort((a, b) => a.money - b.money).filter(({ money }) => money < 0)
     },
 
-    plusMoneyPlayers() {
+    plusMoneyPlayers(): MoneyPlayer[] {
       return [...this.moneyPlayers].sort((a, b) => b.money - a.money).filter(({ money }) => money > 0)
     },
 
-    suggest1() {
+    suggest1(): Suggest[] {
       if (this.loading) {
         return []
       }
@@ -108,7 +97,7 @@ export default Vue.extend<Data, Methods, Computed, Props>({
     },
   },
 
-  async created() {
+  async created(): Promise<void> {
     this.moneyPlayers = (await ApiClient.getCurrentMoney()).money_players
     this.loading = false
   },
