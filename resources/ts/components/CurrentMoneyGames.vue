@@ -21,13 +21,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import apiClient from '../ApiClient'
 import Player from '../types/Player'
 import Game from '../types/Game'
 
 export default Vue.extend({
-  data() {
+  data(): {
+    currentMoneyGames: Game[]
+    loading: boolean
+  } {
     return {
       currentMoneyGames: [],
       loading: true,
@@ -35,11 +37,13 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(['players']),
+    players(): Player[] {
+      return this.$store.state.players
+    },
   },
 
   methods: {
-    culculateGamePlayerMoney(game: Game, player: Player) {
+    culculateGamePlayerMoney(game: Game, player: Player): number {
       let result = 0
       for (let gameResult of game.gameResults) {
         for (let gameResultPlayer of gameResult.gameResultPlayers) {
@@ -53,7 +57,7 @@ export default Vue.extend({
     },
   },
 
-  async created() {
+  async created(): Promise<void> {
     this.currentMoneyGames = await apiClient.getCurrentMoneyGames()
 
     this.loading = false
