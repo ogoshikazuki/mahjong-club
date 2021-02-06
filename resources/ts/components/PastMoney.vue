@@ -23,7 +23,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import ApiClient from '../ApiClient'
 import Player from '../types/Player'
 import Money from '../types/Money'
@@ -44,7 +43,7 @@ export default Vue.extend({
       let result = this.players.reduce((reduceResult: number[], player: Player) => {
         reduceResult[player.id] = 0
         return reduceResult
-      }, {})
+      }, [])
 
       for (const money of this.moneys) {
         for (const moneyPlayer of money.money_players) {
@@ -54,10 +53,12 @@ export default Vue.extend({
 
       return result
     },
-    ...mapState(['players']),
+    players(): Player[] {
+      return this.$store.state.players
+    },
   },
 
-  async created() {
+  async created(): Promise<void> {
     this.moneys = await ApiClient.getPastMoney()
     this.loading = false
   },
