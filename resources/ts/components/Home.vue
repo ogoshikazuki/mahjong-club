@@ -32,7 +32,10 @@ export default Vue.extend({
     SuggestResetMoneyDialog,
   },
 
-  data() {
+  data(): {
+    resetting: boolean
+    suggestResetMoneyDialog: boolean
+  } {
     return {
       resetting: false,
       suggestResetMoneyDialog: false,
@@ -40,7 +43,7 @@ export default Vue.extend({
   },
 
   methods: {
-    async resetMoney() {
+    async resetMoney(): Promise<void> {
       if (!confirm('本当に精算しますか？')) {
         return
       }
