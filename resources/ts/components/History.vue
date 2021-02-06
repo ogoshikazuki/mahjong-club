@@ -45,11 +45,11 @@ export default Vue.extend({
   },
 
   methods: {
-    async showGame(game: Game) {
+    async showGame(game: Game): Promise<void> {
       this.game = game
     },
 
-    async reloadGame() {
+    async reloadGame(): Promise<void> {
       this.gameResultHistory.loading = true
 
       if (this.game === null) {
