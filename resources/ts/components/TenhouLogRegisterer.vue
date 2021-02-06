@@ -31,23 +31,7 @@ type TenhouLogWithGameResultsText = TenhouLog & {
   gameResultsText: string
 }
 
-type Data = {
-  headers: { text: string; value: string }[]
-  checked: TenhouLogWithGameResultsText[]
-  registering: boolean
-}
-type Methods = {
-  register: () => Promise<void>
-}
-type Computed = {
-  items: TenhouLogWithGameResultsText[]
-  checkedTenhouLogs: GameResult[][]
-}
-type Props = {
-  tenhouLogs: TenhouLog[]
-}
-
-export default Vue.extend<Data, Methods, Computed, Props>({
+export default Vue.extend({
   props: {
     tenhouLogs: {
       type: Array as PropType<TenhouLog[]>,
@@ -55,7 +39,11 @@ export default Vue.extend<Data, Methods, Computed, Props>({
     },
   },
 
-  data(): Data {
+  data(): {
+    headers: { text: string; value: string }[]
+    checked: TenhouLogWithGameResultsText[]
+    registering: boolean
+  } {
     return {
       headers: [
         { text: '開始時刻', value: 'startTime' },
@@ -88,7 +76,7 @@ export default Vue.extend<Data, Methods, Computed, Props>({
   },
 
   methods: {
-    async register() {
+    async register(): Promise<void> {
       this.registering = true
 
       this.$emit(
