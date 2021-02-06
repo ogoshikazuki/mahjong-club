@@ -14,10 +14,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import GameResultInput from './GameResultInput.vue'
 import gameResultHistory from './GameResultHistory.vue'
 import apiClient from '../ApiClient'
+import GameResult from '../types/GameResult'
+import Player from '../types/Player'
 
 interface GameResultHistoryInterface extends Vue {
   loading: boolean
@@ -29,7 +30,9 @@ export default Vue.extend({
     gameResultHistory,
   },
 
-  data() {
+  data(): {
+    gameResults: GameResult[]
+  } {
     return {
       gameResults: [],
     }
@@ -39,11 +42,13 @@ export default Vue.extend({
     gameResultHistory(): GameResultHistoryInterface {
       return this.$refs.gameResultHistory as GameResultHistoryInterface
     },
-    ...mapState(['players']),
+    players(): Player[] {
+      return this.$store.state.players
+    },
   },
 
   methods: {
-    async loadHistory() {
+    async loadHistory(): Promise<void> {
       this.gameResultHistory.loading = true
 
       this.gameResults = []
@@ -54,12 +59,12 @@ export default Vue.extend({
   },
 
   watch: {
-    players() {
+    players(): void {
       this.loadHistory()
     },
   },
 
-  mounted() {
+  mounted(): void {
     this.gameResultHistory.loading = true
   },
 })
