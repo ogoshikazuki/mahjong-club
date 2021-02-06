@@ -33,7 +33,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import apiClient from '../ApiClient'
 import Player from '../types/Player'
 import GameResult from '../types/GameResult'
@@ -42,27 +41,12 @@ type ResultByPlayers = {
   [key: number]: number
 }
 
-interface Data {
-  mode: number
-  loading: boolean
-  gameResults: GameResult[]
-}
-interface Methods {
-  setMode: (mode: number) => void
-  loadGameResults: () => Promise<void>
-}
-interface Computed {
-  gameCount: ResultByPlayers
-  finishOrderCount: { [key: number]: ResultByPlayers }
-  totalFinishOrder: ResultByPlayers
-  averageFinishOrder: ResultByPlayers
-  tipCount: ResultByPlayers
-  money: ResultByPlayers
-  players: Player[]
-}
-
-export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
-  data(): Data {
+export default Vue.extend({
+  data(): {
+    mode: number
+    loading: boolean
+    gameResults: GameResult[]
+  } {
     return {
       mode: 4,
       loading: true,
@@ -71,11 +55,11 @@ export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
   },
 
   methods: {
-    setMode(mode: number) {
+    setMode(mode: number): void {
       this.mode = mode
     },
 
-    async loadGameResults() {
+    async loadGameResults(): Promise<void> {
       this.loading = true
 
       this.gameResults = await apiClient.getAllGameResults()
@@ -85,7 +69,7 @@ export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
   },
 
   computed: {
-    gameCount() {
+    gameCount(): ResultByPlayers {
       let gameCount = this.players.reduce((gameCount: ResultByPlayers, player: Player) => {
         gameCount[player.id] = 0
         return gameCount
@@ -101,7 +85,7 @@ export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
         }, gameCount)
     },
 
-    finishOrderCount() {
+    finishOrderCount(): { [key: number]: ResultByPlayers } {
       let finishOrderCount: { [key: number]: ResultByPlayers } = {}
       for (let finishOrder = 1; finishOrder <= this.mode; finishOrder++) {
         finishOrderCount[finishOrder] = this.players.reduce((finishOrderCount: ResultByPlayers, player) => {
@@ -122,7 +106,7 @@ export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
         }, finishOrderCount)
     },
 
-    totalFinishOrder() {
+    totalFinishOrder(): ResultByPlayers {
       let totalFinishOrder = this.players.reduce((gameCount: ResultByPlayers, player) => {
         gameCount[player.id] = 0
         return gameCount
@@ -138,14 +122,14 @@ export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
         }, totalFinishOrder)
     },
 
-    averageFinishOrder() {
+    averageFinishOrder(): ResultByPlayers {
       return this.players.reduce((averageFinishOrder: ResultByPlayers, player) => {
         averageFinishOrder[player.id] = this.totalFinishOrder[player.id] / this.gameCount[player.id]
         return averageFinishOrder
       }, {})
     },
 
-    tipCount() {
+    tipCount(): ResultByPlayers {
       let tipCount = this.players.reduce((tipCount: ResultByPlayers, player) => {
         tipCount[player.id] = 0
         return tipCount
@@ -161,7 +145,7 @@ export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
         }, tipCount)
     },
 
-    money() {
+    money(): ResultByPlayers {
       let money = this.players.reduce((money: ResultByPlayers, player) => {
         money[player.id] = 0
         return money
@@ -178,10 +162,12 @@ export default Vue.extend<Data, Methods, Computed, Record<string, never>>({
         }, money)
     },
 
-    ...mapState(['players']),
+    players(): Player[] {
+      return this.$store.state.players
+    },
   },
 
-  created() {
+  created(): void {
     this.loadGameResults()
   },
 })
