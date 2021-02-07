@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apiClient from '../ApiClient'
+import Repository from '../Repository'
 import Player from '../types/Player'
 import GameResult from '../types/GameResult'
 
@@ -62,7 +62,7 @@ export default Vue.extend({
     async loadGameResults(): Promise<void> {
       this.loading = true
 
-      this.gameResults = await apiClient.getAllGameResults()
+      this.gameResults = await Repository.getAllGameResults()
 
       this.loading = false
     },

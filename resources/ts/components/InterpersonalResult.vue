@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ApiClient from '../ApiClient'
+import Repository from '../Repository'
 import Player from '../types/Player'
 import GameResult from '../types/GameResult'
 type PlayerCount = 3 | 4
@@ -181,7 +181,7 @@ export default Vue.extend({
     },
   },
   async created(): Promise<void> {
-    const gameResults: GameResult[] = await ApiClient.getAllGameResults()
+    const gameResults: GameResult[] = await Repository.getAllGameResults()
     for (const gameResult of gameResults) {
       gameResult.gameResultPlayers.sort((a, b) => b.point - a.point)
     }

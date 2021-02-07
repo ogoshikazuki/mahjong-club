@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ApiClient from '../ApiClient'
+import Repository from '../Repository'
 import Player from '../types/Player'
 import Money from '../types/Money'
 
@@ -59,7 +59,7 @@ export default Vue.extend({
   },
 
   async created(): Promise<void> {
-    this.moneys = await ApiClient.getPastMoney()
+    this.moneys = await Repository.getPastMoney()
     this.loading = false
   },
 

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { SET_PLAYERS } from './mutation_types'
-import apiClient from '../ApiClient'
+import Repository from '../Repository'
 
 Vue.use(Vuex)
 
@@ -18,7 +18,7 @@ export default new Vuex.Store({
 
   actions: {
     async loadPlayers(context) {
-      context.commit(SET_PLAYERS, await apiClient.getAllPlayers())
+      context.commit(SET_PLAYERS, await Repository.getAllPlayers())
     },
   },
 })

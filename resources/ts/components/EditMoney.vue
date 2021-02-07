@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ApiClient from '../ApiClient'
+import Repository from '../Repository'
 import MoneyPlayer from '../types/MoneyPlayer'
 import Player from '../types/Player'
 
@@ -45,7 +45,7 @@ export default Vue.extend({
   },
 
   async created(): Promise<void> {
-    this.money = (await ApiClient.getCurrentMoney()).money_players.reduce(
+    this.money = (await Repository.getCurrentMoney()).money_players.reduce(
       (money: number[], moneyPlayer: MoneyPlayer) => {
         money[moneyPlayer.player.id] = moneyPlayer.money
         return money
@@ -60,7 +60,7 @@ export default Vue.extend({
       this.updating = true
       this.errorMessages = []
 
-      const response = await ApiClient.updateMoney(this.money)
+      const response = await Repository.updateMoney(this.money)
 
       this.updating = false
 

@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apiClient from '../ApiClient'
+import Repository from '../Repository'
 import Player from '../types/Player'
 import Game from '../types/Game'
 
@@ -58,7 +58,7 @@ export default Vue.extend({
   },
 
   async created(): Promise<void> {
-    this.currentMoneyGames = await apiClient.getCurrentMoneyGames()
+    this.currentMoneyGames = await Repository.getCurrentMoneyGames()
 
     this.loading = false
   },

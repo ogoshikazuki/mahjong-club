@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apiClient from '../ApiClient'
+import Repository from '../Repository'
 import Player from '../types/Player'
 
 export default Vue.extend({
@@ -71,7 +71,7 @@ export default Vue.extend({
       this.loading = true
       this.conflictOccurred = false
 
-      const response = await apiClient.storeGameResult({
+      const response = await Repository.storeGameResult({
         rate: this.rate,
         points: this.points,
         tips: this.tips,

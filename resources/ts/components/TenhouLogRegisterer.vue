@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import apiClient from '../ApiClient'
+import Repository from '../Repository'
 
 type GameResult = {
   playerName: string
@@ -81,7 +81,7 @@ export default Vue.extend({
 
       this.$emit(
         'registered',
-        (await (await apiClient.registerTenhouLog({ tenhou_logs: this.checkedTenhouLogs })).json()).data
+        (await (await Repository.registerTenhouLog({ tenhou_logs: this.checkedTenhouLogs })).json()).data
       )
     },
   },

@@ -71,7 +71,7 @@ const _delete = (template: string, id: number) => {
   fetch(url, { method: 'DELETE' })
 }
 
-class ApiClient {
+class Repository {
   getAllPlayers() {
     return _get(URL_TEMPLATE['player.index'])
   }
@@ -129,4 +129,4 @@ class ApiClient {
   }
 }
 
-export default new ApiClient()
+export default new Repository()

@@ -16,7 +16,7 @@
 import Vue from 'vue'
 import GameResultInput from './GameResultInput.vue'
 import gameResultHistory from './GameResultHistory.vue'
-import apiClient from '../ApiClient'
+import Repository from '../Repository'
 import GameResult from '../types/GameResult'
 import Player from '../types/Player'
 
@@ -53,7 +53,7 @@ export default Vue.extend({
 
       this.gameResults = []
 
-      this.gameResults = (await apiClient.getCurrentGame()).gameResults
+      this.gameResults = (await Repository.getCurrentGame()).gameResults
       this.gameResultHistory.loading = false
     },
   },

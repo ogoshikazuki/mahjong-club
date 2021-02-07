@@ -26,7 +26,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import moment from 'moment'
-import apiClient from '../ApiClient'
+import Repository from '../Repository'
 
 export default Vue.extend({
   data(): {
@@ -67,7 +67,7 @@ export default Vue.extend({
 
       this.loading = true
 
-      this.$emit('complete', await apiClient.downloadTenhouLog({ date: this.date, room_number: this.roomNumber }))
+      this.$emit('complete', await Repository.downloadTenhouLog({ date: this.date, room_number: this.roomNumber }))
 
       this.loading = false
     },

@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apiClient from '../ApiClient'
+import Repository from '../Repository'
 import CurrentMoneyGames from './CurrentMoneyGames.vue'
 import GameResultHistory from './GameResultHistory.vue'
 import Game from '../types/Game'
@@ -56,7 +56,7 @@ export default Vue.extend({
         return
       }
 
-      this.game = await apiClient.findGame(this.game.id)
+      this.game = await Repository.findGame(this.game.id)
       this.gameResultHistory.loading = false
     },
   },

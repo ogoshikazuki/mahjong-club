@@ -23,7 +23,7 @@ import Vue from 'vue'
 import CurrentMoney from './CurrentMoney.vue'
 import PastMoney from './PastMoney.vue'
 import SuggestResetMoneyDialog from './SuggestResetMoneyDialog.vue'
-import ApiClient from '../ApiClient'
+import Repository from '../Repository'
 
 export default Vue.extend({
   components: {
@@ -50,7 +50,7 @@ export default Vue.extend({
 
       this.resetting = true
 
-      await ApiClient.resetMoney()
+      await Repository.resetMoney()
 
       location.reload()
     },

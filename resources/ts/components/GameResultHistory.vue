@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apiClient from '../ApiClient'
+import Repository from '../Repository'
 import Player from '../types/Player'
 import GameResult from '../types/GameResult'
 
@@ -91,7 +91,7 @@ export default Vue.extend({
       }
       this.loading = true
 
-      await apiClient.deleteGameResult(id)
+      await Repository.deleteGameResult(id)
       this.loading = false
       this.$emit('reload')
     },
@@ -127,7 +127,7 @@ export default Vue.extend({
 
       this.loading = true
 
-      const response = await apiClient.updateGameResult(this.editForm.id, this.editForm)
+      const response = await Repository.updateGameResult(this.editForm.id, this.editForm)
       this.loading = false
 
       if (response.status === 422) {

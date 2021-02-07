@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ApiClient from '../ApiClient'
+import Repository from '../Repository'
 import MoneyPlayer from '../types/MoneyPlayer'
 
 type Suggest = {
@@ -98,7 +98,7 @@ export default Vue.extend({
   },
 
   async created(): Promise<void> {
-    this.moneyPlayers = (await ApiClient.getCurrentMoney()).money_players
+    this.moneyPlayers = (await Repository.getCurrentMoney()).money_players
     this.loading = false
   },
 })
