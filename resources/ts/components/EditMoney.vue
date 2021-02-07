@@ -46,7 +46,7 @@ export default Vue.extend({
 
   async created(): Promise<void> {
     this.money = (await Repository.getCurrentMoney()).money_players.reduce(
-      (money: number[], moneyPlayer: MoneyPlayer) => {
+      (money: { [playerId: number]: number }, moneyPlayer: MoneyPlayer) => {
         money[moneyPlayer.player.id] = moneyPlayer.money
         return money
       },

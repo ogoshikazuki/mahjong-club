@@ -1,5 +1,10 @@
 import urlTemplate from 'url-template'
 import queryString from 'query-string'
+import Player from './types/Player'
+import Game from './types/Game'
+import GameResult from './types/GameResult'
+import TenhouLog from './types/TenhouLog'
+import Money from './types/Money'
 
 const URL_TEMPLATE = {
   'player.index': '/api/player',
@@ -71,62 +76,60 @@ const _delete = (template: string, id: number) => {
   fetch(url, { method: 'DELETE' })
 }
 
-class Repository {
-  getAllPlayers() {
+export default {
+  getAllPlayers(): Promise<Player[]> {
     return _get(URL_TEMPLATE['player.index'])
-  }
+  },
 
-  getCurrentGame() {
+  getCurrentGame(): Promise<Game> {
     return _get(URL_TEMPLATE['game.get-current-game'])
-  }
+  },
 
-  getCurrentMoneyGames() {
+  getCurrentMoneyGames(): Promise<Game[]> {
     return _get(URL_TEMPLATE['game.get-current-money-games'])
-  }
+  },
 
-  findGame(id: number) {
+  findGame(id: number): Promise<Game> {
     return _get(URL_TEMPLATE['game.show'], { id })
-  }
+  },
 
-  deleteGameResult(id: number) {
+  deleteGameResult(id: number): void {
     _delete(URL_TEMPLATE['game.result.destroy'], id)
-  }
+  },
 
-  updateGameResult(id: number, parameters = {}) {
+  updateGameResult(id: number, parameters = {}): Promise<Response> {
     return _put(URL_TEMPLATE['game.result.update'], id, parameters)
-  }
+  },
 
-  storeGameResult(parameters: RequestPayload) {
+  storeGameResult(parameters: RequestPayload): Promise<Response> {
     return _post(URL_TEMPLATE['game.result.store'], parameters)
-  }
+  },
 
-  getAllGameResults() {
+  getAllGameResults(): Promise<GameResult[]> {
     return _get(URL_TEMPLATE['game.result.index'])
-  }
+  },
 
-  downloadTenhouLog(parameters: QueryParameter) {
+  downloadTenhouLog(parameters: QueryParameter): Promise<TenhouLog[]> {
     return _get(URL_TEMPLATE['tenhou.download-log'], {}, parameters)
-  }
+  },
 
-  registerTenhouLog(parameters: RequestPayload) {
+  registerTenhouLog(parameters: RequestPayload): Promise<Response> {
     return _post(URL_TEMPLATE['tenhou.register-log'], parameters)
-  }
+  },
 
-  getCurrentMoney() {
+  getCurrentMoney(): Promise<Money> {
     return _get(URL_TEMPLATE['money.current'])
-  }
+  },
 
-  getPastMoney() {
+  getPastMoney(): Promise<Money[]> {
     return _get(URL_TEMPLATE['money.past'])
-  }
+  },
 
-  resetMoney() {
+  resetMoney(): Promise<Response> {
     return _post(URL_TEMPLATE['money.reset'])
-  }
+  },
 
-  updateMoney(money: { [key: number]: number }) {
+  updateMoney(money: { [key: number]: number }): Promise<Response> {
     return _post(URL_TEMPLATE['money.update'], { money })
-  }
+  },
 }
-
-export default new Repository()
