@@ -127,11 +127,11 @@ export default Vue.extend({
 
       this.loading = true
 
-      const response = await Repository.updateGameResult(this.editForm.id, this.editForm)
-      this.loading = false
+      const repositoryResponse = Repository.updateGameResult(this.editForm.id, this.editForm)
 
-      if (response.status === 422) {
-        this.editErrors = (await response.json()).errors
+      if (await repositoryResponse.invalid()) {
+        this.editErrors = ((await repositoryResponse.errors()) as unknown) as EditErrors
+        this.loading = false
         return
       }
 

@@ -63,13 +63,15 @@ const _post = (template: string, parameters: RequestPayload = {}) => {
   })
 }
 
-const _put = (template: string, id: number, parameters: RequestPayload) => {
+const _put = (template: string, id: number, parameters: RequestPayload): RepositoryResponse => {
   const url = _url(template, { id })
-  return fetch(url, {
-    method: 'PUT',
-    headers,
-    body: JSON.stringify(parameters),
-  })
+  return new RepositoryResponse(
+    fetch(url, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(parameters),
+    })
+  )
 }
 
 const _delete = (template: string, id: number): RepositoryResponse => {
@@ -98,7 +100,7 @@ export default {
     return _delete(URL_TEMPLATE['game.result.destroy'], id)
   },
 
-  updateGameResult(id: number, parameters = {}): Promise<Response> {
+  updateGameResult(id: number, parameters = {}): RepositoryResponse {
     return _put(URL_TEMPLATE['game.result.update'], id, parameters)
   },
 
