@@ -5,6 +5,7 @@ import Game from './types/Game'
 import GameResult from './types/GameResult'
 import TenhouLog from './types/TenhouLog'
 import Money from './types/Money'
+import RepositoryResponse from './RepositoryResponse'
 
 const URL_TEMPLATE = {
   'player.index': '/api/player',
@@ -71,9 +72,9 @@ const _put = (template: string, id: number, parameters: RequestPayload) => {
   })
 }
 
-const _delete = (template: string, id: number) => {
+const _delete = (template: string, id: number): RepositoryResponse => {
   const url = _url(template, { id })
-  fetch(url, { method: 'DELETE' })
+  return new RepositoryResponse(fetch(url, { method: 'DELETE' }))
 }
 
 export default {
@@ -93,8 +94,8 @@ export default {
     return _get(URL_TEMPLATE['game.show'], { id })
   },
 
-  deleteGameResult(id: number): void {
-    _delete(URL_TEMPLATE['game.result.destroy'], id)
+  deleteGameResult(id: number): RepositoryResponse {
+    return _delete(URL_TEMPLATE['game.result.destroy'], id)
   },
 
   updateGameResult(id: number, parameters = {}): Promise<Response> {
