@@ -60,16 +60,16 @@ export default Vue.extend({
       this.updating = true
       this.errorMessages = []
 
-      const response = await Repository.updateMoney(this.money)
+      const repositoryResponse = Repository.updateMoney(this.money)
 
-      this.updating = false
-
-      if (response.ok) {
+      if (await repositoryResponse.ok()) {
         this.$router.push({ name: 'home' })
+        this.updating = false
         return
       }
 
-      this.errorMessages = (await response.json()).errors.money
+      this.errorMessages = (await repositoryResponse.errors()).money
+      this.updating = false
     },
   },
 })

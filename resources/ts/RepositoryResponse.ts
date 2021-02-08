@@ -12,4 +12,8 @@ export default class RepositoryResponse {
   async errors(): Promise<{ [key: string]: string[] }> {
     return (await (await this.responsePromise).json()).errors
   }
+
+  async ok(): Promise<boolean> {
+    return (await this.responsePromise).ok
+  }
 }

@@ -79,10 +79,7 @@ export default Vue.extend({
     async register(): Promise<void> {
       this.registering = true
 
-      this.$emit(
-        'registered',
-        (await (await Repository.registerTenhouLog({ tenhou_logs: this.checkedTenhouLogs })).json()).data
-      )
+      this.$emit('registered', await Repository.registerTenhouLog({ tenhou_logs: this.checkedTenhouLogs }).data())
     },
   },
 })

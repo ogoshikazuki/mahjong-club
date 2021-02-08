@@ -53,7 +53,7 @@ export default Vue.extend({
     points: { [key: number]: number }
     tips: { [key: number]: number }
     loading: boolean
-    errors: { [key: string]: string }
+    errors: { [key: string]: string[] }
     conflictOccurred: boolean
   } {
     return {
@@ -71,14 +71,14 @@ export default Vue.extend({
       this.loading = true
       this.conflictOccurred = false
 
-      const response = await Repository.storeGameResult({
+      const repositoryResponse = Repository.storeGameResult({
         rate: this.rate,
         points: this.points,
         tips: this.tips,
       })
 
-      if (response.status === 422) {
-        this.errors = (await response.json()).errors
+      if (await repositoryResponse.invalid()) {
+        this.errors = await repositoryResponse.errors()
         this.loading = false
         return
       }

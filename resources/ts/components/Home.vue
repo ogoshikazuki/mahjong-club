@@ -43,14 +43,14 @@ export default Vue.extend({
   },
 
   methods: {
-    async resetMoney(): Promise<void> {
+    resetMoney(): void {
       if (!confirm('本当に精算しますか？')) {
         return
       }
 
       this.resetting = true
 
-      await Repository.resetMoney()
+      Repository.resetMoney()
 
       location.reload()
     },

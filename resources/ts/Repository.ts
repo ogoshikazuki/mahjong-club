@@ -54,13 +54,15 @@ const _get = async (template: string, urlParameter: UrlParameter = {}, queryPara
   return (await (await fetch(url)).json()).data
 }
 
-const _post = (template: string, parameters: RequestPayload = {}) => {
+const _post = (template: string, parameters: RequestPayload = {}): RepositoryResponse => {
   const url = _url(template)
-  return fetch(url, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(parameters),
-  })
+  return new RepositoryResponse(
+    fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(parameters),
+    })
+  )
 }
 
 const _put = (template: string, id: number, parameters: RequestPayload): RepositoryResponse => {
@@ -104,7 +106,7 @@ export default {
     return _put(URL_TEMPLATE['game.result.update'], id, parameters)
   },
 
-  storeGameResult(parameters: RequestPayload): Promise<Response> {
+  storeGameResult(parameters: RequestPayload): RepositoryResponse {
     return _post(URL_TEMPLATE['game.result.store'], parameters)
   },
 
@@ -116,7 +118,7 @@ export default {
     return _get(URL_TEMPLATE['tenhou.download-log'], {}, parameters)
   },
 
-  registerTenhouLog(parameters: RequestPayload): Promise<Response> {
+  registerTenhouLog(parameters: RequestPayload): RepositoryResponse {
     return _post(URL_TEMPLATE['tenhou.register-log'], parameters)
   },
 
@@ -128,11 +130,11 @@ export default {
     return _get(URL_TEMPLATE['money.past'])
   },
 
-  resetMoney(): Promise<Response> {
+  resetMoney(): RepositoryResponse {
     return _post(URL_TEMPLATE['money.reset'])
   },
 
-  updateMoney(money: { [key: number]: number }): Promise<Response> {
+  updateMoney(money: { [key: number]: number }): RepositoryResponse {
     return _post(URL_TEMPLATE['money.update'], { money })
   },
 }
