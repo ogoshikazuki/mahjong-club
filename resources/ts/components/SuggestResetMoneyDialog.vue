@@ -22,6 +22,7 @@
 import Vue from 'vue'
 import Repository from '../Repository'
 import MoneyPlayer from '../types/MoneyPlayer'
+import Money from '../types/Money'
 
 type Suggest = {
   from: string
@@ -98,7 +99,7 @@ export default Vue.extend({
   },
 
   async created(): Promise<void> {
-    this.moneyPlayers = (await Repository.getCurrentMoney()).money_players
+    this.moneyPlayers = ((await Repository.getCurrentMoney().data()) as Money).money_players
     this.loading = false
   },
 })

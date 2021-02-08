@@ -67,7 +67,10 @@ export default Vue.extend({
 
       this.loading = true
 
-      this.$emit('complete', await Repository.downloadTenhouLog({ date: this.date, room_number: this.roomNumber }))
+      this.$emit(
+        'complete',
+        await Repository.downloadTenhouLog({ date: this.date, room_number: this.roomNumber }).data()
+      )
 
       this.loading = false
     },

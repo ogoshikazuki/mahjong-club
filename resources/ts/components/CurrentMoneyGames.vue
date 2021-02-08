@@ -58,7 +58,7 @@ export default Vue.extend({
   },
 
   async created(): Promise<void> {
-    this.currentMoneyGames = await Repository.getCurrentMoneyGames()
+    this.currentMoneyGames = (await Repository.getCurrentMoneyGames().data()) as Game[]
 
     this.loading = false
   },

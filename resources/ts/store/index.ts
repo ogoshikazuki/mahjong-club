@@ -18,7 +18,7 @@ export default new Vuex.Store({
 
   actions: {
     async loadPlayers(context) {
-      context.commit(SET_PLAYERS, await Repository.getAllPlayers())
+      context.commit(SET_PLAYERS, await Repository.getAllPlayers().data())
     },
   },
 })

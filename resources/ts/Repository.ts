@@ -49,9 +49,13 @@ const _url = (template: string, urlParameter: UrlParameter = {}, queryParameter:
   return url
 }
 
-const _get = async (template: string, urlParameter: UrlParameter = {}, queryParameter: QueryParameter = {}) => {
+const _get = (
+  template: string,
+  urlParameter: UrlParameter = {},
+  queryParameter: QueryParameter = {}
+): RepositoryResponse => {
   const url = _url(template, urlParameter, queryParameter)
-  return (await (await fetch(url)).json()).data
+  return new RepositoryResponse(fetch(url))
 }
 
 const _post = (template: string, parameters: RequestPayload = {}): RepositoryResponse => {
@@ -82,19 +86,19 @@ const _delete = (template: string, id: number): RepositoryResponse => {
 }
 
 export default {
-  getAllPlayers(): Promise<Player[]> {
+  getAllPlayers(): RepositoryResponse {
     return _get(URL_TEMPLATE['player.index'])
   },
 
-  getCurrentGame(): Promise<Game> {
+  getCurrentGame(): RepositoryResponse {
     return _get(URL_TEMPLATE['game.get-current-game'])
   },
 
-  getCurrentMoneyGames(): Promise<Game[]> {
+  getCurrentMoneyGames(): RepositoryResponse {
     return _get(URL_TEMPLATE['game.get-current-money-games'])
   },
 
-  findGame(id: number): Promise<Game> {
+  findGame(id: number): RepositoryResponse {
     return _get(URL_TEMPLATE['game.show'], { id })
   },
 
@@ -110,11 +114,11 @@ export default {
     return _post(URL_TEMPLATE['game.result.store'], parameters)
   },
 
-  getAllGameResults(): Promise<GameResult[]> {
+  getAllGameResults(): RepositoryResponse {
     return _get(URL_TEMPLATE['game.result.index'])
   },
 
-  downloadTenhouLog(parameters: QueryParameter): Promise<TenhouLog[]> {
+  downloadTenhouLog(parameters: QueryParameter): RepositoryResponse {
     return _get(URL_TEMPLATE['tenhou.download-log'], {}, parameters)
   },
 
@@ -122,11 +126,11 @@ export default {
     return _post(URL_TEMPLATE['tenhou.register-log'], parameters)
   },
 
-  getCurrentMoney(): Promise<Money> {
+  getCurrentMoney(): RepositoryResponse {
     return _get(URL_TEMPLATE['money.current'])
   },
 
-  getPastMoney(): Promise<Money[]> {
+  getPastMoney(): RepositoryResponse {
     return _get(URL_TEMPLATE['money.past'])
   },
 

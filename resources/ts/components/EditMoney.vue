@@ -22,6 +22,7 @@ import Vue from 'vue'
 import Repository from '../Repository'
 import MoneyPlayer from '../types/MoneyPlayer'
 import Player from '../types/Player'
+import Money from '../types/Money'
 
 export default Vue.extend({
   data(): {
@@ -45,7 +46,7 @@ export default Vue.extend({
   },
 
   async created(): Promise<void> {
-    this.money = (await Repository.getCurrentMoney()).money_players.reduce(
+    this.money = ((await Repository.getCurrentMoney().data()) as Money).money_players.reduce(
       (money: { [playerId: number]: number }, moneyPlayer: MoneyPlayer) => {
         money[moneyPlayer.player.id] = moneyPlayer.money
         return money

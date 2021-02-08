@@ -181,7 +181,7 @@ export default Vue.extend({
     },
   },
   async created(): Promise<void> {
-    const gameResults: GameResult[] = await Repository.getAllGameResults()
+    const gameResults: GameResult[] = (await Repository.getAllGameResults().data()) as GameResult[]
     for (const gameResult of gameResults) {
       gameResult.gameResultPlayers.sort((a, b) => b.point - a.point)
     }

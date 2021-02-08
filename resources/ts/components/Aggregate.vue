@@ -62,7 +62,7 @@ export default Vue.extend({
     async loadGameResults(): Promise<void> {
       this.loading = true
 
-      this.gameResults = await Repository.getAllGameResults()
+      this.gameResults = (await Repository.getAllGameResults().data()) as GameResult[]
 
       this.loading = false
     },

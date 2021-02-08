@@ -59,7 +59,7 @@ export default Vue.extend({
   },
 
   async created(): Promise<void> {
-    this.moneys = await Repository.getPastMoney()
+    this.moneys = (await Repository.getPastMoney().data()) as Money[]
     this.loading = false
   },
 

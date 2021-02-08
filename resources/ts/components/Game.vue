@@ -53,7 +53,7 @@ export default Vue.extend({
 
       this.gameResults = []
 
-      this.gameResults = (await Repository.getCurrentGame()).gameResults
+      this.gameResults = ((await Repository.getCurrentGame().data()) as { gameResults: GameResult[] }).gameResults
       this.gameResultHistory.loading = false
     },
   },

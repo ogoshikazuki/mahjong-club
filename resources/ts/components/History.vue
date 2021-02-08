@@ -56,7 +56,7 @@ export default Vue.extend({
         return
       }
 
-      this.game = await Repository.findGame(this.game.id)
+      this.game = (await Repository.findGame(this.game.id).data()) as Game
       this.gameResultHistory.loading = false
     },
   },
