@@ -16,6 +16,7 @@ const URL_TEMPLATE = {
   'game.result.store': '/api/game/result',
   'game.result.update': '/api/game/result/{id}',
   'game.result.index': '/api/game/result',
+  'game.result.aggregate': '/api/game/result/aggregate/{playerCount}',
   'tenhou.download-log': '/api/tenhou/download-log',
   'tenhou.register-log': '/api/tenhou/register-log',
   'money.current': '/api/money/current',
@@ -140,5 +141,9 @@ export default {
 
   updateMoney(money: { [key: number]: number }): RepositoryResponse {
     return _post(URL_TEMPLATE['money.update'], { money })
+  },
+
+  aggregateGameResult(playerCount: number): RepositoryResponse {
+    return _get(URL_TEMPLATE['game.result.aggregate'], { playerCount })
   },
 }

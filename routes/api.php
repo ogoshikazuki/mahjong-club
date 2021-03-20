@@ -22,6 +22,7 @@ Route::group(['as' => 'api.'], function () {
         Route::get('get-current-money-games', 'GameController@getCurrentMoneyGames')->name('get-current-money-games');
         Route::apiResource('result', 'GameResultController', ['only' => ['destroy', 'update', 'store', 'index']])
             ->parameters(['result' => 'gameResult']);
+        Route::get('result/aggregate/{playerCount}', 'GameResultController@aggregate')->name('result.aggregate');
     });
     Route::apiResource('game', 'GameController', ['only' => ['show']]);
 

@@ -1,33 +1,73 @@
 <template>
   <div>
     <v-tabs>
-      <v-tab @change="setMode(4)">四麻</v-tab>
-      <v-tab @change="setMode(3)">三麻</v-tab>
+      <v-tab>四麻</v-tab>
+      <v-tab>三麻</v-tab>
+      <v-tab-item>
+        <v-simple-table v-loading="loading" class="text-no-wrap">
+          <thead>
+            <tr>
+              <th>名前</th>
+              <th>ゲーム数</th>
+              <th>平均着順</th>
+              <th>祝儀</th>
+              <th>金額</th>
+              <th>1着</th>
+              <th>2着</th>
+              <th>3着</th>
+              <th>4着</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(result, playerId) in aggregate4" :key="playerId">
+              <td>{{ players.find((player) => player.id === Number(playerId)).name }}</td>
+              <td>{{ result['game_count'] }}</td>
+              <td>
+                {{
+                  ((1 * result[1] + 2 * result[2] + 3 * result[3] + 4 * result[4]) / result['game_count']).toFixed(2)
+                }}
+              </td>
+              <td>{{ result['tip'] }}</td>
+              <td>{{ (result['point'] + result['tip'] * 2) * 100 }}</td>
+              <td>{{ result[1] }}({{ ((result[1] / result['game_count']) * 100).toFixed(2) }}%)</td>
+              <td>{{ result[2] }}({{ ((result[2] / result['game_count']) * 100).toFixed(2) }}%)</td>
+              <td>{{ result[3] }}({{ ((result[3] / result['game_count']) * 100).toFixed(2) }}%)</td>
+              <td>{{ result[4] }}({{ ((result[4] / result['game_count']) * 100).toFixed(2) }}%)</td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </v-tab-item>
+      <v-tab-item>
+        <v-simple-table v-loading="loading" class="text-no-wrap">
+          <thead>
+            <tr>
+              <th>名前</th>
+              <th>ゲーム数</th>
+              <th>平均着順</th>
+              <th>祝儀</th>
+              <th>金額</th>
+              <th>1着</th>
+              <th>2着</th>
+              <th>3着</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(result, playerId) in aggregate3" :key="playerId">
+              <td>{{ players.find((player) => player.id === Number(playerId)).name }}</td>
+              <td>{{ result['game_count'] }}</td>
+              <td>
+                {{ ((1 * result[1] + 2 * result[2] + 3 * result[3]) / result['game_count']).toFixed(2) }}
+              </td>
+              <td>{{ result['tip'] }}</td>
+              <td>{{ (result['point'] + result['tip'] * 2) * 50 }}</td>
+              <td>{{ result[1] }}({{ ((result[1] / result['game_count']) * 100).toFixed(2) }}%)</td>
+              <td>{{ result[2] }}({{ ((result[2] / result['game_count']) * 100).toFixed(2) }}%)</td>
+              <td>{{ result[3] }}({{ ((result[3] / result['game_count']) * 100).toFixed(2) }}%)</td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </v-tab-item>
     </v-tabs>
-    <v-simple-table v-loading="loading" class="text-no-wrap">
-      <thead>
-        <tr>
-          <th>名前</th>
-          <th>ゲーム数</th>
-          <th>平均着順</th>
-          <th>祝儀</th>
-          <th>金額</th>
-          <th v-for="(value, key) in finishOrderCount" :key="key">{{ key }}着</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="player in players" :key="player.id">
-          <td>{{ player.name }}</td>
-          <td>{{ gameCount[player.id] }}</td>
-          <td>{{ averageFinishOrder[player.id].toFixed(2) }}</td>
-          <td>{{ tipCount[player.id] }}</td>
-          <td>{{ money[player.id] }}</td>
-          <td v-for="(value, key) in finishOrderCount" :key="key">
-            {{ value[player.id] }}({{ ((value[player.id] / gameCount[player.id]) * 100).toFixed(2) }}%)
-          </td>
-        </tr>
-      </tbody>
-    </v-simple-table>
   </div>
 </template>
 
@@ -35,133 +75,40 @@
 import Vue from 'vue'
 import Repository from '../Repository'
 import Player from '../types/Player'
-import GameResult from '../types/GameResult'
 
-type ResultByPlayers = {
-  [key: number]: number
+type Aggregate = {
+  [key: number]: {
+    point: number
+    tip: number
+    [key: number]: number
+  }
 }
 
 export default Vue.extend({
   data(): {
-    mode: number
     loading: boolean
-    gameResults: GameResult[]
+    aggregate3: Aggregate
+    aggregate4: Aggregate
   } {
     return {
-      mode: 4,
       loading: true,
-      gameResults: [],
+      aggregate3: {},
+      aggregate4: {},
     }
   },
 
   methods: {
-    setMode(mode: number): void {
-      this.mode = mode
-    },
-
     async loadGameResults(): Promise<void> {
       this.loading = true
 
-      this.gameResults = (await Repository.getAllGameResults().data()) as GameResult[]
+      this.aggregate3 = (await Repository.aggregateGameResult(3).data()) as Aggregate
+      this.aggregate4 = (await Repository.aggregateGameResult(4).data()) as Aggregate
 
       this.loading = false
     },
   },
 
   computed: {
-    gameCount(): ResultByPlayers {
-      let gameCount = this.players.reduce((gameCount: ResultByPlayers, player: Player) => {
-        gameCount[player.id] = 0
-        return gameCount
-      }, {})
-
-      return this.gameResults
-        .filter((gameResult) => gameResult.gameResultPlayers.length === this.mode)
-        .reduce((gameCount, gameResult) => {
-          return gameResult.gameResultPlayers.reduce((gameCount, gameResultPlayer) => {
-            gameCount[gameResultPlayer.player_id]++
-            return gameCount
-          }, gameCount)
-        }, gameCount)
-    },
-
-    finishOrderCount(): { [key: number]: ResultByPlayers } {
-      let finishOrderCount: { [key: number]: ResultByPlayers } = {}
-      for (let finishOrder = 1; finishOrder <= this.mode; finishOrder++) {
-        finishOrderCount[finishOrder] = this.players.reduce((finishOrderCount: ResultByPlayers, player) => {
-          finishOrderCount[player.id] = 0
-          return finishOrderCount
-        }, {})
-      }
-
-      return this.gameResults
-        .filter((gameResult) => gameResult.gameResultPlayers.length === this.mode)
-        .reduce((finishOrderCount, gameResult) => {
-          return gameResult.gameResultPlayers
-            .sort((a, b) => b.point - a.point)
-            .reduce((finishOrderCount, gameResultPlayer, index) => {
-              finishOrderCount[index + 1][gameResultPlayer.player_id]++
-              return finishOrderCount
-            }, finishOrderCount)
-        }, finishOrderCount)
-    },
-
-    totalFinishOrder(): ResultByPlayers {
-      let totalFinishOrder = this.players.reduce((gameCount: ResultByPlayers, player) => {
-        gameCount[player.id] = 0
-        return gameCount
-      }, {})
-
-      return Object.keys(this.finishOrderCount)
-        .map(Number)
-        .reduce((totalFinishOrder, finishOrder) => {
-          for (let player of this.players) {
-            totalFinishOrder[player.id] += this.finishOrderCount[finishOrder][player.id] * finishOrder
-          }
-          return totalFinishOrder
-        }, totalFinishOrder)
-    },
-
-    averageFinishOrder(): ResultByPlayers {
-      return this.players.reduce((averageFinishOrder: ResultByPlayers, player) => {
-        averageFinishOrder[player.id] = this.totalFinishOrder[player.id] / this.gameCount[player.id]
-        return averageFinishOrder
-      }, {})
-    },
-
-    tipCount(): ResultByPlayers {
-      let tipCount = this.players.reduce((tipCount: ResultByPlayers, player) => {
-        tipCount[player.id] = 0
-        return tipCount
-      }, {})
-
-      return this.gameResults
-        .filter((gameResult) => gameResult.gameResultPlayers.length === this.mode)
-        .reduce((tipCount, gameResult) => {
-          return gameResult.gameResultPlayers.reduce((tipCount, gameResultPlayer) => {
-            tipCount[gameResultPlayer.player_id] += gameResultPlayer.tip
-            return tipCount
-          }, tipCount)
-        }, tipCount)
-    },
-
-    money(): ResultByPlayers {
-      let money = this.players.reduce((money: ResultByPlayers, player) => {
-        money[player.id] = 0
-        return money
-      }, {})
-
-      return this.gameResults
-        .filter((gameResult) => gameResult.gameResultPlayers.length === this.mode)
-        .reduce((money, gameResult) => {
-          return gameResult.gameResultPlayers.reduce((money, gameResultPlayer) => {
-            let point = gameResultPlayer.point + gameResultPlayer.tip * 2
-            money[gameResultPlayer.player_id] += point * gameResult.rate
-            return money
-          }, money)
-        }, money)
-    },
-
     players(): Player[] {
       return this.$store.state.players
     },

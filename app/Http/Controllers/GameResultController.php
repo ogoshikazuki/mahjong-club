@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\GameResult;
+use App\Service\GameService;
+use App\UseCases\GameResult\Aggregate;
 use App\Http\Requests\GameResultRequest;
 use App\Http\Resources\GameResult as GameResultResource;
-use App\Service\GameService;
-use App\GameResult;
 
 class GameResultController extends Controller
 {
@@ -52,5 +53,10 @@ class GameResultController extends Controller
     public function index()
     {
         return GameResultResource::collection(GameResult::all());
+    }
+
+    public function aggregate(int $playerCount)
+    {
+        return response()->json(['data' => (new Aggregate())($playerCount)]);
     }
 }
