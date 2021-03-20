@@ -101,8 +101,12 @@ export default Vue.extend({
     async loadGameResults(): Promise<void> {
       this.loading = true
 
-      this.aggregate3 = (await Repository.aggregateGameResult(3).data()) as Aggregate
-      this.aggregate4 = (await Repository.aggregateGameResult(4).data()) as Aggregate
+      await Promise.all([Repository.aggregateGameResult(3).data(), Repository.aggregateGameResult(4).data()]).then(
+        (result: unknown[]) => {
+          this.aggregate3 = result[0] as Aggregate
+          this.aggregate4 = result[1] as Aggregate
+        }
+      )
 
       this.loading = false
     },
