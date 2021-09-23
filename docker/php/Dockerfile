@@ -27,12 +27,6 @@ RUN docker-php-ext-install zip pdo_mysql opcache gd
 RUN pecl install redis apcu && \
     docker-php-ext-enable redis apcu
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
-
-# node.js install
-RUN curl -sL https://deb.nodesource.com/setup_13.x | php -- --install-dir=/usr/bin
-RUN apk add --update nodejs nodejs-npm
-
 RUN { \
     # echo 'memory_limit=-1'; \
     echo 'upload_max_filesize = 100M'; \
@@ -61,7 +55,5 @@ RUN { \
     echo 'apc.max_file_size=1M'; \
     echo 'apc.stat=1'; \
     } > /usr/local/etc/php/conf.d/overrides_apcu.ini
-
-COPY . /var/www
 
 WORKDIR /var/www
