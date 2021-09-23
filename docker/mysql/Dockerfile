@@ -1,11 +1,4 @@
-# docker/mysql/Dockerfile
-# ARG MYSQL_VERSION=latest
-# FROM mysql:${MYSQL_VERSION}
 FROM mysql:5.7
-
-#####################################
-# Set Timezone
-#####################################
 
 ARG TZ=UTC
 ENV TZ ${TZ}

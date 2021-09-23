@@ -1,4 +1,3 @@
-# docker/php-fpm/Dockerfile
 FROM php:7.4-fpm-alpine3.10
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,9 +8,9 @@ RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
 RUN apk upgrade --update && apk --no-cache add git libzip-dev zip unzip autoconf gcc g++ make \
     freetype-dev libjpeg libjpeg-turbo-dev libpng-dev pcre-dev \
     && apk add --no-cache --virtual .build-deps \
-        make \
-        gcc \
-        g++ \
+    make \
+    gcc \
+    g++ \
     && curl -SL http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz | tar -xz -C ~/ \
     && rm /usr/bin/iconv \
     && mv ~/libiconv-1.15 ~/libiconv \
@@ -49,7 +48,7 @@ RUN { \
     echo 'opcache.revalidate_freq=60'; \
     echo 'opcache.fast_shutdown=1'; \
     echo 'xdebug.remote_enable=1'; \
-} > /usr/local/etc/php/conf.d/overrides.ini
+    } > /usr/local/etc/php/conf.d/overrides.ini
 
 RUN { \
     echo 'apc.shm_segments=1'; \
@@ -61,16 +60,8 @@ RUN { \
     echo 'apc.gc_ttl=3600'; \
     echo 'apc.max_file_size=1M'; \
     echo 'apc.stat=1'; \
-} > /usr/local/etc/php/conf.d/overrides_apcu.ini
+    } > /usr/local/etc/php/conf.d/overrides_apcu.ini
 
-# RUN mkdir -p /app
 COPY . /var/www
-# COPY .env.development /var/www/.env
 
 WORKDIR /var/www
-
-# RUN composer install
-# RUN cp .env.example .env
-# RUN cp .env .env
-# RUN php artisan key:generate
-# RUN chmod -R a+w storage/ bootstrap/cache

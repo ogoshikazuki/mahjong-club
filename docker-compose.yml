@@ -1,11 +1,10 @@
-version: '3'
+version: "3"
 
 volumes:
   mysql:
     driver: local
 
 services:
-### NGINX Server #########################################
   nginx:
     build:
       context: .
@@ -16,16 +15,15 @@ services:
     ports:
       - "50080:80"
     depends_on:
-      - php-fpm
+      - php
     networks:
       - mahjong
 
-### PHP-FPM ################################################
-  php-fpm:
+  php:
     build:
       context: .
-      dockerfile: ./docker/php-fpm/Dockerfile
-    container_name: mahjong_php-fpm
+      dockerfile: ./docker/php/Dockerfile
+    container_name: mahjong_php
     volumes:
       - ./:/var/www
     depends_on:
@@ -33,13 +31,10 @@ services:
     networks:
       - mahjong
 
-### MySQL ################################################
   mysql:
     build:
       context: .
       dockerfile: ./docker/mysql/Dockerfile
-      # args:
-      #   MYSQL_VERSION: "5.7"
     container_name: mahjong_mysql
     environment:
       MYSQL_DATABASE: "default"
@@ -56,6 +51,5 @@ services:
       - mahjong
     command: --innodb-use-native-aio=0
 
-### Networks ################################################
 networks:
   mahjong:
