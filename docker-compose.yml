@@ -5,27 +5,15 @@ volumes:
     driver: local
 
 services:
-  nginx:
+  ppm:
     build:
       context: .
-      dockerfile: ./docker/nginx/Dockerfile
-    container_name: mahjong_nginx
+      dockerfile: ./docker/ppm/Dockerfile
+    container_name: mahjong_ppm
     volumes:
       - ./:/var/www
     ports:
-      - "50080:80"
-    depends_on:
-      - php
-    networks:
-      - mahjong
-
-  php:
-    build:
-      context: .
-      dockerfile: ./docker/php/Dockerfile
-    container_name: mahjong_php
-    volumes:
-      - ./:/var/www
+      - "80:80"
     depends_on:
       - mysql
     networks:
