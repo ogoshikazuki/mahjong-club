@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::fallback(function () {
     return view('app');
 });
+
+Route::get('/debug-sentry', function () {
+    throw new Exception('My first Sentry error!');
+});
