@@ -94,9 +94,6 @@ class TenhouService
 
     private function convertPlayersCountIntoRate(int $playersCount): int
     {
-        if ($playersCount === 3) {
-            return 50;
-        }
         return 100;
     }
 }
