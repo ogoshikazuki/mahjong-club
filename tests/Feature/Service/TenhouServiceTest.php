@@ -84,7 +84,7 @@ class TenhouServiceTest extends TestCase
         $gameResults = $tenhouService->convertLogsIntoGameResults($inputs);
 
         for ($i = 0; $i < count($gameResults); $i++) {
-            $this->assertEquals($i === 0 ? 50 : 100, $gameResults[$i]['rate']);
+            $this->assertEquals($i === 0 ? 100 : 100, $gameResults[$i]['rate']);
 
             foreach ($gameResults[$i]['points'] as $playerId => $point) {
                 $this->assertEquals($expecteds[$i][$playerId]['point'], $point);
