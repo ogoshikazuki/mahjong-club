@@ -19,7 +19,9 @@ class CreateTenhouNamesTable extends Migration
             $table->unsignedBigInteger('player_id');
             $table->timestamps();
 
-            $table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');
+            if (!env('DB_DISABLE_FOREIGN_KEY')) {
+                $table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');
+            }
         });
     }
 

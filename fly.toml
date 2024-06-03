@@ -1,0 +1,57 @@
+# fly.toml app configuration file generated for mahjong-club on 2023-10-08T11:55:46+09:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "mahjong-club"
+primary_region = "nrt"
+kill_signal = "SIGINT"
+kill_timeout = "5s"
+
+[experimental]
+  auto_rollback = true
+
+[build]
+  [build.args]
+    NODE_VERSION = "12.16"
+    PHP_VERSION = "7.4"
+
+[env]
+  APP_ENV = "production"
+  DB_DATABASE = "test"
+  DB_HOST = "gateway01.ap-northeast-1.prod.aws.tidbcloud.com"
+  DB_PORT = "4000"
+  DB_PASSWORD = "LUiHhQje4m1XvjbA"
+  DB_USERNAME = "3He7jG76nT6bnuQ.root"
+  LOG_CHANNEL = "stderr"
+  LOG_LEVEL = "info"
+  LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
+  MYSQL_ATTR_SSL_CA = "/var/www/html/config/isrgrootx1.pem"
+  SENTRY_LARAVEL_DSN = "https://b3755828206243fc974a3a3148f8893a@o1012399.ingest.sentry.io/5977844"
+
+[processes]
+  app = ""
+  cron = "cron -f"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "1s"

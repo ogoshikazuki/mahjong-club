@@ -25,7 +25,9 @@ class CreateGamesTable extends Migration
             $table->integer('rate');
             $table->timestamps();
 
-            $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
+            if (!env('DB_DISABLE_FOREIGN_KEY')) {
+                $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
+            }
         });
 
         Schema::create('game_result_players', function (Blueprint $table) {
@@ -35,8 +37,10 @@ class CreateGamesTable extends Migration
             $table->integer('point');
             $table->timestamps();
 
-            $table->foreign('game_result_id')->references('id')->on('game_results')->onDelete('cascade');
-            $table->foreign('player_id')->references('id')->on('players');
+            if (!env('DB_DISABLE_FOREIGN_KEY')) {
+                $table->foreign('game_result_id')->references('id')->on('game_results')->onDelete('cascade');
+                $table->foreign('player_id')->references('id')->on('players');
+            }
         });
     }
 

@@ -26,7 +26,7 @@ class TenhouLogGameResult implements Arrayable
 
         $self = new self();
         $self->playerName = $matches[1];
-        $self->point = (int)$matches[2];
+        $self->point = (float)$matches[2];
         if (isset($matches[4])) {
             $self->tip = (int)$matches[4];
         }
