@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('tenhou:register-log C1020')->dailyAt('2:00');
+        $schedule->command('tenhou:register-log C2200')->dailyAt('2:00');
     }
 
     /**
